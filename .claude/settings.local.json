@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(py --version)",
+      "Read(//c/Users/Moritz/.claude/plugins/cache/ui-ux-pro-max-skill/ui-ux-pro-max/2.5.0/.claude/skills/ui-ux-pro-max/**)",
+      "Bash(py scripts/search.py \"tattoo studio portfolio minimal black white editorial premium\" --design-system -f markdown)",
+      "Bash(file scripts *)",
+      "Bash(stat -c '%n %s bytes %F' scripts data)",
+      "Bash(py scripts/search.py \"carousel swipe gallery mobile scroll sticky parallax\" --domain ux -n 12)",
+      "Bash(mkdir -p public/hero public/video public/studio public/tattoos public/events public/brand public/misc)",
+      "Bash(cp \"Herobild.jpeg\" public/hero/hero.jpeg)",
+      "Bash(cp \"Introvideo jaron.mp4\" public/video/intro.mp4)",
+      "Bash(cp \"How to book datei.jpeg\" public/misc/how-to-book.jpeg)",
+      "Bash(cp Studiobilder/*.jpeg public/studio/)",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(tee /tmp/devserver.log)",
+      "Read(//tmp/**)",
+      "Bash(curl -s -o /dev/null -w \"Homepage HTTP %{http_code}\\\\n\" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"Event page HTTP %{http_code}\\\\n\" http://localhost:3000/events/flashdays)",
+      "Bash(curl -s http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"localhost:3000 → HTTP %{http_code}\\\\n\" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" http://localhost:3000/)",
+      "Bash(curl -s \"http://localhost:3000/\")",
+      "PowerShell($p = \\(Get-NetTCPConnection -LocalPort 3001 -State Listen -ErrorAction SilentlyContinue\\).OwningProcess; if \\($p\\) { Stop-Process -Id $p -Force; \"Stopped duplicate server on 3001 \\(PID $p\\)\" } else { \"No server on 3001\" })",
+      "Bash(curl -s -o /dev/null -w \"Home HTTP %{http_code}\\\\n\" http://localhost:3000/)",
+      "Bash(py scripts/search.py \"hero portrait vertical image split editorial fullscreen\" --domain landing -n 6)",
+      "Bash(py scripts/search.py \"portrait image full bleed object-fit focal point responsive hero\" --domain ux -n 8)",
+      "Bash(py scripts/search.py \"section transition scroll reveal continuity flow spacing rhythm cohesion\" --domain ux -n 10)",
+      "Bash(py scripts/search.py \"motion-driven scroll storytelling seamless continuous flow\" --domain style -n 3)",
+      "Bash(curl -s -o /dev/null -w \"Event HTTP %{http_code}\\\\n\" http://localhost:3000/events/flashdays)",
+      "Bash(curl -s -o /dev/null -w \"Event HTTP %{http_code}\\\\n\" http://localhost:3000/events/pbc-bootsparty)",
+      "PowerShell(Get-NetTCPConnection *)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git -c user.name=\"Moritz\" -c user.email=\"moritzlindebner@outlook.de\" commit -q -m \"Sicherungspunkt: Stand vor Hero-Umbau \\(Agentura-Muster Experiment\\)\")"
+    ]
+  }
+}

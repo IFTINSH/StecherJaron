@@ -1,0 +1,178 @@
+// ---------------------------------------------------------------------------
+// Central content layer. Structured to map 1:1 onto Sanity later (Phase 2).
+// For now everything is local so the site is fully viewable without a CMS.
+// ---------------------------------------------------------------------------
+
+export const site = {
+  name: 'Stecher Jaron',
+  wordmark: 'STECHER JARON',
+  tagline: 'Tattoo Artist · Passau',
+  instagram: {
+    handle: '@stecherjaron',
+    url: 'https://www.instagram.com/stecherjaron/',
+  },
+  studio: {
+    address: 'Firmianstraße 10, Passau',
+    mapsUrl:
+      'https://www.google.com/maps/search/?api=1&query=Firmianstra%C3%9Fe+10+Passau',
+  },
+} as const;
+
+export const nav = [
+  { href: '#about', label: 'Über mich' },
+  { href: '#work', label: 'Portfolio' },
+  { href: '#studio', label: 'Studio' },
+  { href: '#events', label: 'Events' },
+  { href: '#contact', label: 'Kontakt' },
+] as const;
+
+export const about = {
+  title: 'Über mich',
+  // Short teaser shown under the wordmark in the hero.
+  teaser: `Tattoo Artist aus Passau — spezialisiert auf Dotwork, Blackwork & Fine-Line. Jedes Design entsteht individuell für dich.`,
+  body: `Hey, ich bin Jaron — Tattoo Artist aus Passau. Ich spezialisiere mich auf Dotwork, Blackwork und Fine-Line Tattoos. Jedes meiner Designs entsteht individuell für dich, mit einem Fokus auf feine Details, klare Linien und ausdrucksstarke Kontraste zwischen schwarzer Tinte und Haut. Lass uns gemeinsam deine Vision auf die Haut bringen.`,
+};
+
+// "How to Book" — persistent overlay content. Booking happens via Instagram.
+export const howToBook = {
+  title: 'How to Book',
+  intro:
+    'Termine und Anfragen laufen ausschließlich über Instagram. So funktioniert es:',
+  steps: [
+    'Folge @stecherjaron auf Instagram.',
+    'Schreib mir eine DM mit deiner Tattoo-Idee, ungefährer Größe und Körperstelle.',
+    'Häng — wenn möglich — 1–2 Referenzbilder an.',
+    'Wir besprechen Motiv, Termin und Preis direkt im Chat.',
+  ],
+  // A photographed booking note Jaron provided.
+  image: '/misc/how-to-book.jpeg',
+  ctaLabel: 'Auf Instagram schreiben',
+  ctaUrl: 'https://www.instagram.com/stecherjaron/',
+};
+
+// ---------------------------------------------------------------------------
+// Gallery — filterable by style (NISSACO-style category bar).
+// NOTE: style categories are PLACEHOLDERS until Jaron confirms them.
+// ---------------------------------------------------------------------------
+export type TattooStyle = 'Dotwork' | 'Blackwork' | 'Fine-Line';
+
+export const tattooStyles: TattooStyle[] = ['Dotwork', 'Blackwork', 'Fine-Line'];
+
+export interface Tattoo {
+  id: string;
+  src: string;
+  alt: string;
+  style: TattooStyle;
+}
+
+export const tattoos: Tattoo[] = [
+  { id: 't1', src: '/tattoos/tattoo-1.jpeg', alt: 'Tattoo von Stecher Jaron', style: 'Fine-Line' },
+  { id: 't2', src: '/tattoos/tattoo-2.jpeg', alt: 'Tattoo von Stecher Jaron', style: 'Blackwork' },
+  { id: 't3', src: '/tattoos/tattoo-3.jpeg', alt: 'Tattoo von Stecher Jaron', style: 'Dotwork' },
+  { id: 't4', src: '/tattoos/tattoo-4.jpeg', alt: 'Tattoo von Stecher Jaron', style: 'Blackwork' },
+  { id: 't5', src: '/tattoos/tattoo-5.jpeg', alt: 'Tattoo von Stecher Jaron', style: 'Fine-Line' },
+  { id: 't6', src: '/tattoos/tattoo-6.jpeg', alt: 'Tattoo von Stecher Jaron', style: 'Dotwork' },
+  { id: 't7', src: '/tattoos/tattoo-7.jpeg', alt: 'Tattoo von Stecher Jaron', style: 'Blackwork' },
+  { id: 't8', src: '/tattoos/tattoo-8.jpeg', alt: 'Tattoo von Stecher Jaron', style: 'Fine-Line' },
+];
+
+// ---------------------------------------------------------------------------
+// Studio photos (Concept A — editorial sticky)
+// ---------------------------------------------------------------------------
+export const studioImages = [
+  { src: '/studio/studio-1.jpeg', alt: 'Studio Impression', w: 1080, h: 1620 },
+  { src: '/studio/studio-2.jpeg', alt: 'Studio Impression', w: 1080, h: 1620 },
+  { src: '/studio/studio-3.jpeg', alt: 'Studio Impression', w: 1080, h: 1620 },
+  { src: '/studio/studio-4.jpeg', alt: 'Studio Impression', w: 1080, h: 1355 },
+  { src: '/studio/studio-5.jpeg', alt: 'Studio Impression', w: 1080, h: 1620 },
+  { src: '/studio/studio-6.jpeg', alt: 'Studio Impression', w: 1080, h: 1620 },
+  { src: '/studio/studio-7.jpeg', alt: 'Studio Impression', w: 811, h: 1080 },
+  { src: '/studio/studio-8.jpeg', alt: 'Studio Impression', w: 1080, h: 1620 },
+];
+
+// ---------------------------------------------------------------------------
+// Events — overview grid (Chris-Foy-style) → each links to a detail page.
+// NOTE: dates / locations / descriptions are PLACEHOLDERS, editable later.
+// ---------------------------------------------------------------------------
+export interface EventMedia {
+  type: 'image' | 'video';
+  src: string;
+  alt?: string;
+}
+
+export interface StudioEvent {
+  slug: string;
+  title: string;
+  date: string;
+  location?: string;
+  description?: string;
+  cover: string;
+  media: EventMedia[];
+}
+
+export const events: StudioEvent[] = [
+  {
+    slug: 'flashdays',
+    title: 'Flashdays',
+    date: '2025',
+    location: 'Passau',
+    description:
+      'Flashdays im Studio — ausgewählte Designs zu festen Konditionen, spontan stechbar.',
+    cover: '/events/flashdays/img-1.jpeg',
+    media: [{ type: 'image', src: '/events/flashdays/img-1.jpeg', alt: 'Flashdays' }],
+  },
+  {
+    slug: 'pbc-bootsparty',
+    title: 'PBC Bootsparty',
+    date: '2025',
+    location: 'Passau',
+    description: 'Eindrücke von der PBC Bootsparty.',
+    cover: '/events/pbc-bootsparty/img-1.jpeg',
+    media: [
+      { type: 'image', src: '/events/pbc-bootsparty/img-1.jpeg', alt: 'PBC Bootsparty' },
+      { type: 'image', src: '/events/pbc-bootsparty/img-2.jpeg', alt: 'PBC Bootsparty' },
+    ],
+  },
+  {
+    slug: 'pbc-regensburg',
+    title: 'PBC Event Regensburg',
+    date: '2025',
+    location: 'Tanzdirektion Süd, Regensburg',
+    description: 'PBC Event in der Tanzdirektion Süd, Regensburg.',
+    cover: '/events/pbc-regensburg/img-1.jpeg',
+    media: [
+      { type: 'image', src: '/events/pbc-regensburg/img-1.jpeg', alt: 'PBC Event Regensburg' },
+      { type: 'image', src: '/events/pbc-regensburg/img-2.jpeg', alt: 'PBC Event Regensburg' },
+    ],
+  },
+  {
+    slug: 'traegertal-2026',
+    title: 'Trägertal 2026',
+    date: '2026',
+    location: 'Trägertal',
+    description: 'Trägertal Festival 2026.',
+    cover: '/events/traegertal-2026/img-1.jpeg',
+    media: [{ type: 'image', src: '/events/traegertal-2026/img-1.jpeg', alt: 'Trägertal 2026' }],
+  },
+  {
+    slug: 'traegertal-2025',
+    title: 'Trägertal 2025',
+    date: '2025',
+    location: 'Trägertal',
+    description: 'Trägertal Festival 2025.',
+    cover: '/events/traegertal-2025/img-1.jpeg',
+    media: [{ type: 'image', src: '/events/traegertal-2025/img-1.jpeg', alt: 'Trägertal 2025' }],
+  },
+  {
+    slug: 'sonstige-kunst',
+    title: 'Sonstige Kunst',
+    date: '',
+    description: 'Weitere Arbeiten und künstlerische Projekte abseits der Haut.',
+    cover: '/events/sonstige-kunst/img-1.jpeg',
+    media: [{ type: 'image', src: '/events/sonstige-kunst/img-1.jpeg', alt: 'Sonstige Kunst' }],
+  },
+];
+
+export function getEvent(slug: string) {
+  return events.find((e) => e.slug === slug);
+}
