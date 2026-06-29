@@ -11,8 +11,17 @@ import Events from '@/components/Events';
 import Contact from '@/components/Contact';
 import HowToBook from '@/components/HowToBook';
 import Footer from '@/components/Footer';
+import { getAbout, getTattoos, getEvents } from '@/lib/data';
 
-export default function Home() {
+export const revalidate = 60;
+
+export default async function Home() {
+  const [about, tattoos, events] = await Promise.all([
+    getAbout(),
+    getTattoos(),
+    getEvents(),
+  ]);
+
   return (
     <>
       <BackgroundShader />
@@ -21,11 +30,11 @@ export default function Home() {
         <Header />
         <main className="relative">
           <Hero />
-          <About />
+          <About title={about.title} body={about.body} />
           <IntroVideo />
-          <Gallery />
+          <Gallery tattoos={tattoos} />
           <Studio />
-          <Events />
+          <Events events={events} />
           <Contact />
         </main>
         <Footer />

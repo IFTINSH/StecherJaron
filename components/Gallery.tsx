@@ -3,24 +3,28 @@
 import { useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import ParallaxImage from './ParallaxImage';
-import { tattoos, tattooStyles, type TattooStyle } from '@/lib/content';
 import { cn } from '@/lib/utils';
+import type { TattooItem } from '@/lib/data';
 
-type Filter = 'Alle' | TattooStyle;
 const PAGE = 6;
 
-export default function Gallery() {
-  const [filter, setFilter] = useState<Filter>('Alle');
+export default function Gallery({ tattoos }: { tattoos: TattooItem[] }) {
+  const [filter, setFilter] = useState<string>('Alle');
   const [visible, setVisible] = useState(PAGE);
   const [lightbox, setLightbox] = useState<string | null>(null);
 
+  // Filter list adapts to whichever categories actually have images.
+  const categories = useMemo(
+    () => ['Alle', ...Array.from(new Set(tattoos.map((t) => t.style)))],
+    [tattoos]
+  );
   const filtered = useMemo(
     () => (filter === 'Alle' ? tattoos : tattoos.filter((t) => t.style === filter)),
-    [filter]
+    [filter, tattoos]
   );
   const shown = filtered.slice(0, visible);
 
-  const select = (f: Filter) => {
+  const select = (f: string) => {
     setFilter(f);
     setVisible(PAGE);
   };
@@ -41,7 +45,7 @@ export default function Gallery() {
 
         {/* Filter bar */}
         <div className="mt-10 flex flex-wrap justify-center gap-2 md:justify-start">
-          {(['Alle', ...tattooStyles] as Filter[]).map((f) => (
+          {categories.map((f) => (
             <button
               key={f}
               onClick={() => select(f)}

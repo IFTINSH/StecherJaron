@@ -3,11 +3,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'motion/react';
-import { events } from '@/lib/content';
+import type { EventItem } from '@/lib/data';
 
 // Events overview — a grid of tiles (Chris-Foy /all style). Each tile links to
-// its own event page. Tiles use the cover image now; ready for looping clips later.
-export default function Events() {
+// its own event page.
+export default function Events({ events }: { events: EventItem[] }) {
   return (
     <section id="events" className="relative z-10 px-6 py-24 md:px-12 md:py-32">
       <div className="mx-auto max-w-[1800px]">

@@ -101,14 +101,14 @@ export const tattoos: Tattoo[] = [
 // Studio photos (Concept A — editorial sticky)
 // ---------------------------------------------------------------------------
 export const studioImages = [
-  { src: '/studio/studio-1.jpeg', alt: 'Studio Impression', w: 1080, h: 1620 },
-  { src: '/studio/studio-2.jpeg', alt: 'Studio Impression', w: 1080, h: 1620 },
-  { src: '/studio/studio-3.jpeg', alt: 'Studio Impression', w: 1080, h: 1620 },
-  { src: '/studio/studio-4.jpeg', alt: 'Studio Impression', w: 1080, h: 1355 },
-  { src: '/studio/studio-5.jpeg', alt: 'Studio Impression', w: 1080, h: 1620 },
-  { src: '/studio/studio-6.jpeg', alt: 'Studio Impression', w: 1080, h: 1620 },
-  { src: '/studio/studio-7.jpeg', alt: 'Studio Impression', w: 811, h: 1080 },
-  { src: '/studio/studio-8.jpeg', alt: 'Studio Impression', w: 1080, h: 1620 },
+  { src: '/studio-photos/studio-1.jpeg', alt: 'Studio Impression', w: 1080, h: 1620 },
+  { src: '/studio-photos/studio-2.jpeg', alt: 'Studio Impression', w: 1080, h: 1620 },
+  { src: '/studio-photos/studio-3.jpeg', alt: 'Studio Impression', w: 1080, h: 1620 },
+  { src: '/studio-photos/studio-4.jpeg', alt: 'Studio Impression', w: 1080, h: 1355 },
+  { src: '/studio-photos/studio-5.jpeg', alt: 'Studio Impression', w: 1080, h: 1620 },
+  { src: '/studio-photos/studio-6.jpeg', alt: 'Studio Impression', w: 1080, h: 1620 },
+  { src: '/studio-photos/studio-7.jpeg', alt: 'Studio Impression', w: 811, h: 1080 },
+  { src: '/studio-photos/studio-8.jpeg', alt: 'Studio Impression', w: 1080, h: 1620 },
 ];
 
 // ---------------------------------------------------------------------------

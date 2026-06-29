@@ -1,80 +1,74 @@
-# Übergabe — Stecher Jaron Website 2.0
+# Übergabe — Stecher Jaron Website
 
-_Stand: 17.06.2026 (Ende Tag 1 / Phase 1)_
+_Stand: 29.06.2026._ Was steht, wie man's startet, wie es weitergeht.
 
 ---
 
-## 1. Was das ist
-Neue Website für das Tattoo-Studio **Stecher Jaron** (Passau). Neuaufbau der ersten
-Beispiel-Seite (`C:\Users\Moritz\Development\Stecher Jaron Website`) — gleicher
-Schwarz-Weiß-Stil, aber moderner Stack, mobil-first, CMS-fähig.
+## 1. Projekt & Stack
+Tattoo-Studio-Website für **Stecher Jaron** (Passau), Deutsch, Schwarz-Weiß/Grau, mobil-first.
+- **Next.js 15** (App Router) · TypeScript · **Tailwind v4** · **motion** (Framer Motion) · **Lenis** (Smooth-Scroll) · `@paper-design/shaders-react` (Mesh-Hintergrund) · **Sanity** (CMS).
+- Schriften via `next/font`: **Jost** (Display/Wortmarke, dünn/uppercase/getrackt), **Inter** (Fließtext).
+- **Repo:** https://github.com/IFTINSH/StecherJaron · Branch `master`. **Hosting:** Vercel (geplant, s. u.).
 
-## 2. Wie starten / ansehen
-```bash
-cd "C:\Users\Moritz\Development\Jaron Website 2.0"
-npm run dev
+> **Arbeitsweise (wichtig):** Immer **Mobil und PC getrennt** denken/besprechen. Moritz priorisiert **Mobil**.
+
+## 2. Lokal starten
 ```
-- **PC:** http://localhost:3000
-- **Handy (gleiches WLAN):** http://192.168.178.40:3000
-  - Firewall einmalig freigeben (PowerShell **als Admin**):
-    `New-NetFirewallRule -DisplayName "Next dev 3000" -Direction Inbound -LocalPort 3000 -Protocol TCP -Action Allow -Profile Private,Public`
-  - **NordVPN** ggf. trennen oder „LAN zulassen" aktivieren, sonst blockiert es den Zugriff.
+npm install
+npm run dev      # http://localhost:3000 (oder 3001, falls belegt)
+npm run build    # vor Deploy: muss grün sein
+```
+- Lenis-Smooth-Scroll aktiv → scrollbare Overlays brauchen `data-lenis-prevent`.
+- Next-Dev-Indikator („N") ist aus (`devIndicators: false`).
 
-## 3. Tech-Stack (fix)
-Next.js 15 (App Router) · TypeScript · Tailwind v4 · Motion · Lenis (Smooth-Scroll)
-· @paper-design/shaders-react (Mesh-Hintergrund). Schriften lokal via `next/font`
-(**Jost** = Display/Wortmarke, **Inter** = Fließtext). Hosting später **Vercel**.
+## 3. Mobil testen
+- **Gleiches WLAN:** `http://<lokale-IP>:3000` (Firewall einmalig freigeben; NordVPN ggf. „LAN zulassen").
+- **Öffentliches WLAN / unterwegs:** Cloudflare-Quick-Tunnel:
+  `cloudflared tunnel --url http://localhost:3001 --protocol http2`
+  (`--protocol http2` nötig, weil WLANs oft UDP blocken). URLs sind **Wegwerf** (pro Session neu).
+- **Jaron etwas Dauerhaftes zeigen → Vercel** (s. u.), nicht den Tunnel.
 
-## 4. Seitenaufbau (aktuell)
-`Loader → Hero → Über mich → Video → Galerie → Studio → Events → Kontakt → Footer`
-+ durchgehender **„How to Book"**-Button (unten links) → Overlay.
+## 4. Was steht (fertig)
+- **Hero:** Foto + Chrome-„Intro-Linie" um Jaron (`components/FlowLine.tsx`): poppt einmal auf, flackert weich (Bloom), zieht sich symmetrisch zurück. Eigene Mobil-Silhouette; Foto+Linie gekoppelt (`HeroPhotoBackground.tsx`, `heroSilhouette.ts`). Pfade getract mit `scripts/trace-extract.cjs` (Desktop) / `scripts/trace-mobile.cjs` (Mobil).
+- **Design-System** (`app/globals.css` `@theme`): Tokens `text-body / text-secondary / text-muted / bg-surface / border-line`, keine rohen Hex in Komponenten. Gutter `px-6 md:px-12`, breite Sektionen `max-w-[1800px]`.
+- **Einheitlicher Rhythmus:** alle Content-Sektionen „Überschrift oben → Inhalt volle Breite". Heading-Ausrichtung PC: Raster-Sektionen (Portfolio/Studio/Events) links, Text-Sektionen (Über mich/Kontakt) mittig; Mobile immer zentriert.
+- **Portfolio & Studio:** gleiches Raster (`aspect-[4/5]`, `grid-cols-2 md:grid-cols-3 lg:grid-cols-4`) + **Scroll-Parallax in den Bildern** (`ParallaxImage.tsx` via `lenisStore.ts`).
+- **How to Book:** Floating-Button unten rechts → Panel mit Buchungstext (`HowToBook.tsx`), scrollbar.
+- **Feine Übergangslinie** auf der Naht Hero↔Über-mich (`About.tsx`, pulsiert dezent).
+- **Quality:** Reduced-Motion respektiert, `:focus-visible`-Ringe, Scroll-Restoration „manual" (lädt immer oben).
+- **Sanity-Integration** (Code fertig — Projekt noch nicht angelegt, s. u.).
 
-| Sektion | Mobil | PC |
-|---|---|---|
-| **Loader** | Monogramm-Reveal, **nur 1× pro Session** | dito |
-| **Hero** | Foto formatfüllend, Name unten | **Split**: Foto links, Name rechts |
-| **Über mich** | zentrierter Text | zentrierter Text |
-| **Video** | scrollt rein, wächst 0.82→1; Ton bei voller Sicht (+ „Ton aktivieren") | dito, breit (max 1800px) |
-| **Galerie** | Filter + 2-Spalten-Grid + Lightbox | Filter + 3-Spalten-Grid |
-| **Studio** | 2-Spalten-Masonry + Lightbox | sticky Text links + 3-Spalten-Masonry rechts |
-| **Events** | 1 Spalte → Detailseite | 2–3 Spalten → Detailseite |
-| **Kontakt** | Instagram + Adresse + Karte | dito |
+## 5. Inhalte / Daten
+- Zentral in `lib/content.ts` (Fallback) → über `lib/data.ts` aus Sanity gelesen, sonst Fallback.
+- Assets: `public/hero/` (hero-16x9, hero-4x3, **hero-mobile.jpg**, jaron-cutout), `public/tattoos/` (8), `public/studio-photos/` (8, umbenannt wegen `/studio`-Route!), `public/events/<slug>/`, `public/video/intro.mp4`, `public/brand/monogramm.png`.
 
-## 5. Designentscheidungen
-- Reines **Schwarz/Weiß**, durchgehender **Mesh-Hintergrund** (opacity-50 + black/40 Scrim) → Seite als **ein Flow**, Sektionen transparent.
-- **Jost** dünn, uppercase, weit getrackt (Wortmarke + Headings).
-- Hauptsektionen einheitlich **max-w-[1800px], px-4** (bündige Kanten).
-- Reduced-Motion wird respektiert.
+## 6. Deployment (Vercel) — TODO
+1. vercel.com → Login mit GitHub `IFTINSH` → **Add New Project** → Repo `StecherJaron` importieren → Deploy (Next.js wird autoerkannt, Production-Branch `master`).
+2. Env-Vars setzen (s. Sanity).
+3. Optional Domain `stecherjaron.de` unter Settings → Domains.
+→ Danach: jeder `git push` deployt automatisch, Link `*.vercel.app`.
 
-## 6. Assets im Projekt
-`public/hero/hero.jpeg` · `public/video/intro.mp4` · `public/misc/how-to-book.jpeg`
-· `public/studio/` (8) · `public/tattoos/` (8) · `public/events/<slug>/` (6 Events)
-· `public/brand/monogramm.png` (aus Website 1).
-Originale liegen zusätzlich in `Studiobilder/`, `Tattoobilder/`, `Eventbilder/`.
+## 7. Sanity (CMS) — Status & Aktivierung
+**Code fertig, Projekt noch nicht angelegt.** Solange `NEXT_PUBLIC_SANITY_PROJECT_ID` fehlt/leer ist, läuft die Seite auf den Fallback-Inhalten.
+- **Dashboard:** `/studio` (eingebettetes Studio, Sanity-Login). Bearbeitbar: **Über mich** (Text), **Portfolio** (Bilder + selbst angelegte **Kategorien**), **Events** (Cover + Bilder).
+- **Schemas:** `sanity/schemas/` (`about`, `category`, `tattoo`, `event`). **Daten:** `lib/data.ts` (ISR `revalidate=60`, Fallback auf `content.ts` wenn leer).
+- **Versionen:** next-sanity **9** / sanity 3 — **nicht** auf next-sanity 13 (verlangt Next 16).
+- **Aktivierung (einmalig):** Projekt auf sanity.io/manage anlegen (Dataset `production`, public) → Project ID; `.env.example`→`.env.local` mit ID; CORS-Origins (localhost + Vercel-URL) hinzufügen; gleiche Env-Vars in Vercel; `/studio` öffnen, Inhalte anlegen.
+- **Account:** Owner = Moritz, **Jaron als Editor einladen** (Übertragung an Jaron später möglich). Kein API-Token nötig (öffentliches Dataset + Studio-Login).
 
-## 7. Bewusste Platzhalter / noch offen (Phase 2)
-- [ ] **Tattoo-Stile** echt zuordnen (aktuell geraten: Dotwork/Blackwork/Fine-Line) — Liste von Jaron
-- [ ] **Event-Daten/Beschreibungen** echt einpflegen
-- [ ] **Event-Videos** (noch keine vorhanden, Struktur ist bereit)
-- [ ] **Sanity CMS** anbinden (damit Jaron selbst pflegt)
-- [ ] **Impressum/Datenschutz** mit echten Inhalten füllen (DE-Pflicht)
-- [ ] eigene **Domain** + **Vercel-Deploy**
-- [ ] Echte Bio / Studio-Text final
+## 8. Offene To-dos
+- [ ] **Sanity-Arbeit committen & pushen** (aktuell nur lokal, noch nicht auf GitHub).
+- [ ] **Vercel-Deploy** einrichten (+ Env-Vars, ggf. Domain).
+- [ ] **Sanity-Projekt** anlegen, echte Inhalte einpflegen (Portfolio, Events, Über-mich), Jaron einladen.
+- [ ] **Hi-Res `public/hero/hero-mobile.jpg`** (aktuell nur 578 px, leicht weich) — gleicher Ausschnitt, dann bleibt die Linie gültig.
+- [ ] **Impressum/Datenschutz** mit echten Angaben füllen (DE-Pflicht, aktuell Platzhalter).
+- [ ] Optional später: **Videos in Events** (Schema-Feld ergänzen).
+- [ ] Aufräumen: ungenutzte Experimente `HeroPattern.tsx` / `PatternBackground.tsx` prüfen/entfernen.
 
-## 8. Schnelle Stellschrauben (Datei → was)
-- Mesh-Stärke: `components/BackgroundShader.tsx` → `opacity-50` / `bg-black/40`
-- Hero-Bildausschnitt: `components/Hero.tsx` → `objectPosition` (mobil/desktop)
-- Video Start-/Endgröße: `components/IntroVideo.tsx` → `scale [0.82, 1]`, Breite `max-w-[1800px]`
-- Studio-Kompaktheit: `components/Studio.tsx` → `columns-2 lg:columns-3`
-- Inhalte/Texte/Events/Galerie: alles zentral in `lib/content.ts`
-
-## 9. WICHTIG ab morgen
-**Immer in zwei Versionen planen & besprechen: MOBIL und PC getrennt.**
-(Moritz gefällt die mobile Version aktuell besser — Mobil hat Priorität.)
-
-## 10. Plan für morgen (Tag 2)
-1. **Fragerunde** zum aktuellen Stand:
-   - Was gefällt auf **Mobil** gut / was fehlt / was stört?
-   - Was gefällt auf **PC** gut / was fehlt / was stört?
-   - Pro Sektion durchgehen (Hero, Über mich, Video, Galerie, Studio, Events, Kontakt, How to Book).
-2. Danach: Feinschliff priorisieren → dann Phase-2-Themen (Kategorien, Sanity, rechtliches, Deploy).
+## 9. Schnelle Stellschrauben (Datei → was)
+- Hero-Linie Timing/Stärke: `components/FlowLine.tsx` (`APPEAR/HOLD/RETRACT`, `MAG`, Bloom).
+- Parallax-Stärke: `components/ParallaxImage.tsx` (`MAG = 11`).
+- Mobile-Hero: `HeroPhotoBackground.tsx` (`top-[12vw]`, `MOBILE_MASK`) · Hero-Höhe `Hero.tsx` (`h-[100vw] md:h-[100svh]`).
+- Übergangslinie: `About.tsx` (`top-2 md:top-6`).
+- Mesh-Hintergrund: `BackgroundShader.tsx` (`opacity-50`, `bg-black/40`).
+- Texte/Fallback-Inhalte: `lib/content.ts`.

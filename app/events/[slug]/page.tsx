@@ -1,13 +1,16 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import type { Metadata } from 'next';
-import { events, getEvent } from '@/lib/content';
+import { getEvent, getEventSlugs } from '@/lib/data';
 import BackgroundShader from '@/components/BackgroundShader';
 import BackButton from '@/components/BackButton';
 import Footer from '@/components/Footer';
 
-export function generateStaticParams() {
-  return events.map((e) => ({ slug: e.slug }));
+export const revalidate = 60;
+
+export async function generateStaticParams() {
+  const slugs = await getEventSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -16,12 +19,12 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const ev = getEvent(slug);
+  const ev = await getEvent(slug);
   if (!ev) return { title: 'Event' };
   return {
     title: ev.title,
     description: ev.description ?? `${ev.title} — Stecher Jaron`,
-    openGraph: { title: ev.title, images: [ev.cover] },
+    openGraph: { title: ev.title, images: ev.cover ? [ev.cover] : [] },
   };
 }
 
@@ -31,8 +34,11 @@ export default async function EventPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const ev = getEvent(slug);
+  const ev = await getEvent(slug);
   if (!ev) notFound();
+
+  // Show the gallery images; fall back to the cover if no extra images exist.
+  const images = ev.images.length > 0 ? ev.images : ev.cover ? [ev.cover] : [];
 
   return (
     <>
@@ -60,30 +66,20 @@ export default async function EventPage({
           </header>
 
           <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6">
-            {ev.media.map((m, i) =>
-              m.type === 'video' ? (
-                <video
-                  key={i}
-                  src={m.src}
-                  controls
-                  playsInline
-                  className="aspect-[4/3] w-full bg-surface object-cover"
+            {images.map((src, i) => (
+              <div
+                key={i}
+                className="relative aspect-[4/3] w-full overflow-hidden bg-surface"
+              >
+                <Image
+                  src={src}
+                  alt={ev.title}
+                  fill
+                  sizes="(max-width: 640px) 100vw, 50vw"
+                  className="object-cover"
                 />
-              ) : (
-                <div
-                  key={i}
-                  className="relative aspect-[4/3] w-full overflow-hidden bg-surface"
-                >
-                  <Image
-                    src={m.src}
-                    alt={m.alt ?? ev.title}
-                    fill
-                    sizes="(max-width: 640px) 100vw, 50vw"
-                    className="object-cover"
-                  />
-                </div>
-              )
-            )}
+              </div>
+            ))}
           </div>
         </div>
       </main>
