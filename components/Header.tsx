@@ -46,7 +46,7 @@ export default function Header() {
 
         <button
           onClick={() => setOpen(true)}
-          className="font-display text-sm font-light uppercase tracking-brand text-white md:hidden"
+          className="-m-2 p-2 font-display text-sm font-light uppercase tracking-brand text-white md:hidden"
           aria-label="Menü öffnen"
         >
           Menü
@@ -63,10 +63,10 @@ export default function Header() {
       >
         <button
           onClick={() => setOpen(false)}
-          className="absolute right-6 top-5 font-display text-sm font-light uppercase tracking-brand text-white"
+          className="absolute right-3 top-2 p-3 font-display text-sm font-light uppercase tracking-brand text-white"
           aria-label="Menü schließen"
         >
-          Close
+          Schließen
         </button>
 
         <nav className="flex flex-col items-center gap-8">
@@ -75,7 +75,7 @@ export default function Header() {
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
-              className="font-display text-2xl font-light uppercase tracking-brand text-white no-underline transition-colors duration-300 hover:text-[#999]"
+              className="font-display text-2xl font-light uppercase tracking-brand text-white no-underline transition-colors duration-300 hover:text-secondary"
             >
               {link.label}
             </a>
@@ -83,7 +83,7 @@ export default function Header() {
         </nav>
 
         <div className="absolute bottom-10 flex flex-col items-center gap-3">
-          <span className="text-xs uppercase tracking-brand text-[#666]">
+          <span className="text-xs uppercase tracking-brand text-secondary">
             Social Media
           </span>
           <a

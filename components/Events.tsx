@@ -9,14 +9,14 @@ import { events } from '@/lib/content';
 // its own event page. Tiles use the cover image now; ready for looping clips later.
 export default function Events() {
   return (
-    <section id="events" className="relative z-10 px-4 py-24 md:py-32">
+    <section id="events" className="relative z-10 px-6 py-24 md:px-12 md:py-32">
       <div className="mx-auto max-w-[1800px]">
         <motion.h2
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-10% 0px' }}
           transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-          className="text-center font-display text-4xl uppercase tracking-brand text-white/90 md:text-7xl"
+          className="text-center font-display text-4xl uppercase tracking-brand text-white/90 md:text-left md:text-7xl"
           style={{ fontWeight: 300 }}
         >
           Events
@@ -40,7 +40,7 @@ export default function Events() {
                 className="group block"
                 aria-label={`Event ansehen: ${ev.title}`}
               >
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#0a0a0a]">
+                <div className="relative aspect-[4/3] w-full overflow-hidden bg-surface">
                   <Image
                     src={ev.cover}
                     alt={ev.title}
@@ -55,7 +55,7 @@ export default function Events() {
                     {ev.title}
                   </h3>
                   {ev.date && (
-                    <span className="font-display text-xs uppercase tracking-brand text-[#777]">
+                    <span className="font-display text-xs uppercase tracking-brand text-muted">
                       {ev.date}
                     </span>
                   )}

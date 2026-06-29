@@ -12,8 +12,8 @@ export default function Impressum() {
       <h1 className="mt-8 font-display text-4xl uppercase tracking-brand text-white" style={{ fontWeight: 300 }}>
         Impressum
       </h1>
-      <div className="mt-8 space-y-4 font-light leading-relaxed text-[#bbb]">
-        <p className="rounded-lg border border-[#222] bg-[#0a0a0a] p-4 text-sm text-[#888]">
+      <div className="mt-8 space-y-4 font-light leading-relaxed text-body">
+        <p className="rounded-lg border border-line bg-surface p-4 text-sm text-secondary">
           Platzhalter — bitte vor Veröffentlichung mit den echten Angaben füllen
           (Pflicht nach §5 DDG / §18 MStV).
         </p>

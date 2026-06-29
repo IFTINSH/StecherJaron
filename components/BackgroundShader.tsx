@@ -1,11 +1,15 @@
 'use client';
 
 import { MeshGradient } from '@paper-design/shaders-react';
+import { useReducedMotion } from 'motion/react';
 
 // One continuous background for the whole page: animated mesh (like Website 1)
 // + a uniform scrim for text readability. Because every section is transparent
 // on top of this, the page reads as a single flowing canvas (no hard panel edges).
 export default function BackgroundShader({ speed = 0.3 }: { speed?: number }) {
+  // Respect reduced-motion: freeze the animated mesh (it's JS/WebGL-driven, so the
+  // global CSS reduced-motion rule doesn't reach it).
+  const reduce = useReducedMotion();
   return (
     <div
       className="fixed inset-0 z-0 overflow-hidden bg-black pointer-events-none"
@@ -15,7 +19,7 @@ export default function BackgroundShader({ speed = 0.3 }: { speed?: number }) {
         <MeshGradient
           className="h-full w-full"
           colors={['#000000', '#1a1a1a', '#333333', '#ffffff']}
-          speed={speed}
+          speed={reduce ? 0 : speed}
         />
       </div>
       {/* uniform readability scrim */}

@@ -5,7 +5,7 @@ import { site } from '@/lib/content';
 
 export default function Contact() {
   return (
-    <section id="contact" className="relative z-10 px-6 pb-32 pt-20 md:px-12 md:pb-40">
+    <section id="contact" className="relative z-10 px-6 py-24 md:px-12 md:py-32">
       <div className="mx-auto max-w-4xl text-center">
         <motion.h2
           initial={{ opacity: 0, y: 24 }}
@@ -23,7 +23,7 @@ export default function Contact() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-10% 0px' }}
           transition={{ duration: 0.8, delay: 0.15 }}
-          className="mx-auto mt-10 max-w-xl font-light text-[#999]"
+          className="mx-auto mt-10 max-w-xl font-light text-body"
           style={{ fontSize: 'clamp(1.05rem, 3vw, 1.5rem)', lineHeight: 1.7 }}
         >
           Für Termine und Anfragen schreib mir einfach eine DM auf Instagram.
@@ -31,7 +31,7 @@ export default function Contact() {
 
         <div className="mt-12 flex flex-col items-center justify-center gap-12 md:flex-row md:gap-20">
           <div className="text-center">
-            <span className="mb-4 block font-display text-sm uppercase tracking-brand text-[#999]">
+            <span className="mb-4 block font-display text-sm uppercase tracking-brand text-secondary">
               Instagram
             </span>
             <a
@@ -45,7 +45,7 @@ export default function Contact() {
           </div>
 
           <div className="text-center">
-            <span className="mb-4 block font-display text-sm uppercase tracking-brand text-[#999]">
+            <span className="mb-4 block font-display text-sm uppercase tracking-brand text-secondary">
               Studio
             </span>
             <a

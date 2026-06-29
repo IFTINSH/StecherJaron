@@ -1,65 +1,58 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import { motion } from 'motion/react';
+import ParallaxImage from './ParallaxImage';
 import { site, studioImages } from '@/lib/content';
 
-// Concept A — "Editorial Sticky", compact variant.
-// Desktop: sticky text panel left; photos as a multi-column masonry on the right
-// (short scroll, images uncropped). Mobile: text block, then a 2-column masonry.
-// Tap any photo to view it full size in a lightbox.
+// Heading on top, then the text + address, then a uniform photo grid (same look as
+// Portfolio) — clean and consistent. Tap any photo to open the lightbox.
 export default function Studio() {
   const [lightbox, setLightbox] = useState<string | null>(null);
 
   return (
-    <section id="studio" className="relative z-10 px-4 py-24 md:py-32">
-      <div className="mx-auto grid max-w-[1800px] grid-cols-1 gap-10 md:grid-cols-12 md:gap-12">
-        {/* Sticky text panel */}
-        <div className="md:col-span-4">
-          <div className="md:sticky md:top-28">
-            <motion.h2
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-10% 0px' }}
-              transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-              className="font-display text-5xl uppercase tracking-brand text-white/90 md:text-7xl"
-              style={{ fontWeight: 300 }}
-            >
-              Studio
-            </motion.h2>
+    <section id="studio" className="relative z-10 px-6 py-24 md:px-12 md:py-32">
+      <div className="mx-auto max-w-[1800px]">
+        <motion.h2
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-10% 0px' }}
+          transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+          className="text-center font-display text-4xl uppercase tracking-brand text-white/90 md:text-left md:text-7xl"
+          style={{ fontWeight: 300 }}
+        >
+          Studio
+        </motion.h2>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-10% 0px' }}
-              transition={{ duration: 0.8, delay: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
-              className="mt-8 space-y-6"
-            >
-              <p className="max-w-sm font-light leading-relaxed text-[#bbb]">
-                Ein ruhiger, privater Raum im Herzen von Passau — Platz für
-                Konzentration, gute Gespräche und saubere Arbeit.
-              </p>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-10% 0px' }}
+          transition={{ duration: 0.8, delay: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
+          className="mt-8 flex flex-col items-center gap-6 text-center md:mt-10 md:flex-row md:items-end md:justify-between md:text-left"
+        >
+          <p className="max-w-md font-light leading-relaxed text-body">
+            Ein ruhiger, privater Raum im Herzen von Passau — Platz für
+            Konzentration, gute Gespräche und saubere Arbeit.
+          </p>
 
-              <div>
-                <span className="font-display text-xs uppercase tracking-brand text-[#666]">
-                  Adresse
-                </span>
-                <a
-                  href={site.studio.mapsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline-trail mt-2 block font-display text-lg uppercase tracking-wordmark text-white"
-                >
-                  {site.studio.address}
-                </a>
-              </div>
-            </motion.div>
+          <div className="shrink-0">
+            <span className="font-display text-xs uppercase tracking-brand text-secondary">
+              Adresse
+            </span>
+            <a
+              href={site.studio.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline-trail mt-2 block font-display text-lg uppercase tracking-wordmark text-white"
+            >
+              {site.studio.address}
+            </a>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Masonry photo grid */}
-        <div className="columns-2 gap-3 md:col-span-8 lg:columns-3 [&>*]:mb-3">
+        {/* Uniform photo grid — same look as Portfolio */}
+        <div className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5 lg:grid-cols-4">
           {studioImages.map((img) => (
             <motion.button
               key={img.src}
@@ -68,17 +61,15 @@ export default function Studio() {
               viewport={{ once: true, margin: '-8% 0px' }}
               transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
               onClick={() => setLightbox(img.src)}
-              className="group block w-full overflow-hidden break-inside-avoid bg-[#0a0a0a]"
+              className="group relative aspect-[4/5] overflow-hidden bg-surface"
               aria-label="Foto vergrößern"
             >
-              <Image
+              <ParallaxImage
                 src={img.src}
                 alt={img.alt}
-                width={img.w}
-                height={img.h}
-                sizes="(max-width: 768px) 50vw, 25vw"
+                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                 loading="lazy"
-                className="h-auto w-full transition-transform duration-700 ease-out group-hover:scale-105"
+                className="transition-transform duration-700 ease-out group-hover:scale-105"
               />
             </motion.button>
           ))}

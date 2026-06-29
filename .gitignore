@@ -7,3 +7,8 @@ dist
 .env*.local
 .vercel
 next-env.d.ts
+
+# temp trace output + raw source uploads (not used by the app)
+tmp-trace
+/Design ohne Titel.*
+/Herobild*

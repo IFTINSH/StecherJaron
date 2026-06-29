@@ -41,19 +41,19 @@ export default async function EventPage({
         <div className="mx-auto max-w-[1500px]">
           <BackButton />
 
-          <header className="mt-8 border-b border-[#1a1a1a] pb-8">
+          <header className="mt-8 border-b border-line pb-8">
             <h1
               className="font-display text-4xl uppercase tracking-brand text-white md:text-6xl"
               style={{ fontWeight: 300 }}
             >
               {ev.title}
             </h1>
-            <div className="mt-4 flex flex-wrap gap-x-6 gap-y-1 font-display text-xs uppercase tracking-brand text-[#777]">
+            <div className="mt-4 flex flex-wrap gap-x-6 gap-y-1 font-display text-xs uppercase tracking-brand text-muted">
               {ev.date && <span>{ev.date}</span>}
               {ev.location && <span>{ev.location}</span>}
             </div>
             {ev.description && (
-              <p className="mt-6 max-w-2xl font-light leading-relaxed text-[#bbb]">
+              <p className="mt-6 max-w-2xl font-light leading-relaxed text-body">
                 {ev.description}
               </p>
             )}
@@ -67,12 +67,12 @@ export default async function EventPage({
                   src={m.src}
                   controls
                   playsInline
-                  className="aspect-[4/3] w-full bg-[#0a0a0a] object-cover"
+                  className="aspect-[4/3] w-full bg-surface object-cover"
                 />
               ) : (
                 <div
                   key={i}
-                  className="relative aspect-[4/3] w-full overflow-hidden bg-[#0a0a0a]"
+                  className="relative aspect-[4/3] w-full overflow-hidden bg-surface"
                 >
                   <Image
                     src={m.src}

@@ -1,8 +1,8 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import Image from 'next/image';
 import { AnimatePresence, motion } from 'motion/react';
+import ParallaxImage from './ParallaxImage';
 import { tattoos, tattooStyles, type TattooStyle } from '@/lib/content';
 import { cn } from '@/lib/utils';
 
@@ -26,30 +26,30 @@ export default function Gallery() {
   };
 
   return (
-    <section id="work" className="relative z-10 px-4 py-24 md:py-32">
+    <section id="work" className="relative z-10 px-6 py-24 md:px-12 md:py-32">
       <div className="mx-auto max-w-[1800px]">
         <motion.h2
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-10% 0px' }}
           transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-          className="text-center font-display text-4xl uppercase tracking-brand text-white/90 md:text-7xl"
+          className="text-center font-display text-4xl uppercase tracking-brand text-white/90 md:text-left md:text-7xl"
           style={{ fontWeight: 300 }}
         >
           Portfolio
         </motion.h2>
 
         {/* Filter bar */}
-        <div className="mt-10 flex flex-wrap justify-center gap-3">
+        <div className="mt-10 flex flex-wrap justify-center gap-2 md:justify-start">
           {(['Alle', ...tattooStyles] as Filter[]).map((f) => (
             <button
               key={f}
               onClick={() => select(f)}
               className={cn(
-                'rounded-full border px-5 py-2 font-display text-xs uppercase tracking-brand transition-colors duration-300',
+                'rounded-full border px-3.5 py-1.5 font-display text-[11px] uppercase tracking-wordmark transition-colors duration-300',
                 filter === f
                   ? 'border-white bg-white text-black'
-                  : 'border-[#333] text-white/70 hover:border-white hover:text-white'
+                  : 'border-line text-white/70 hover:border-white hover:text-white'
               )}
             >
               {f}
@@ -60,7 +60,7 @@ export default function Gallery() {
         {/* Grid */}
         <motion.div
           layout
-          className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5"
+          className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5 lg:grid-cols-4"
         >
           <AnimatePresence mode="popLayout">
             {shown.map((t) => (
@@ -72,14 +72,13 @@ export default function Gallery() {
                 exit={{ opacity: 0, scale: 0.96 }}
                 transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
                 onClick={() => setLightbox(t.src)}
-                className="group relative aspect-[4/5] overflow-hidden bg-[#0a0a0a]"
+                className="group relative aspect-[4/5] overflow-hidden bg-surface"
               >
-                <Image
+                <ParallaxImage
                   src={t.src}
                   alt={t.alt}
-                  fill
-                  sizes="(max-width: 768px) 50vw, 33vw"
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  className="transition-transform duration-700 ease-out group-hover:scale-105"
                 />
                 <span className="pointer-events-none absolute bottom-3 left-3 font-display text-[10px] uppercase tracking-brand text-white/0 transition-colors duration-300 group-hover:text-white/80">
                   {t.style}

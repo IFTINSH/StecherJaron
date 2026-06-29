@@ -1,14 +1,17 @@
 @import "tailwindcss";
 
 @theme {
+  /* Surfaces */
   --color-bg: #000000;
-  --color-bg-soft: #0a0a0a;
-  --color-bg-section: #111111;
-  --color-text: #ffffff;
-  --color-text-secondary: #999999;
-  --color-text-muted: #666666;
-  --color-border: #2a2a2a;
-  --color-accent: #dfdad5;
+  --color-surface: #0a0a0a; /* bg-surface — image/card placeholders */
+
+  /* Text ramp (on near-black) — one value per role, no ad-hoc hex */
+  --color-body: #c9c9c9; /* text-body — paragraph copy */
+  --color-secondary: #8c8c8c; /* text-secondary — labels, secondary text */
+  --color-muted: #767676; /* text-muted — meta: dates, footer, copyright (AA on black) */
+
+  /* Lines */
+  --color-line: #2a2a2a; /* border-line — all borders / dividers */
 
   --font-display: var(--font-jost);
   --font-body: var(--font-inter);
@@ -16,6 +19,13 @@
 
 * {
   box-sizing: border-box;
+}
+
+/* Keyboard focus only (:focus-visible) — a fine white ring for tab navigation.
+   Mouse/touch users never see it; it just closes the a11y gap (BFSG / WCAG). */
+*:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, 0.75);
+  outline-offset: 3px;
 }
 
 html {
@@ -123,5 +133,24 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Hero photo + line stage.
+   Mobile: full-bleed (handled by the base `absolute inset-0` utility).
+   Desktop: render the COMPLETE 16:9 image at the exact same size/position as the
+   current cover crop (centred, full viewport width), but in a box that does NOT
+   clip the bottom. The top overflow is hidden by the section (so top/left/right
+   look identical to before — same zoom), while the previously cropped bottom now
+   appears below the fold and fades out for a seamless transition. */
+@media (min-width: 768px) and (min-aspect-ratio: 16/9) {
+  .hero-stage {
+    inset: auto;
+    left: 0;
+    width: 100%;
+    height: 56.25vw; /* 16:9 of full width — same horizontal scale as cover */
+    top: calc((100svh - 56.25vw) / 2); /* centred like object-cover (negative when wide) */
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 72%, transparent 96%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 72%, transparent 96%);
   }
 }

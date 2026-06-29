@@ -36,16 +36,37 @@ export const about = {
 // "How to Book" — persistent overlay content. Booking happens via Instagram.
 export const howToBook = {
   title: 'How to Book',
-  intro:
-    'Termine und Anfragen laufen ausschließlich über Instagram. So funktioniert es:',
-  steps: [
-    'Folge @stecherjaron auf Instagram.',
-    'Schreib mir eine DM mit deiner Tattoo-Idee, ungefährer Größe und Körperstelle.',
-    'Häng — wenn möglich — 1–2 Referenzbilder an.',
-    'Wir besprechen Motiv, Termin und Preis direkt im Chat.',
+  sections: [
+    {
+      heading: 'Buchungsanfrage',
+      items: [
+        'Buchungsanfragen erfolgen ausschließlich über Instagram.',
+        'Bitte sende eine möglichst präzise Beschreibung deiner Tattoo-Idee oder Wunschvorstellung.',
+        'Falls vorhanden, ergänze deine Anfrage gerne mit Referenzbildern, Inspirationen oder Skizzen.',
+        'Bei Wannados füge bitte zusätzlich einen entsprechenden Screenshot bei.',
+        'Wenn du die gewünschte Größe bereits einschätzen kannst, teile diese am besten in cm mit; das erleichtert eine erste preisliche Orientierung.',
+        'Ein Foto der gewünschten Körperstelle hilft dabei, Placement und Wirkung besser einzuschätzen.',
+        'Sollte es dir unangenehm sein, ein Foto der Stelle zu schicken, ist das selbstverständlich kein Problem — gib in dem Fall einfach kurz Bescheid.',
+        'Bitte nenne außerdem 2–3 Termine, die für dich grundsätzlich infrage kommen.',
+        'Aktuelle verfügbare Termine findest du in den Instagram-Highlights.',
+      ],
+    },
+    {
+      heading: 'Terminreservierung',
+      items: [
+        'Für die verbindliche Buchung eines Termins wird eine nicht erstattbare Anzahlung in Höhe von 50 € erhoben.',
+        'Diese Anzahlung deckt die Ausarbeitung deines individuellen Entwurfs ab und dient zugleich der verbindlichen Reservierung deines Termins.',
+      ],
+    },
+    {
+      heading: 'Stil und Zusammenarbeit',
+      items: [
+        'Auch neue, besondere oder stilistisch unkonventionelle Ideen sind jederzeit willkommen.',
+        'Entscheidend ist, dass Motiv, Stil und Umsetzung für beide Seiten stimmig sind.',
+        'Die beste Arbeit entsteht immer dann, wenn eine gemeinsame kreative Basis vorhanden ist und das Projekt von Anfang an auf gegenseitigem Vertrauen beruht.',
+      ],
+    },
   ],
-  // A photographed booking note Jaron provided.
-  image: '/misc/how-to-book.jpeg',
   ctaLabel: 'Auf Instagram schreiben',
   ctaUrl: 'https://www.instagram.com/stecherjaron/',
 };
