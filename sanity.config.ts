@@ -23,6 +23,10 @@ export default defineConfig({
               .title('Über mich')
               .id('about')
               .child(S.document().schemaType('about').documentId('about')),
+            S.listItem()
+              .title('How to Book')
+              .id('howToBook')
+              .child(S.document().schemaType('howToBook').documentId('howToBook')),
             S.divider(),
             S.documentTypeListItem('category').title('Kategorien'),
             S.documentTypeListItem('tattoo').title('Portfolio'),

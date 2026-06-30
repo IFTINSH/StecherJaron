@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { howToBook } from '@/lib/content';
+import type { HowToBookData } from '@/lib/data';
 
 // Persistent, site-wide "How to Book" affordance. A fixed floating pill (bottom-
 // right) opens a panel with the booking guidance, grouped into clear sections.
-export default function HowToBook() {
+export default function HowToBook({ data }: { data: HowToBookData }) {
+  const howToBook = data;
   const [open, setOpen] = useState(false);
 
   useEffect(() => {

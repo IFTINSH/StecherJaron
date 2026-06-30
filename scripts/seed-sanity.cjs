@@ -41,6 +41,43 @@ const about = {
   body: `Hey, ich bin Jaron — Tattoo Artist aus Passau. Ich spezialisiere mich auf Dotwork, Blackwork und Fine-Line Tattoos. Jedes meiner Designs entsteht individuell für dich, mit einem Fokus auf feine Details, klare Linien und ausdrucksstarke Kontraste zwischen schwarzer Tinte und Haut. Lass uns gemeinsam deine Vision auf die Haut bringen.`,
 };
 
+const howToBook = {
+  title: 'How to Book',
+  sections: [
+    {
+      heading: 'Buchungsanfrage',
+      items: [
+        'Buchungsanfragen erfolgen ausschließlich über Instagram.',
+        'Bitte sende eine möglichst präzise Beschreibung deiner Tattoo-Idee oder Wunschvorstellung.',
+        'Falls vorhanden, ergänze deine Anfrage gerne mit Referenzbildern, Inspirationen oder Skizzen.',
+        'Bei Wannados füge bitte zusätzlich einen entsprechenden Screenshot bei.',
+        'Wenn du die gewünschte Größe bereits einschätzen kannst, teile diese am besten in cm mit; das erleichtert eine erste preisliche Orientierung.',
+        'Ein Foto der gewünschten Körperstelle hilft dabei, Placement und Wirkung besser einzuschätzen.',
+        'Sollte es dir unangenehm sein, ein Foto der Stelle zu schicken, ist das selbstverständlich kein Problem — gib in dem Fall einfach kurz Bescheid.',
+        'Bitte nenne außerdem 2–3 Termine, die für dich grundsätzlich infrage kommen.',
+        'Aktuelle verfügbare Termine findest du in den Instagram-Highlights.',
+      ],
+    },
+    {
+      heading: 'Terminreservierung',
+      items: [
+        'Für die verbindliche Buchung eines Termins wird eine nicht erstattbare Anzahlung in Höhe von 50 € erhoben.',
+        'Diese Anzahlung deckt die Ausarbeitung deines individuellen Entwurfs ab und dient zugleich der verbindlichen Reservierung deines Termins.',
+      ],
+    },
+    {
+      heading: 'Stil und Zusammenarbeit',
+      items: [
+        'Auch neue, besondere oder stilistisch unkonventionelle Ideen sind jederzeit willkommen.',
+        'Entscheidend ist, dass Motiv, Stil und Umsetzung für beide Seiten stimmig sind.',
+        'Die beste Arbeit entsteht immer dann, wenn eine gemeinsame kreative Basis vorhanden ist und das Projekt von Anfang an auf gegenseitigem Vertrauen beruht.',
+      ],
+    },
+  ],
+  ctaLabel: 'Auf Instagram schreiben',
+  ctaUrl: 'https://www.instagram.com/stecherjaron/',
+};
+
 // Reihenfolge = order; Key = wird zur deterministischen _id (category-<key>)
 const categories = [
   { key: 'dotwork', title: 'Dotwork', order: 1 },
@@ -100,6 +137,22 @@ async function run() {
   // 1) Über mich
   await client.createOrReplace({ _id: 'about', _type: 'about', title: about.title, body: about.body });
   console.log('✓ Über mich');
+
+  // 1b) How to Book
+  await client.createOrReplace({
+    _id: 'howToBook',
+    _type: 'howToBook',
+    title: howToBook.title,
+    sections: howToBook.sections.map((s, si) => ({
+      _key: `s${si}`,
+      _type: 'section',
+      heading: s.heading,
+      items: s.items,
+    })),
+    ctaLabel: howToBook.ctaLabel,
+    ctaUrl: howToBook.ctaUrl,
+  });
+  console.log('✓ How to Book');
 
   // 2) Kategorien
   for (const c of categories) {

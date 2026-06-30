@@ -2,6 +2,7 @@ import { client } from '@/sanity/client';
 import { imageUrl } from '@/sanity/image';
 import {
   about as aboutFallback,
+  howToBook as howToBookFallback,
   tattoos as tattoosFallback,
   events as eventsFallback,
 } from './content';
@@ -27,6 +28,30 @@ export interface EventItem {
   description?: string;
   cover: string;
   images: string[];
+}
+
+export interface HowToBookData {
+  title: string;
+  sections: { heading: string; items: string[] }[];
+  ctaLabel: string;
+  ctaUrl: string;
+}
+
+export async function getHowToBook(): Promise<HowToBookData> {
+  if (!client) return howToBookFallback;
+  const doc = await client.fetch<Partial<HowToBookData> | null>(
+    `*[_type == "howToBook"][0]{ title, sections, ctaLabel, ctaUrl }`,
+    {},
+    fetchOpts,
+  );
+  // Nur Sanity nehmen, wenn echte Abschnitte vorhanden sind, sonst Fallback.
+  if (!doc?.sections?.length) return howToBookFallback;
+  return {
+    title: doc.title || howToBookFallback.title,
+    sections: doc.sections,
+    ctaLabel: doc.ctaLabel || howToBookFallback.ctaLabel,
+    ctaUrl: doc.ctaUrl || howToBookFallback.ctaUrl,
+  };
 }
 
 export async function getAbout(): Promise<AboutData> {
@@ -67,17 +92,24 @@ export async function getTattoos(): Promise<TattooItem[]> {
     : tattoosFallback.map((t) => ({ id: t.id, src: t.src, alt: t.alt, style: t.style }));
 }
 
+// Fallback-Events nach Datum sortiert (neueste zuerst), analog zur Sanity-Query.
+const sortedFallbackEvents = () =>
+  [...eventsFallback]
+    .sort((a, b) => (b.date || '').localeCompare(a.date || ''))
+    .map(toFallbackEvent);
+
 export async function getEvents(): Promise<EventItem[]> {
-  if (!client) return eventsFallback.map(toFallbackEvent);
+  if (!client) return sortedFallbackEvents();
   const docs = await client.fetch<RawEvent[]>(
-    `*[_type == "event" && defined(cover)] | order(order asc, _createdAt desc){
+    // coalesce -> Events ohne Datum ans Ende (sonst sortiert GROQ null bei desc nach oben).
+    `*[_type == "event" && defined(cover)] | order(coalesce(date, "") desc, _createdAt desc){
       "slug": slug.current, title, date, location, description, cover, images
     }`,
     {},
     fetchOpts,
   );
   const items = docs.map(fromSanityEvent).filter((e) => e.slug && e.cover);
-  return items.length ? items : eventsFallback.map(toFallbackEvent);
+  return items.length ? items : sortedFallbackEvents();
 }
 
 export async function getEvent(slug: string): Promise<EventItem | null> {

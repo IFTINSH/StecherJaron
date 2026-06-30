@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import type { Metadata } from 'next';
 import { getEvent, getEventSlugs } from '@/lib/data';
+import { formatEventDate } from '@/lib/format';
 import BackgroundShader from '@/components/BackgroundShader';
 import BackButton from '@/components/BackButton';
 import Footer from '@/components/Footer';
@@ -55,7 +56,7 @@ export default async function EventPage({
               {ev.title}
             </h1>
             <div className="mt-4 flex flex-wrap gap-x-6 gap-y-1 font-display text-xs uppercase tracking-brand text-muted">
-              {ev.date && <span>{ev.date}</span>}
+              {formatEventDate(ev.date) && <span>{formatEventDate(ev.date)}</span>}
               {ev.location && <span>{ev.location}</span>}
             </div>
             {ev.description && (

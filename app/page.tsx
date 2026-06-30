@@ -11,15 +11,16 @@ import Events from '@/components/Events';
 import Contact from '@/components/Contact';
 import HowToBook from '@/components/HowToBook';
 import Footer from '@/components/Footer';
-import { getAbout, getTattoos, getEvents } from '@/lib/data';
+import { getAbout, getTattoos, getEvents, getHowToBook } from '@/lib/data';
 
 export const revalidate = 60;
 
 export default async function Home() {
-  const [about, tattoos, events] = await Promise.all([
+  const [about, tattoos, events, howToBook] = await Promise.all([
     getAbout(),
     getTattoos(),
     getEvents(),
+    getHowToBook(),
   ]);
 
   return (
@@ -38,7 +39,7 @@ export default async function Home() {
           <Contact />
         </main>
         <Footer />
-        <HowToBook />
+        <HowToBook data={howToBook} />
       </LoadingProvider>
     </>
   );

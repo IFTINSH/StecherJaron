@@ -13,7 +13,13 @@ export const event = defineType({
       options: { source: 'title', maxLength: 96 },
       validation: (r) => r.required(),
     }),
-    defineField({ name: 'date', title: 'Datum', type: 'string', description: 'z. B. „12. Juli 2026"' }),
+    defineField({
+      name: 'date',
+      title: 'Datum',
+      type: 'date',
+      options: { dateFormat: 'DD.MM.YYYY' },
+      description: 'Bestimmt die Reihenfolge auf der Website (neueste zuerst).',
+    }),
     defineField({ name: 'location', title: 'Ort', type: 'string' }),
     defineField({ name: 'description', title: 'Beschreibung', type: 'text', rows: 4 }),
     defineField({
@@ -29,15 +35,9 @@ export const event = defineType({
       type: 'array',
       of: [{ type: 'image', options: { hotspot: true } }],
     }),
-    defineField({
-      name: 'order',
-      title: 'Reihenfolge',
-      type: 'number',
-      description: 'Kleinere Zahl = weiter vorne in der Event-Übersicht.',
-    }),
   ],
   orderings: [
-    { title: 'Reihenfolge', name: 'orderAsc', by: [{ field: 'order', direction: 'asc' }] },
+    { title: 'Datum (neueste zuerst)', name: 'dateDesc', by: [{ field: 'date', direction: 'desc' }] },
   ],
   preview: { select: { title: 'title', subtitle: 'date', media: 'cover' } },
 });

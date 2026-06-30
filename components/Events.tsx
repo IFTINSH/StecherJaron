@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'motion/react';
 import type { EventItem } from '@/lib/data';
+import { formatEventDate } from '@/lib/format';
 
 // Events overview — a grid of tiles (Chris-Foy /all style). Each tile links to
 // its own event page.
@@ -54,9 +55,9 @@ export default function Events({ events }: { events: EventItem[] }) {
                   <h3 className="font-display text-sm uppercase tracking-wordmark text-white">
                     {ev.title}
                   </h3>
-                  {ev.date && (
+                  {formatEventDate(ev.date) && (
                     <span className="font-display text-xs uppercase tracking-brand text-muted">
-                      {ev.date}
+                      {formatEventDate(ev.date)}
                     </span>
                   )}
                 </div>
