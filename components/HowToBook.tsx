@@ -90,7 +90,7 @@ export default function HowToBook({ data }: { data: HowToBookData }) {
                 href={howToBook.ctaUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-10 inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 font-display text-xs uppercase tracking-brand text-black transition-opacity hover:opacity-85"
+                className="mt-10 flex w-full items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 font-display text-xs uppercase tracking-brand text-black transition-opacity hover:opacity-85"
               >
                 {howToBook.ctaLabel}
               </a>

@@ -1,6 +1,5 @@
 'use client';
 
-import { useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'motion/react';
@@ -9,8 +8,8 @@ import ParallaxImage from './ParallaxImage';
 // Shared "editorial preview" (from the Figma design): a few feature images in dark
 // 4:5 frames plus a compact "+N / Alle ansehen" tile whose background is a blurred
 // mini-mosaic of the following images. Desktop shows four tiles in a row; mobile is
-// a swipeable card row with progress dots. Used by both Portfolio and Studio — items
-// are generic, with an optional label shown bottom-left (e.g. the tattoo style).
+// a static 2×2 grid (three works + the See-All tile). Used by both Portfolio and
+// Studio — items are generic, with an optional label bottom-left (e.g. the style).
 
 export interface PreviewItem {
   key: string;
@@ -157,12 +156,10 @@ export function SeeAllTile({
 
 // Mobile: a swipeable row of portrait cards. Cards are ~60% wide so the next one
 // peeks at the edge; scroll-snap holds each in place. Progress dots track position
-// (and jump on tap). The last card is the See-All tile. SCROLL_PAD must match the
-// section's px-6 gutter (24px) so a snapped card aligns to the heading.
-const CARD_W = 'w-[60%]';
-const SCROLL_PAD = 24;
-
-function MobileSwipe({
+// Mobile: a static 2×2 grid — two works on top, one work + the See-All tile
+// below. Everything is visible at once (no swiping, no dots), and the See-All
+// tile is a full member of the grid, like in the original Figma composition.
+function MobileGrid({
   works,
   mini,
   remaining,
@@ -175,81 +172,26 @@ function MobileSwipe({
   href: string;
   onOpenLightbox: (index: number) => void;
 }) {
-  const scrollerRef = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(0);
-
   const showSeeAll = remaining > 0 && mini.length > 0;
-  const count = works.length + (showSeeAll ? 1 : 0);
-
-  // Active card = the one whose left edge is closest to the snapped scroll position.
-  const handleScroll = () => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    const cards = Array.from(el.children) as HTMLElement[];
-    let best = 0;
-    let bestDist = Infinity;
-    cards.forEach((c, i) => {
-      const d = Math.abs(c.offsetLeft - SCROLL_PAD - el.scrollLeft);
-      if (d < bestDist) {
-        bestDist = d;
-        best = i;
-      }
-    });
-    setActive(best);
-  };
-
-  const goTo = (i: number) => {
-    const el = scrollerRef.current;
-    const card = el?.children[i] as HTMLElement | undefined;
-    if (el && card) el.scrollTo({ left: card.offsetLeft - SCROLL_PAD, behavior: 'smooth' });
-  };
 
   return (
-    <div className="md:hidden">
-      <div
-        ref={scrollerRef}
-        onScroll={handleScroll}
-        className="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-pl-6 px-6 pb-1"
-      >
-        {works.map((item, i) => (
-          <div key={item.key} className={`${CARD_W} shrink-0 snap-start`}>
-            {/* gentler parallax — on a phone the frame passes the viewport quickly,
-                so the same travel reads much stronger than on desktop */}
-            <FeatureImage
-              item={item}
-              index={i}
-              onOpenLightbox={onOpenLightbox}
-              className="aspect-[4/5] w-full"
-              magnitude={4}
-            />
-          </div>
-        ))}
+    <div className="grid grid-cols-2 gap-3 md:hidden">
+      {/* magnitude 4: gentler parallax — on a phone the frame passes the viewport
+          quickly, so the same travel reads much stronger than on desktop */}
+      {works.map((item, i) => (
+        <FeatureImage
+          key={item.key}
+          item={item}
+          index={i}
+          onOpenLightbox={onOpenLightbox}
+          className="aspect-[4/5] w-full"
+          magnitude={4}
+        />
+      ))}
 
-        {showSeeAll && (
-          <div className={`${CARD_W} shrink-0 snap-start`}>
-            <SeeAllTile mini={mini} remaining={remaining} href={href} vertical className="aspect-[4/5] w-full" />
-          </div>
-        )}
-      </div>
-
-      {/* progress dots — the visible bar is tiny, so each button carries generous
-          invisible padding to reach a comfortable touch-target size */}
-      <div className="mt-2 flex justify-center">
-        {Array.from({ length: count }).map((_, i) => (
-          <button
-            key={i}
-            onClick={() => goTo(i)}
-            aria-label={`Zu Bild ${i + 1}`}
-            className="flex items-center px-1.5 py-3"
-          >
-            <span
-              className={`block h-[3px] rounded-full transition-all duration-200 ${
-                i === active ? 'w-5 bg-white/50' : 'w-1.5 bg-white/15'
-              }`}
-            />
-          </button>
-        ))}
-      </div>
+      {showSeeAll && (
+        <SeeAllTile mini={mini} remaining={remaining} href={href} vertical className="aspect-[4/5] w-full" />
+      )}
     </div>
   );
 }
@@ -258,8 +200,8 @@ export default function GalleryPreview({ items, href, onOpenLightbox }: Props) {
   if (!items.length) return null;
 
   // Desktop shows three features + the See-All tile (four tiles fill the row); mobile
-  // is a swipe row of three + a See-All card. Each layout draws its mini-mosaic from
-  // the images that follow the ones already on display.
+  // is a 2×2 grid: three works + the See-All tile. Each layout draws its mini-mosaic
+  // from the images that follow the ones already on display.
   const dFeatures = items.slice(0, 3);
   const dMini = items.slice(3, 7);
   const dRemaining = Math.max(items.length - dFeatures.length, 0);
@@ -287,8 +229,8 @@ export default function GalleryPreview({ items, href, onOpenLightbox }: Props) {
         )}
       </div>
 
-      {/* ── Mobile: swipeable row of portrait cards (last card = See-All) ── */}
-      <MobileSwipe works={mWorks} mini={mMini} remaining={mRemaining} href={href} onOpenLightbox={onOpenLightbox} />
+      {/* ── Mobile: 2×2 grid (three works + See-All tile) ── */}
+      <MobileGrid works={mWorks} mini={mMini} remaining={mRemaining} href={href} onOpenLightbox={onOpenLightbox} />
     </motion.div>
   );
 }

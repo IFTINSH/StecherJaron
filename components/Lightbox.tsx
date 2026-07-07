@@ -1,11 +1,15 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 
 // Shared lightbox for all galleries: locks the page scroll while open, closes on
 // Escape / backdrop / ×, and navigates with arrow keys, edge buttons (desktop)
 // and horizontal swipe (touch). The image re-runs its entrance animation on
 // every index change (key={index}).
+// Rendered via portal into <body>: inside a section (relative z-10) the fixed
+// overlay would be trapped in that stacking context and the site-wide header /
+// How-to-Book pill would still paint on top of it.
 
 export interface LightboxImage {
   src: string;
@@ -51,7 +55,7 @@ export default function Lightbox({ images, index, onClose, onIndexChange }: Prop
   const image = images[index];
   if (!image) return null;
 
-  return (
+  return createPortal(
     <div
       className="animate-lightbox-bg fixed inset-0 z-[200] flex items-center justify-center p-4"
       data-lenis-prevent
@@ -149,6 +153,7 @@ export default function Lightbox({ images, index, onClose, onIndexChange }: Prop
           </span>
         </>
       )}
-    </div>
+    </div>,
+    document.body
   );
 }
