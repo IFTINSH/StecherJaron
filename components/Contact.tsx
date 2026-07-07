@@ -23,7 +23,7 @@ export default function Contact() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-10% 0px' }}
           transition={{ duration: 0.8, delay: 0.15 }}
-          className="mx-auto mt-10 max-w-xl font-light text-body"
+          className="mx-auto mt-12 max-w-xl font-light text-body md:mt-10"
           style={{ fontSize: 'clamp(1.05rem, 3vw, 1.5rem)', lineHeight: 1.7 }}
         >
           Für Termine und Anfragen schreib mir einfach eine DM auf Instagram.

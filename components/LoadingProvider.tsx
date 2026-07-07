@@ -9,7 +9,10 @@ import {
 } from 'react';
 import Loader from './Loader';
 
-const LoadingContext = createContext(false);
+// Default TRUE: components rendered outside the provider (e.g. the Header on
+// subpages, which have no intro loader) should behave as "already loaded".
+// The homepage wraps everything in the provider, which controls the real value.
+const LoadingContext = createContext(true);
 
 /** true once the page is ready (intro finished, or skipped on return visits). */
 export function useLoaded() {

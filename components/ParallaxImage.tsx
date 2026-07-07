@@ -19,9 +19,11 @@ interface Props {
   loading?: 'eager' | 'lazy';
   /** classes for the <img> (e.g. object-cover + hover scale) */
   className?: string;
+  /** parallax travel each direction, in %. Defaults to the site standard. */
+  magnitude?: number;
 }
 
-export default function ParallaxImage({ src, alt, sizes, loading, className }: Props) {
+export default function ParallaxImage({ src, alt, sizes, loading, className, magnitude = MAG }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const y = useMotionValue('0%');
@@ -38,7 +40,7 @@ export default function ParallaxImage({ src, alt, sizes, loading, className }: P
       // leaves at the viewport top.
       const progress = (vh - rect.top) / (vh + rect.height);
       const clamped = Math.min(1, Math.max(0, progress));
-      y.set(`${(0.5 - clamped) * 2 * MAG}%`);
+      y.set(`${(0.5 - clamped) * 2 * magnitude}%`);
     };
 
     update();
@@ -50,7 +52,7 @@ export default function ParallaxImage({ src, alt, sizes, loading, className }: P
       window.removeEventListener('scroll', update);
       window.removeEventListener('resize', update);
     };
-  }, [reduce, y]);
+  }, [reduce, y, magnitude]);
 
   return (
     <div ref={ref} className="absolute inset-0 overflow-hidden">

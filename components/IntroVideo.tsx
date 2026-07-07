@@ -3,18 +3,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
 
-// "Scrolls in & expands" like dotstolines.com. Plays muted+looped; once the
-// block is fully in view we try to unmute (sound on). Browsers may block
-// unmuted autoplay without a prior tap → we fall back to a "Ton aktivieren"
-// button. Mobile-first.
+// "Scrolls in & expands" like dotstolines.com. Plays muted+looped; sound is
+// opt-in via the "Ton" button (no auto-unmute — unexpected audio while
+// scrolling is jarring, and browsers usually block it anyway). Mobile-first.
 export default function IntroVideo() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
-  const [needsTap, setNeedsTap] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
-  const autoTried = useRef(false); // auto-unmute only once
-  const userDecided = useRef(false); // once the user toggles, never auto-override
 
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({
@@ -26,39 +22,17 @@ export default function IntroVideo() {
   const radius = useTransform(scrollYProgress, [0, 1], [24, 0]);
 
   // Lazy: only load + play the (heavy) video when it scrolls into view, pause
-  // when it leaves. Once (almost) fully visible, try to enable sound — once.
+  // when it leaves. preload="none" means the first play triggers the load.
   useEffect(() => {
     const el = videoRef.current;
     if (!el) return;
 
     const io = new IntersectionObserver(
-      async ([entry]) => {
-        if (!entry.isIntersecting) {
-          el.pause();
-          return;
-        }
-
-        // in view → start (muted) playback; preload="none" means this is the
-        // first time the video actually loads.
-        el.play().catch(() => {});
-
-        // attempt auto-unmute ONCE, never after the user chose via the button.
-        if (userDecided.current || autoTried.current) return;
-        if (entry.intersectionRatio >= 0.85) {
-          autoTried.current = true;
-          try {
-            el.muted = false;
-            await el.play();
-            setMuted(false);
-            setNeedsTap(false);
-          } catch {
-            el.muted = true;
-            setMuted(true);
-            setNeedsTap(true);
-          }
-        }
+      ([entry]) => {
+        if (entry.isIntersecting) el.play().catch(() => {});
+        else el.pause();
       },
-      { threshold: [0, 0.25, 0.85, 1] }
+      { threshold: [0, 0.25] }
     );
     io.observe(el);
     return () => io.disconnect();
@@ -67,7 +41,6 @@ export default function IntroVideo() {
   const toggleSound = async () => {
     const el = videoRef.current;
     if (!el) return;
-    userDecided.current = true; // user is in control from now on
     const next = !muted;
     el.muted = next;
     if (!next) {
@@ -78,7 +51,6 @@ export default function IntroVideo() {
       }
     }
     setMuted(next);
-    setNeedsTap(false);
   };
 
   // Fullscreen (desktop): show native controls while in fullscreen for sound/seek.
@@ -155,17 +127,6 @@ export default function IntroVideo() {
             </button>
           </div>
 
-          {needsTap && muted && (
-            <button
-              onClick={toggleSound}
-              className="absolute inset-0 flex items-center justify-center bg-black/30"
-              aria-label="Ton aktivieren"
-            >
-              <span className="flex items-center gap-3 rounded-full bg-white/90 px-6 py-3 font-display text-sm uppercase tracking-brand text-black">
-                <SoundOn /> Ton aktivieren
-              </span>
-            </button>
-          )}
         </motion.div>
       </div>
     </section>

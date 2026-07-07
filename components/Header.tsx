@@ -13,6 +13,14 @@ export default function Header() {
     document.body.style.overflow = open ? 'hidden' : '';
   }, [open]);
 
+  // Escape closes the mobile menu.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open]);
+
   return (
     <>
       <motion.header
@@ -22,7 +30,7 @@ export default function Header() {
         transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1], delay: 0.8 }}
       >
         <a
-          href="#top"
+          href="/#top"
           className="font-display tracking-wordmark text-lg uppercase text-white no-underline md:text-xl"
           style={{ fontWeight: 400 }}
         >

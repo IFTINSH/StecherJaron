@@ -1,10 +1,12 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import type { Metadata } from 'next';
-import { getEvent, getEventSlugs } from '@/lib/data';
+import { getEvent, getEventSlugs, getHowToBook } from '@/lib/data';
 import { formatEventDate } from '@/lib/format';
 import BackgroundShader from '@/components/BackgroundShader';
+import Header from '@/components/Header';
 import BackButton from '@/components/BackButton';
+import HowToBook from '@/components/HowToBook';
 import Footer from '@/components/Footer';
 
 export const revalidate = 60;
@@ -35,7 +37,7 @@ export default async function EventPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const ev = await getEvent(slug);
+  const [ev, howToBook] = await Promise.all([getEvent(slug), getHowToBook()]);
   if (!ev) notFound();
 
   // Show the gallery images; fall back to the cover if no extra images exist.
@@ -44,6 +46,7 @@ export default async function EventPage({
   return (
     <>
       <BackgroundShader />
+      <Header />
       <main className="relative z-10 min-h-dvh px-6 pb-28 pt-28 md:px-12">
         <div className="mx-auto max-w-[1500px]">
           <BackButton />
@@ -85,6 +88,7 @@ export default async function EventPage({
         </div>
       </main>
       <Footer />
+      <HowToBook data={howToBook} />
     </>
   );
 }

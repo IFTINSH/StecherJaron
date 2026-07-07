@@ -60,6 +60,10 @@ export default function HeroPhotoBackground() {
           path={JARON_SILHOUETTE_MOBILE}
           viewBox={JARON_VIEWBOX_MOBILE}
           preserveAspectRatio="none"
+          // mobile viewBox scales DOWN to phone width (~0.67×) vs desktop UP (~2.15×),
+          // so it needs a heavier width to read on screen — but kept a touch under
+          // full desktop-match so the line stays fine and refined ("edel"), not chunky.
+          weight={2.1}
         />
       </motion.div>
 

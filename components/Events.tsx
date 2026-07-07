@@ -23,7 +23,10 @@ export default function Events({ events }: { events: EventItem[] }) {
           Events
         </motion.h2>
 
-        <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-3">
+        {/* Mobile (1 col): larger gap so each card (image + its title) reads as one
+            group — the title's 12px tie to its image needs clear separation from
+            the next card. Desktop keeps its 24px. */}
+        <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
           {events.map((ev, i) => (
             <motion.div
               key={ev.slug}

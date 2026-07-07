@@ -29,6 +29,10 @@ interface Props {
   /** Arc-length fraction (0–1) the line recedes TO when dissolving. 0.5 = path
    *  midpoint; ~0.354 = the bottom edge (so both ends run off the bottom together). */
   vanish?: number;
+  /** Multiplies every stroke width. Mobile's viewBox is scaled DOWN to phone width
+   *  (~0.67×) while desktop is scaled UP (~2.15×), so the same width renders ~3× thinner
+   *  on mobile — pass ~3 there to match desktop's visual boldness. Default 1 = desktop. */
+  weight?: number;
 }
 
 export default function FlowLine({
@@ -36,6 +40,7 @@ export default function FlowLine({
   viewBox,
   preserveAspectRatio = 'xMidYMid slice',
   vanish = 0.5,
+  weight = 1,
 }: Props) {
   const loaded = useLoaded();
   const reduce = useReducedMotion();
@@ -46,8 +51,8 @@ export default function FlowLine({
 
   // Stroke layers: a faint soft halo for depth (NOT a bright glow) + the chrome core.
   const STROKES = [
-    { width: 2.6, stroke: 'white', opacity: 0.05 },
-    { width: 1.1, stroke: `url(#chrome-${uid})`, opacity: 1 },
+    { width: 2.6 * weight, stroke: 'white', opacity: 0.035 },
+    { width: 1.1 * weight, stroke: `url(#chrome-${uid})`, opacity: 1 },
   ];
 
   return (
@@ -104,12 +109,12 @@ export default function FlowLine({
       <motion.path
         d={path}
         stroke="white"
-        strokeWidth={4}
+        strokeWidth={4 * weight}
         strokeLinecap="round"
         strokeLinejoin="round"
         filter={`url(#bloom-${uid})`}
         initial={{ opacity: 0 }}
-        animate={loaded ? { opacity: [0, 0.2, 0] } : {}}
+        animate={loaded ? { opacity: [0, 0.14, 0] } : {}}
         transition={{ duration: 1, times: [0, 0.45, 1], delay: DELAY, ease: 'easeOut' }}
       />
     </svg>

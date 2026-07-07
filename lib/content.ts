@@ -18,12 +18,14 @@ export const site = {
   },
 } as const;
 
+// Absolute hrefs (/#section) so the nav also works from subpages like
+// /portfolio or /events/…; on the homepage they still scroll in place.
 export const nav = [
-  { href: '#about', label: 'Über mich' },
-  { href: '#work', label: 'Portfolio' },
-  { href: '#studio', label: 'Studio' },
-  { href: '#events', label: 'Events' },
-  { href: '#contact', label: 'Kontakt' },
+  { href: '/#about', label: 'Über mich' },
+  { href: '/#work', label: 'Portfolio' },
+  { href: '/#studio', label: 'Studio' },
+  { href: '/#events', label: 'Events' },
+  { href: '/#contact', label: 'Kontakt' },
 ] as const;
 
 export const about = {

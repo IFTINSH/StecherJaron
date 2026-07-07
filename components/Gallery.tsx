@@ -1,132 +1,53 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { AnimatePresence, motion } from 'motion/react';
-import ParallaxImage from './ParallaxImage';
-import { cn } from '@/lib/utils';
+import { useState } from 'react';
+import { motion } from 'motion/react';
+import GalleryPreview, { type PreviewItem } from './GalleryPreview';
+import Lightbox from './Lightbox';
 import type { TattooItem } from '@/lib/data';
 
-const PAGE = 6;
-
+// Homepage Portfolio section: the editorial "Galerie" preview (feature works +
+// an "Alle ansehen" tile); the tile opens the full social-media feed on its own page.
 export default function Gallery({ tattoos }: { tattoos: TattooItem[] }) {
-  const [filter, setFilter] = useState<string>('Alle');
-  const [visible, setVisible] = useState(PAGE);
-  const [lightbox, setLightbox] = useState<string | null>(null);
+  const [lightbox, setLightbox] = useState<number | null>(null);
 
-  // Filter list adapts to whichever categories actually have images.
-  const categories = useMemo(
-    () => ['Alle', ...Array.from(new Set(tattoos.map((t) => t.style)))],
-    [tattoos]
-  );
-  const filtered = useMemo(
-    () => (filter === 'Alle' ? tattoos : tattoos.filter((t) => t.style === filter)),
-    [filter, tattoos]
-  );
-  const shown = filtered.slice(0, visible);
-
-  const select = (f: string) => {
-    setFilter(f);
-    setVisible(PAGE);
-  };
+  const items: PreviewItem[] = tattoos.map((t) => ({
+    key: t.id,
+    src: t.src,
+    alt: t.alt,
+    label: t.style,
+  }));
 
   return (
     <section id="work" className="relative z-10 px-6 py-24 md:px-12 md:py-32">
       <div className="mx-auto max-w-[1800px]">
-        <motion.h2
+        <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-10% 0px' }}
           transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-          className="text-center font-display text-4xl uppercase tracking-brand text-white/90 md:text-left md:text-7xl"
-          style={{ fontWeight: 300 }}
+          className="mb-12 md:mb-8"
         >
-          Portfolio
-        </motion.h2>
-
-        {/* Filter bar */}
-        <div className="mt-10 flex flex-wrap justify-center gap-2 md:justify-start">
-          {categories.map((f) => (
-            <button
-              key={f}
-              onClick={() => select(f)}
-              className={cn(
-                'rounded-full border px-3.5 py-1.5 font-display text-[11px] uppercase tracking-wordmark transition-colors duration-300',
-                filter === f
-                  ? 'border-white bg-white text-black'
-                  : 'border-line text-white/70 hover:border-white hover:text-white'
-              )}
-            >
-              {f}
-            </button>
-          ))}
-        </div>
-
-        {/* Grid */}
-        <motion.div
-          layout
-          className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5 lg:grid-cols-4"
-        >
-          <AnimatePresence mode="popLayout">
-            {shown.map((t) => (
-              <motion.button
-                key={t.id}
-                layout
-                initial={{ opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.96 }}
-                transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-                onClick={() => setLightbox(t.src)}
-                className="group relative aspect-[4/5] overflow-hidden bg-surface"
-              >
-                <ParallaxImage
-                  src={t.src}
-                  alt={t.alt}
-                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                  className="transition-transform duration-700 ease-out group-hover:scale-105"
-                />
-                <span className="pointer-events-none absolute bottom-3 left-3 font-display text-[10px] uppercase tracking-brand text-white/0 transition-colors duration-300 group-hover:text-white/80">
-                  {t.style}
-                </span>
-              </motion.button>
-            ))}
-          </AnimatePresence>
+          <h2
+            className="text-center font-display text-4xl uppercase tracking-brand text-white/90 md:text-left md:text-7xl"
+            style={{ fontWeight: 300 }}
+          >
+            Portfolio
+          </h2>
         </motion.div>
 
-        {visible < filtered.length && (
-          <div className="mt-12 text-center">
-            <button
-              onClick={() => setVisible((v) => v + PAGE)}
-              className="underline-trail font-display text-sm uppercase tracking-brand text-white"
-            >
-              Mehr laden
-            </button>
-          </div>
-        )}
+        {/* Editorial preview — full width */}
+        <GalleryPreview items={items} href="/portfolio" onOpenLightbox={setLightbox} />
       </div>
 
-      {/* Lightbox */}
-      {lightbox && (
-        <div
-          className="animate-lightbox-bg fixed inset-0 z-[200] flex items-center justify-center p-4"
-          onClick={() => setLightbox(null)}
-        >
-          <img
-            src={lightbox}
-            alt=""
-            className="animate-lightbox-img max-h-[90vh] max-w-[92vw] object-contain"
-            onClick={(e) => e.stopPropagation()}
-          />
-          <button
-            onClick={() => setLightbox(null)}
-            className="absolute right-6 top-6 text-white/70 transition-colors hover:text-white"
-            aria-label="Schließen"
-          >
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
-        </div>
+      {/* Shared lightbox — navigates through all works, not just the preview */}
+      {lightbox !== null && (
+        <Lightbox
+          images={items}
+          index={lightbox}
+          onClose={() => setLightbox(null)}
+          onIndexChange={setLightbox}
+        />
       )}
     </section>
   );
