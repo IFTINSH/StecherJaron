@@ -5,6 +5,7 @@ import {
   howToBook as howToBookFallback,
   tattoos as tattoosFallback,
   events as eventsFallback,
+  studioImages as studioImagesFallback,
 } from './content';
 
 // Revalidate Sanity-backed pages at most once a minute so edits show up quickly.
@@ -90,6 +91,34 @@ export async function getTattoos(): Promise<TattooItem[]> {
   return items.length
     ? items
     : tattoosFallback.map((t) => ({ id: t.id, src: t.src, alt: t.alt, style: t.style }));
+}
+
+export interface StudioImageItem {
+  id: string;
+  src: string;
+  alt: string;
+}
+
+export async function getStudioImages(): Promise<StudioImageItem[]> {
+  const fallback = () =>
+    studioImagesFallback.map((s) => ({ id: s.src, src: s.src, alt: s.alt }));
+  if (!client) return fallback();
+  const docs = await client.fetch<{ id: string; alt?: string; image: unknown }[]>(
+    `*[_type == "studioImage" && defined(image)] | order(order asc, _createdAt desc){
+      "id": _id, alt, image
+    }`,
+    {},
+    fetchOpts,
+  );
+  const items = docs
+    .map((d) => ({
+      id: d.id,
+      src: imageUrl(d.image as never, 1000) || '',
+      alt: d.alt || 'Studio Impression',
+    }))
+    .filter((s) => s.src);
+  // configured but still empty → keep showing current content until items are added
+  return items.length ? items : fallback();
 }
 
 // Fallback-Events nach Datum sortiert (neueste zuerst), analog zur Sanity-Query.

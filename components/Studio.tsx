@@ -4,16 +4,17 @@ import { useState } from 'react';
 import { motion } from 'motion/react';
 import GalleryPreview, { type PreviewItem } from './GalleryPreview';
 import Lightbox from './Lightbox';
-import { site, studioImages } from '@/lib/content';
+import { site } from '@/lib/content';
+import type { StudioImageItem } from '@/lib/data';
 
-// Heading + intro text/address, then the editorial preview (a few photos + an
-// "Alle ansehen" tile). The full grid lives on its own page (/atelier), reached from
-// the See-All tile — same pattern as Portfolio.
-export default function Studio() {
+// Heading + address, then the editorial preview (a few photos + an "Alle ansehen"
+// tile). The full grid lives on its own page (/atelier), reached from the See-All
+// tile — same pattern as Portfolio. Photos come from Sanity (lib/data).
+export default function Studio({ images }: { images: StudioImageItem[] }) {
   const [lightbox, setLightbox] = useState<number | null>(null);
 
-  const items: PreviewItem[] = studioImages.map((img) => ({
-    key: img.src,
+  const items: PreviewItem[] = images.map((img) => ({
+    key: img.id,
     src: img.src,
     alt: img.alt,
   }));

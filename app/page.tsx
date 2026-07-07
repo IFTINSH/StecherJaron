@@ -11,16 +11,17 @@ import Events from '@/components/Events';
 import Contact from '@/components/Contact';
 import HowToBook from '@/components/HowToBook';
 import Footer from '@/components/Footer';
-import { getAbout, getTattoos, getEvents, getHowToBook } from '@/lib/data';
+import { getAbout, getTattoos, getEvents, getHowToBook, getStudioImages } from '@/lib/data';
 
 export const revalidate = 60;
 
 export default async function Home() {
-  const [about, tattoos, events, howToBook] = await Promise.all([
+  const [about, tattoos, events, howToBook, studioImages] = await Promise.all([
     getAbout(),
     getTattoos(),
     getEvents(),
     getHowToBook(),
+    getStudioImages(),
   ]);
 
   return (
@@ -34,7 +35,7 @@ export default async function Home() {
           <About title={about.title} body={about.body} />
           <IntroVideo />
           <Gallery tattoos={tattoos} />
-          <Studio />
+          <Studio images={studioImages} />
           <Events events={events} />
           <Contact />
         </main>

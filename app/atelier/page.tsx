@@ -6,7 +6,9 @@ import StudioGrid from '@/components/StudioGrid';
 import HowToBook from '@/components/HowToBook';
 import Footer from '@/components/Footer';
 import { site } from '@/lib/content';
-import { getHowToBook } from '@/lib/data';
+import { getHowToBook, getStudioImages } from '@/lib/data';
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: 'Studio',
@@ -14,7 +16,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AtelierPage() {
-  const howToBook = await getHowToBook();
+  const [howToBook, images] = await Promise.all([getHowToBook(), getStudioImages()]);
 
   return (
     <>
@@ -48,7 +50,7 @@ export default async function AtelierPage() {
           </header>
 
           <div className="mt-10">
-            <StudioGrid />
+            <StudioGrid images={images} />
           </div>
         </div>
       </main>

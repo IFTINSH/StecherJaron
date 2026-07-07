@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seed": "node --env-file=.env.local scripts/seed-sanity.cjs"
+    "seed": "node --env-file=.env.local scripts/seed-sanity.cjs",
+    "seed:studio": "node --env-file=.env.local scripts/seed-studio.cjs"
   },
   "dependencies": {
     "@paper-design/shaders-react": "^0.0.72",
