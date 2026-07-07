@@ -61,9 +61,10 @@ export default function Header() {
         </button>
       </motion.header>
 
-      {/* Mobile menu */}
+      {/* Mobile menu — z above the How-to-Book pill (z-120) so the pill is
+          covered while the menu is open */}
       <div
-        className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black transition-opacity duration-500 md:hidden"
+        className="fixed inset-0 z-[130] flex flex-col items-center justify-center bg-black transition-opacity duration-500 md:hidden"
         style={{
           opacity: open ? 1 : 0,
           pointerEvents: open ? 'auto' : 'none',
