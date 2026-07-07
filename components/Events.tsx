@@ -1,19 +1,19 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'motion/react';
 import EventCard from './EventCard';
-import { SeeAllTile } from './GalleryPreview';
 import type { EventItem } from '@/lib/data';
 
+const MOBILE_PAGE = 3;
+
 // Events overview — desktop shows the full grid (Chris-Foy /all style); mobile
-// shows the newest three plus an "Alle ansehen" tile that opens /events (same
-// pattern as the Portfolio/Studio previews). Each tile links to its event page.
+// starts with the newest three and reveals more in place via "Weitere laden"
+// (same pattern as the portfolio feed's "Mehr laden"). Each tile links to its
+// event page.
 export default function Events({ events }: { events: EventItem[] }) {
   // events arrive sorted newest-first (see lib/data)
-  const newest = events.slice(0, 3);
-  const mini = events.slice(3, 7).map((ev) => ({ key: ev.slug, src: ev.cover, alt: ev.title }));
-  const remaining = Math.max(events.length - newest.length, 0);
-  const showSeeAll = remaining > 0 && mini.length > 0;
+  const [visible, setVisible] = useState(MOBILE_PAGE);
 
   return (
     <section id="events" className="relative z-10 px-6 py-24 md:px-12 md:py-32">
@@ -29,20 +29,23 @@ export default function Events({ events }: { events: EventItem[] }) {
           Events
         </motion.h2>
 
-        {/* ── Mobile: newest three + "Alle ansehen" tile → /events ── */}
-        <div className="mt-12 grid grid-cols-1 gap-8 md:hidden">
-          {newest.map((ev) => (
-            <EventCard key={ev.slug} event={ev} />
-          ))}
+        {/* ── Mobile: newest first, more revealed in place ── */}
+        <div className="md:hidden">
+          <div className="mt-12 grid grid-cols-1 gap-8">
+            {events.slice(0, visible).map((ev) => (
+              <EventCard key={ev.slug} event={ev} />
+            ))}
+          </div>
 
-          {showSeeAll && (
-            <SeeAllTile
-              mini={mini}
-              remaining={remaining}
-              href="/events"
-              vertical={false}
-              className="aspect-[4/3] w-full"
-            />
+          {visible < events.length && (
+            <div className="mt-10 text-center">
+              <button
+                onClick={() => setVisible((v) => v + MOBILE_PAGE)}
+                className="underline-trail font-display text-sm uppercase tracking-brand text-white"
+              >
+                Weitere laden
+              </button>
+            </div>
           )}
         </div>
 

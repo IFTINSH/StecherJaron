@@ -115,7 +115,9 @@
       "mcp__claude_ai_Figma__get_design_context",
       "Bash(where ffmpeg *)",
       "Bash(ffmpeg -version)",
-      "Bash(node -e \"const fs=require\\('fs'\\);const b=fs.readFileSync\\('public/video/intro.mp4'\\);const head=b.subarray\\(0,4096\\).indexOf\\('moov'\\);const pos=b.indexOf\\('moov'\\);console.log\\('moov at byte:',pos,'of',b.length, head>=0?'\\(faststart OK\\)':'\\(am ENDE -> nicht faststart\\)'\\)\")"
+      "Bash(node -e \"const fs=require\\('fs'\\);const b=fs.readFileSync\\('public/video/intro.mp4'\\);const head=b.subarray\\(0,4096\\).indexOf\\('moov'\\);const pos=b.indexOf\\('moov'\\);console.log\\('moov at byte:',pos,'of',b.length, head>=0?'\\(faststart OK\\)':'\\(am ENDE -> nicht faststart\\)'\\)\")",
+      "Bash(git remote *)",
+      "Bash(git ls-remote *)"
     ]
   }
 }
