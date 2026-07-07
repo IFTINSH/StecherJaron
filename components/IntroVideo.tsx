@@ -97,15 +97,18 @@ export default function IntroVideo() {
           style={reduce ? { opacity: 1, borderRadius: 0 } : { scale, opacity, borderRadius: radius }}
           className="relative mx-auto aspect-[4/5] w-full overflow-hidden bg-surface sm:aspect-video"
         >
+          {/* No poster image — the hero photo as poster looked like the wrong
+              content. Instead preload="metadata" + #t=0.001 makes browsers
+              (incl. iOS Safari) render the video's real first frame right away;
+              full data still only loads when it scrolls into view and plays. */}
           <video
             ref={videoRef}
-            src="/video/intro.mp4"
-            poster="/hero/hero.jpeg"
+            src="/video/intro.mp4#t=0.001"
             className="absolute inset-0 h-full w-full object-cover"
             muted
             loop
             playsInline
-            preload="none"
+            preload="metadata"
             controls={fullscreen}
           />
 

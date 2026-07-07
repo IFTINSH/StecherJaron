@@ -58,13 +58,14 @@ export default function Studio() {
         </div>
       </div>
 
-      {/* Shared lightbox — navigates through all studio photos */}
-      {lightbox !== null && (
+      {/* Preview lightbox shows ONLY the tapped photo (no browsing) — seeing all
+          photos goes through the "Alle ansehen" page. */}
+      {lightbox !== null && items[lightbox] && (
         <Lightbox
-          images={items}
-          index={lightbox}
+          images={[items[lightbox]]}
+          index={0}
           onClose={() => setLightbox(null)}
-          onIndexChange={setLightbox}
+          onIndexChange={() => {}}
         />
       )}
     </section>

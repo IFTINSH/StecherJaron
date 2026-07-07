@@ -54,12 +54,15 @@ function FeatureImage({
   index,
   onOpenLightbox,
   className = '',
+  magnitude = 7.7,
 }: {
   item: PreviewItem;
   /** index into the full items array (for lightbox navigation) */
   index: number;
   onOpenLightbox: (index: number) => void;
   className?: string;
+  /** parallax strength (% travel); the mobile swipe row uses a gentler value */
+  magnitude?: number;
 }) {
   return (
     <button
@@ -74,7 +77,7 @@ function FeatureImage({
         alt={item.alt}
         loading="lazy"
         sizes="(min-width: 768px) 25vw, 72vw"
-        magnitude={7.7}
+        magnitude={magnitude}
         className="transition-transform duration-700 ease-out group-hover:scale-[1.02]"
       />
       <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/10" />
@@ -88,7 +91,8 @@ function FeatureImage({
 }
 
 // "+N / Alle ansehen" tile — blurred mini-mosaic of the next images behind a veil.
-function SeeAllTile({
+// Exported for reuse (e.g. the Events section builds the same tile from covers).
+export function SeeAllTile({
   mini,
   remaining,
   href,
@@ -209,7 +213,15 @@ function MobileSwipe({
       >
         {works.map((item, i) => (
           <div key={item.key} className={`${CARD_W} shrink-0 snap-start`}>
-            <FeatureImage item={item} index={i} onOpenLightbox={onOpenLightbox} className="aspect-[4/5] w-full" />
+            {/* gentler parallax — on a phone the frame passes the viewport quickly,
+                so the same travel reads much stronger than on desktop */}
+            <FeatureImage
+              item={item}
+              index={i}
+              onOpenLightbox={onOpenLightbox}
+              className="aspect-[4/5] w-full"
+              magnitude={4}
+            />
           </div>
         ))}
 

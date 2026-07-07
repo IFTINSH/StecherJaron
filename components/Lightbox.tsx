@@ -74,15 +74,31 @@ export default function Lightbox({ images, index, onClose, onIndexChange }: Prop
         }
       }}
     >
+      {/* dvh (not vh) so the image centres in the VISIBLE viewport on phones,
+          where the browser chrome eats into 100vh */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         key={index}
         src={image.src}
         alt={image.alt ?? ''}
-        className="animate-lightbox-img max-h-[90vh] max-w-[92vw] select-none object-contain"
+        className="animate-lightbox-img max-h-[85dvh] max-w-[92vw] select-none object-contain"
         draggable={false}
         onClick={(e) => e.stopPropagation()}
       />
+
+      {/* back — explicit way out, matching the subpages' back link.
+          NOTE: underline-trail sets position:relative, so it must live on an
+          inner span — on the button itself it would cancel `absolute` and the
+          button would flow next to the image. */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
+        className="absolute left-6 top-7 font-display text-xs uppercase tracking-brand text-white/70"
+      >
+        <span className="underline-trail">← Zurück</span>
+      </button>
 
       {/* close */}
       <button

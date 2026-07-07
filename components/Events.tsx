@@ -1,14 +1,20 @@
 'use client';
 
-import Image from 'next/image';
-import Link from 'next/link';
 import { motion } from 'motion/react';
+import EventCard from './EventCard';
+import { SeeAllTile } from './GalleryPreview';
 import type { EventItem } from '@/lib/data';
-import { formatEventDate } from '@/lib/format';
 
-// Events overview — a grid of tiles (Chris-Foy /all style). Each tile links to
-// its own event page.
+// Events overview — desktop shows the full grid (Chris-Foy /all style); mobile
+// shows the newest three plus an "Alle ansehen" tile that opens /events (same
+// pattern as the Portfolio/Studio previews). Each tile links to its event page.
 export default function Events({ events }: { events: EventItem[] }) {
+  // events arrive sorted newest-first (see lib/data)
+  const newest = events.slice(0, 3);
+  const mini = events.slice(3, 7).map((ev) => ({ key: ev.slug, src: ev.cover, alt: ev.title }));
+  const remaining = Math.max(events.length - newest.length, 0);
+  const showSeeAll = remaining > 0 && mini.length > 0;
+
   return (
     <section id="events" className="relative z-10 px-6 py-24 md:px-12 md:py-32">
       <div className="mx-auto max-w-[1800px]">
@@ -23,49 +29,27 @@ export default function Events({ events }: { events: EventItem[] }) {
           Events
         </motion.h2>
 
-        {/* Mobile (1 col): larger gap so each card (image + its title) reads as one
-            group — the title's 12px tie to its image needs clear separation from
-            the next card. Desktop keeps its 24px. */}
-        <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+        {/* ── Mobile: newest three + "Alle ansehen" tile → /events ── */}
+        <div className="mt-12 grid grid-cols-1 gap-8 md:hidden">
+          {newest.map((ev) => (
+            <EventCard key={ev.slug} event={ev} />
+          ))}
+
+          {showSeeAll && (
+            <SeeAllTile
+              mini={mini}
+              remaining={remaining}
+              href="/events"
+              vertical={false}
+              className="aspect-[4/3] w-full"
+            />
+          )}
+        </div>
+
+        {/* ── Desktop: full grid (unchanged) ── */}
+        <div className="mt-12 hidden grid-cols-2 gap-6 md:grid lg:grid-cols-3">
           {events.map((ev, i) => (
-            <motion.div
-              key={ev.slug}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-8% 0px' }}
-              transition={{
-                duration: 0.6,
-                ease: [0.25, 0.1, 0.25, 1],
-                delay: (i % 3) * 0.06,
-              }}
-            >
-              <Link
-                href={`/events/${ev.slug}`}
-                className="group block"
-                aria-label={`Event ansehen: ${ev.title}`}
-              >
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-surface">
-                  <Image
-                    src={ev.cover}
-                    alt={ev.title}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-70" />
-                </div>
-                <div className="mt-3 flex items-baseline justify-between gap-3">
-                  <h3 className="font-display text-sm uppercase tracking-wordmark text-white">
-                    {ev.title}
-                  </h3>
-                  {formatEventDate(ev.date) && (
-                    <span className="font-display text-xs uppercase tracking-brand text-muted">
-                      {formatEventDate(ev.date)}
-                    </span>
-                  )}
-                </div>
-              </Link>
-            </motion.div>
+            <EventCard key={ev.slug} event={ev} delay={(i % 3) * 0.06} />
           ))}
         </div>
       </div>

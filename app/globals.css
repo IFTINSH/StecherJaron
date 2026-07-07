@@ -96,7 +96,7 @@ body {
 /* Lightbox animations */
 @keyframes lightbox-bg {
   from { background-color: rgba(0, 0, 0, 0); }
-  to { background-color: rgba(0, 0, 0, 0.94); }
+  to { background-color: rgba(0, 0, 0, 1); } /* fully opaque — page behind is hidden */
 }
 @keyframes lightbox-img {
   from { opacity: 0; transform: scale(0.94); }

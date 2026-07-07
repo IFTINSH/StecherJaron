@@ -40,13 +40,14 @@ export default function Gallery({ tattoos }: { tattoos: TattooItem[] }) {
         <GalleryPreview items={items} href="/portfolio" onOpenLightbox={setLightbox} />
       </div>
 
-      {/* Shared lightbox — navigates through all works, not just the preview */}
-      {lightbox !== null && (
+      {/* Preview lightbox shows ONLY the tapped work (no browsing) — seeing all
+          works goes through the "Alle ansehen" page. */}
+      {lightbox !== null && items[lightbox] && (
         <Lightbox
-          images={items}
-          index={lightbox}
+          images={[items[lightbox]]}
+          index={0}
           onClose={() => setLightbox(null)}
-          onIndexChange={setLightbox}
+          onIndexChange={() => {}}
         />
       )}
     </section>

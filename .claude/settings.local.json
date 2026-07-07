@@ -112,7 +112,10 @@
       "Bash(NODE_PATH=\"C:/Users/Moritz/Development/Jaron Website 2.0/node_modules\" node \"C:/Users/Moritz/AppData/Local/Temp/claude/C--Users-Moritz-Development-Jaron-Website-2-0/b1ac6de1-73a8-4697-a818-8f138a60d431/scratchpad/trace-high.cjs\")",
       "Bash(node scripts/trace-mobile.cjs)",
       "Bash(echo \"tsc done \\(exit $?\\)\")",
-      "mcp__claude_ai_Figma__get_design_context"
+      "mcp__claude_ai_Figma__get_design_context",
+      "Bash(where ffmpeg *)",
+      "Bash(ffmpeg -version)",
+      "Bash(node -e \"const fs=require\\('fs'\\);const b=fs.readFileSync\\('public/video/intro.mp4'\\);const head=b.subarray\\(0,4096\\).indexOf\\('moov'\\);const pos=b.indexOf\\('moov'\\);console.log\\('moov at byte:',pos,'of',b.length, head>=0?'\\(faststart OK\\)':'\\(am ENDE -> nicht faststart\\)'\\)\")"
     ]
   }
 }
