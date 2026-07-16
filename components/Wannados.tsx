@@ -98,7 +98,7 @@ export default function Wannados({ items }: { items: WannadoItem[] }) {
           className="text-center font-display text-4xl uppercase tracking-brand text-white/90 md:text-left md:text-7xl"
           style={{ fontWeight: 300 }}
         >
-          Wannados
+          Wannado’s
         </motion.h2>
         <motion.p
           initial={{ opacity: 0, y: 20 }}

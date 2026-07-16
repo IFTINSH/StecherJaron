@@ -23,7 +23,7 @@ export const site = {
 export const nav = [
   { href: '/#about', label: 'Über mich' },
   { href: '/#work', label: 'Portfolio' },
-  { href: '/#wannados', label: 'Wannados' },
+  { href: '/#wannados', label: 'Wannado’s' },
   { href: '/#studio', label: 'Studio' },
   { href: '/#events', label: 'Events' },
   { href: '/#contact', label: 'Kontakt' },
@@ -36,6 +36,26 @@ export const about = {
   body: `Hey, ich bin Jaron — Tattoo Artist aus Passau. Ich spezialisiere mich auf Dotwork, Blackwork und Fine-Line Tattoos. Jedes meiner Designs entsteht individuell für dich, mit einem Fokus auf feine Details, klare Linien und ausdrucksstarke Kontraste zwischen schwarzer Tinte und Haut. Lass uns gemeinsam deine Vision auf die Haut bringen.`,
 };
 
+// Booking section (desktop): the How-to-Book flow condensed into three steps.
+// The full detail text lives in `howToBook` below (panel + mobile accordion).
+export const bookingSteps = [
+  {
+    no: '01',
+    title: 'Schreib mir deine Idee',
+    text: 'Eine DM auf Instagram reicht — mit deiner Idee oder deinem Wannado, gern plus Referenzen, Größe in cm und 2–3 möglichen Terminen.',
+  },
+  {
+    no: '02',
+    title: 'Termin sichern',
+    text: 'Mit 50 € Anzahlung ist dein Termin verbindlich reserviert — darin steckt auch die Ausarbeitung deines individuellen Entwurfs.',
+  },
+  {
+    no: '03',
+    title: 'Stechen in Passau',
+    text: 'Dein Termin im Studio, Firmianstraße 10. Verfügbare Termine findest du in den Instagram-Highlights.',
+  },
+] as const;
+
 // "How to Book" — persistent overlay content. Booking happens via Instagram.
 export const howToBook = {
   title: 'How to Book',
@@ -46,7 +66,7 @@ export const howToBook = {
         'Buchungsanfragen erfolgen ausschließlich über Instagram.',
         'Bitte sende eine möglichst präzise Beschreibung deiner Tattoo-Idee oder Wunschvorstellung.',
         'Falls vorhanden, ergänze deine Anfrage gerne mit Referenzbildern, Inspirationen oder Skizzen.',
-        'Bei Wannados füge bitte zusätzlich einen entsprechenden Screenshot bei.',
+        'Bei Wannado’s füge bitte zusätzlich einen entsprechenden Screenshot bei.',
         'Wenn du die gewünschte Größe bereits einschätzen kannst, teile diese am besten in cm mit; das erleichtert eine erste preisliche Orientierung.',
         'Ein Foto der gewünschten Körperstelle hilft dabei, Placement und Wirkung besser einzuschätzen.',
         'Sollte es dir unangenehm sein, ein Foto der Stelle zu schicken, ist das selbstverständlich kein Problem — gib in dem Fall einfach kurz Bescheid.',
@@ -129,12 +149,12 @@ export interface WannadoSheet {
 }
 
 export const wannados: WannadoSheet[] = [
-  { src: '/wannados/wannados-1.jpeg', alt: 'Wannados Flash Sheet von Stecher Jaron', label: 'Sheet 01', w: 1638, h: 2048 },
-  { src: '/wannados/wannados-2.jpeg', alt: 'Wannados Flash Sheet von Stecher Jaron', label: 'Sheet 02', w: 1638, h: 2048 },
-  { src: '/wannados/wannados-3.jpeg', alt: 'Wannados Flash Sheet von Stecher Jaron', label: 'Sheet 03', w: 1626, h: 2033 },
-  { src: '/wannados/wannados-4.jpeg', alt: 'Wannados Flash Sheet von Stecher Jaron', label: 'Sheet 04', w: 1638, h: 2048 },
-  { src: '/wannados/wannados-5.jpeg', alt: 'Wannados Flash Sheet von Stecher Jaron', label: 'Sheet 05', w: 1638, h: 2048 },
-  { src: '/wannados/wannados-6.jpeg', alt: 'Wannados Flash Sheet von Stecher Jaron', label: 'Sheet 06', w: 1607, h: 2009 },
+  { src: '/wannados/wannados-1.jpeg', alt: 'Wannado’s Flash Sheet von Stecher Jaron', label: 'Sheet 01', w: 1638, h: 2048 },
+  { src: '/wannados/wannados-2.jpeg', alt: 'Wannado’s Flash Sheet von Stecher Jaron', label: 'Sheet 02', w: 1638, h: 2048 },
+  { src: '/wannados/wannados-3.jpeg', alt: 'Wannado’s Flash Sheet von Stecher Jaron', label: 'Sheet 03', w: 1626, h: 2033 },
+  { src: '/wannados/wannados-4.jpeg', alt: 'Wannado’s Flash Sheet von Stecher Jaron', label: 'Sheet 04', w: 1638, h: 2048 },
+  { src: '/wannados/wannados-5.jpeg', alt: 'Wannado’s Flash Sheet von Stecher Jaron', label: 'Sheet 05', w: 1638, h: 2048 },
+  { src: '/wannados/wannados-6.jpeg', alt: 'Wannado’s Flash Sheet von Stecher Jaron', label: 'Sheet 06', w: 1607, h: 2009 },
 ];
 
 // ---------------------------------------------------------------------------

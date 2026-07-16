@@ -150,7 +150,7 @@ export async function getWannados(): Promise<WannadoItem[]> {
     .map((d) => ({
       id: d.id,
       src: imageUrl(d.image as never, 1400) || '',
-      alt: d.alt || 'Wannados Flash Sheet von Stecher Jaron',
+      alt: d.alt || 'Wannado’s Flash Sheet von Stecher Jaron',
       label: d.label || 'Sheet',
       w: d.w || 1000,
       h: d.h || 1250,

@@ -12,8 +12,14 @@ export default function HowToBook({ data }: { data: HowToBookData }) {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
+    // Other components (e.g. "Alle Details" in the Contact section) can open the panel.
+    const onOpen = () => setOpen(true);
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    window.addEventListener('howtobook:open', onOpen);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      window.removeEventListener('howtobook:open', onOpen);
+    };
   }, []);
 
   return (

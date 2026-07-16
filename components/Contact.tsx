@@ -1,62 +1,185 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'motion/react';
-import { site } from '@/lib/content';
+import { site, bookingSteps } from '@/lib/content';
+import type { HowToBookData } from '@/lib/data';
+import MapPreview from './MapPreview';
 
-export default function Contact() {
+// Contact = the page's closing beat: booking + address under one heading.
+// Desktop: two columns — address + map left, the booking flow ("So läuft's",
+// three numbered steps + CTA pair) right. Mobile: address + map first, then the
+// FULL How-to-Book content as an accordion + CTA (nothing hidden behind the pill).
+export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
+  // All accordion items start collapsed.
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
+
+  const openPanel = () => {
+    // HowToBook.tsx listens for this and opens its overlay panel.
+    window.dispatchEvent(new CustomEvent('howtobook:open'));
+  };
+
   return (
-    <section id="contact" className="relative z-10 px-6 py-24 md:px-12 md:py-32">
-      <div className="mx-auto max-w-4xl text-center">
+    <section id="contact" className="relative z-10 px-6 pb-14 pt-24 md:px-12 md:pb-16 md:pt-32">
+      <div className="mx-auto max-w-[1400px]">
         <motion.h2
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-10% 0px' }}
           transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-          className="font-display text-4xl uppercase tracking-brand text-white/90 md:text-7xl"
+          className="text-center font-display text-4xl uppercase tracking-brand text-white/90 md:text-7xl"
           style={{ fontWeight: 300 }}
         >
           Kontakt
         </motion.h2>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-10% 0px' }}
-          transition={{ duration: 0.8, delay: 0.15 }}
-          className="mx-auto mt-12 max-w-xl font-light text-body md:mt-10"
-          style={{ fontSize: 'clamp(1.05rem, 3vw, 1.5rem)', lineHeight: 1.7 }}
-        >
-          Für Termine und Anfragen schreib mir einfach eine DM auf Instagram.
-        </motion.p>
-
-        <div className="mt-12 flex flex-col items-center justify-center gap-12 md:flex-row md:gap-20">
-          <div className="text-center">
-            <span className="mb-4 block font-display text-sm uppercase tracking-brand text-secondary">
-              Instagram
-            </span>
-            <a
-              href={site.instagram.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline-trail text-xl font-light text-white md:text-3xl"
-            >
-              {site.instagram.handle}
-            </a>
-          </div>
-
-          <div className="text-center">
-            <span className="mb-4 block font-display text-sm uppercase tracking-brand text-secondary">
-              Studio
+        {/* ── Desktop: map left, booking right ── */}
+        <div className="mt-16 hidden grid-cols-[1.05fr_0.95fr] items-start gap-16 md:grid lg:gap-28 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-10% 0px' }}
+            transition={{ duration: 0.8, delay: 0.15 }}
+          >
+            <span className="mb-3 block font-display text-xs uppercase tracking-brand text-secondary">
+              Adresse
             </span>
             <a
               href={site.studio.mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="underline-trail text-xl font-light text-white md:text-3xl"
+              className="underline-trail text-xl font-light text-white"
             >
               {site.studio.address}
             </a>
-          </div>
+            <MapPreview />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-10% 0px' }}
+            transition={{ duration: 0.8, delay: 0.25 }}
+          >
+            <span className="mb-6 block font-display text-xs uppercase tracking-brand text-secondary">
+              So läuft&apos;s
+            </span>
+            <div className="space-y-6">
+              {bookingSteps.map((step) => (
+                <div key={step.no} className="border-t border-line pt-5">
+                  <span className="block font-display text-xs tracking-[0.3em] text-muted">
+                    {step.no}
+                  </span>
+                  <h3 className="mt-2 font-display text-sm font-normal uppercase tracking-brand text-white">
+                    {step.title}
+                  </h3>
+                  <p className="mt-1.5 max-w-[48ch] text-[0.92rem] leading-relaxed text-body">
+                    {step.text}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* CTA pair — primary + quiet details ghost */}
+            <div className="mt-9 flex flex-wrap items-center gap-4">
+              <a
+                href={howToBook.ctaUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 rounded-full bg-white px-8 py-4 font-display text-xs uppercase tracking-brand text-black transition-opacity hover:opacity-85"
+              >
+                {howToBook.ctaLabel}
+              </a>
+              <button
+                type="button"
+                onClick={openPanel}
+                className="flex items-center justify-center rounded-full border border-white/25 px-7 py-4 font-display text-xs uppercase tracking-brand text-white/80 transition-colors hover:border-white hover:text-white"
+              >
+                Alle Details
+              </button>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* ── Mobile: address + map, then booking accordion + CTA ── */}
+        <div className="mt-8 md:hidden">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-10% 0px' }}
+            transition={{ duration: 0.8, delay: 0.15 }}
+            className="text-center"
+          >
+            <span className="mb-3 block font-display text-xs uppercase tracking-brand text-secondary">
+              Adresse
+            </span>
+            <a
+              href={site.studio.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline-trail text-lg font-light text-white"
+            >
+              {site.studio.address}
+            </a>
+            <MapPreview />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-10% 0px' }}
+            transition={{ duration: 0.8, delay: 0.15 }}
+            className="mt-12"
+          >
+            <span className="mb-4 block text-center font-display text-xs uppercase tracking-brand text-secondary">
+              So läuft&apos;s
+            </span>
+            <div>
+              {howToBook.sections.map((section, i) => {
+                const open = openIdx === i;
+                return (
+                  <div key={section.heading} className="border-t border-line last:border-b">
+                    <button
+                      type="button"
+                      onClick={() => setOpenIdx(open ? null : i)}
+                      aria-expanded={open}
+                      className="flex w-full items-center justify-between gap-4 py-4 text-left"
+                    >
+                      <h3 className="font-display text-sm font-normal uppercase tracking-brand text-white">
+                        {section.heading}
+                      </h3>
+                      <span
+                        className="text-secondary transition-transform duration-300"
+                        style={{ transform: open ? 'rotate(45deg)' : 'none' }}
+                      >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                          <line x1="12" y1="5" x2="12" y2="19" />
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                      </span>
+                    </button>
+                    {open && (
+                      <ul className="space-y-2.5 pb-5 pl-4 text-left text-sm leading-relaxed text-body">
+                        {section.items.map((item) => (
+                          <li key={item} className="list-disc">
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            <a
+              href={howToBook.ctaUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mx-auto mt-8 flex w-full max-w-xs items-center justify-center gap-2 rounded-full bg-white px-7 py-4 font-display text-xs uppercase tracking-brand text-black transition-opacity hover:opacity-85"
+            >
+              {howToBook.ctaLabel}
+            </a>
+          </motion.div>
         </div>
       </div>
     </section>

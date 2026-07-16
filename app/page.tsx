@@ -40,7 +40,7 @@ export default async function Home() {
           <Wannados items={wannados} />
           <Studio images={studioImages} />
           <Events events={events} />
-          <Contact />
+          <Contact howToBook={howToBook} />
         </main>
         <Footer />
         <HowToBook data={howToBook} />

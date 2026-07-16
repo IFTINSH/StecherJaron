@@ -2,7 +2,7 @@ import { defineType, defineField } from 'sanity';
 
 export const wannados = defineType({
   name: 'wannados',
-  title: 'Wannados (Flash Sheet)',
+  title: 'Wannado’s (Flash Sheet)',
   type: 'document',
   fields: [
     defineField({
@@ -23,7 +23,7 @@ export const wannados = defineType({
       name: 'alt',
       title: 'Bildbeschreibung (Alt-Text)',
       type: 'string',
-      initialValue: 'Wannados Flash Sheet von Stecher Jaron',
+      initialValue: 'Wannado’s Flash Sheet von Stecher Jaron',
     }),
     defineField({
       name: 'order',
