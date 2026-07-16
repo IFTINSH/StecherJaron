@@ -12,6 +12,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: 'Events',
   description: 'Alle Events von Stecher Jaron — Flashdays, Conventions und mehr.',
+  alternates: { canonical: '/events' },
 };
 
 // The full events overview — the "Alle ansehen" target of the mobile Events

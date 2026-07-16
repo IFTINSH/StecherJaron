@@ -27,6 +27,7 @@ export async function generateMetadata({
   return {
     title: ev.title,
     description: ev.description ?? `${ev.title} — Stecher Jaron`,
+    alternates: { canonical: `/events/${slug}` },
     openGraph: { title: ev.title, images: ev.cover ? [ev.cover] : [] },
   };
 }

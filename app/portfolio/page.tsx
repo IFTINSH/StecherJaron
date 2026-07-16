@@ -12,6 +12,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: 'Portfolio',
   description: 'Alle Arbeiten von Stecher Jaron — Dotwork, Blackwork, Fine-Line Tattoos.',
+  alternates: { canonical: '/portfolio' },
 };
 
 export default async function PortfolioPage() {

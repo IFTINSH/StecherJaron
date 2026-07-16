@@ -13,14 +13,6 @@ export const metadata: Metadata = {
     template: '%s — Stecher Jaron',
   },
   description,
-  keywords: [
-    'Tattoo Passau',
-    'Tattoo Artist Passau',
-    'Stecher Jaron',
-    'Dotwork',
-    'Blackwork',
-    'Fine-Line Tattoo',
-  ],
   openGraph: {
     title: 'Stecher Jaron — Tattoo Artist Passau',
     description,
@@ -35,7 +27,9 @@ export const metadata: Metadata = {
     description,
     images: ['/hero/hero.jpeg'],
   },
-  alternates: { canonical: '/' },
+  // Per-page canonicals are set in each page's own metadata (app/page.tsx → '/',
+  // /portfolio, /atelier, /events, /events/[slug]). Not set here so subpages don't
+  // all inherit the homepage canonical.
 };
 
 const jsonLd = {
@@ -48,10 +42,20 @@ const jsonLd = {
   address: {
     '@type': 'PostalAddress',
     streetAddress: 'Firmianstraße 10',
+    postalCode: '94032',
     addressLocality: 'Passau',
     addressCountry: 'DE',
   },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 48.5719524,
+    longitude: 13.4528076,
+  },
+  areaServed: 'Passau und Umgebung',
   sameAs: [site.instagram.url],
+  // TODO (nach Rücksprache mit Jaron, siehe Plan B3):
+  //  - telephone: '+49…'  → sobald es eine Geschäftsnummer gibt
+  //  - openingHoursSpecification: […]  → feste Zeiten, oder Hinweis „nach Vereinbarung"
 };
 
 export default function RootLayout({

@@ -13,6 +13,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: 'Studio',
   description: 'Impressionen aus dem Studio von Stecher Jaron in Passau.',
+  alternates: { canonical: '/atelier' },
 };
 
 export default async function AtelierPage() {

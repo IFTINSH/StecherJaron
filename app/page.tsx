@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import BackgroundShader from '@/components/BackgroundShader';
 import SmoothScroll from '@/components/SmoothScroll';
 import LoadingProvider from '@/components/LoadingProvider';
@@ -15,6 +16,10 @@ import Footer from '@/components/Footer';
 import { getAbout, getTattoos, getEvents, getHowToBook, getStudioImages, getWannados } from '@/lib/data';
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+};
 
 export default async function Home() {
   const [about, tattoos, events, howToBook, studioImages, wannados] = await Promise.all([
