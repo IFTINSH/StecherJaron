@@ -6,6 +6,7 @@ import {
   tattoos as tattoosFallback,
   events as eventsFallback,
   studioImages as studioImagesFallback,
+  wannados as wannadosFallback,
 } from './content';
 
 // Revalidate Sanity-backed pages at most once a minute so edits show up quickly.
@@ -117,6 +118,44 @@ export async function getStudioImages(): Promise<StudioImageItem[]> {
       alt: d.alt || 'Studio Impression',
     }))
     .filter((s) => s.src);
+  // configured but still empty → keep showing current content until items are added
+  return items.length ? items : fallback();
+}
+
+export interface WannadoItem {
+  id: string;
+  src: string;
+  alt: string;
+  label: string;
+  w: number;
+  h: number;
+}
+
+export async function getWannados(): Promise<WannadoItem[]> {
+  const fallback = () =>
+    wannadosFallback.map((w) => ({ id: w.src, src: w.src, alt: w.alt, label: w.label, w: w.w, h: w.h }));
+  if (!client) return fallback();
+  const docs = await client.fetch<
+    { id: string; alt?: string; label?: string; w?: number; h?: number; image: unknown }[]
+  >(
+    `*[_type == "wannados" && defined(image)] | order(order asc, _createdAt desc){
+      "id": _id, alt, label, image,
+      "w": image.asset->metadata.dimensions.width,
+      "h": image.asset->metadata.dimensions.height
+    }`,
+    {},
+    fetchOpts,
+  );
+  const items = docs
+    .map((d) => ({
+      id: d.id,
+      src: imageUrl(d.image as never, 1400) || '',
+      alt: d.alt || 'Wannados Flash Sheet von Stecher Jaron',
+      label: d.label || 'Sheet',
+      w: d.w || 1000,
+      h: d.h || 1250,
+    }))
+    .filter((w) => w.src);
   // configured but still empty → keep showing current content until items are added
   return items.length ? items : fallback();
 }

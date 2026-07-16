@@ -199,11 +199,11 @@ function MobileGrid({
 export default function GalleryPreview({ items, href, onOpenLightbox }: Props) {
   if (!items.length) return null;
 
-  // Desktop shows three features + the See-All tile (four tiles fill the row); mobile
+  // Desktop shows four features + the See-All tile (five tiles fill the row); mobile
   // is a 2×2 grid: three works + the See-All tile. Each layout draws its mini-mosaic
   // from the images that follow the ones already on display.
-  const dFeatures = items.slice(0, 3);
-  const dMini = items.slice(3, 7);
+  const dFeatures = items.slice(0, 4);
+  const dMini = items.slice(4, 8);
   const dRemaining = Math.max(items.length - dFeatures.length, 0);
   const dShowSeeAll = dRemaining > 0 && dMini.length > 0;
 

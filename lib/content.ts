@@ -23,6 +23,7 @@ export const site = {
 export const nav = [
   { href: '/#about', label: 'Über mich' },
   { href: '/#work', label: 'Portfolio' },
+  { href: '/#wannados', label: 'Wannados' },
   { href: '/#studio', label: 'Studio' },
   { href: '/#events', label: 'Events' },
   { href: '/#contact', label: 'Kontakt' },
@@ -111,6 +112,29 @@ export const studioImages = [
   { src: '/studio-photos/studio-6.jpeg', alt: 'Studio Impression', w: 1080, h: 1620 },
   { src: '/studio-photos/studio-7.jpeg', alt: 'Studio Impression', w: 811, h: 1080 },
   { src: '/studio-photos/studio-8.jpeg', alt: 'Studio Impression', w: 1080, h: 1620 },
+];
+
+// ---------------------------------------------------------------------------
+// Wannados — flash sheets: designs Jaron wants to tattoo, clients pick from them.
+// Presented as a horizontal "flash wall": white "paper" sheets on black that you
+// drag/swipe through, one in focus at a time (see components/Wannados.tsx).
+// Full sheets (never cropped); w/h drive next/image aspect ratio (all ~4:5).
+// ---------------------------------------------------------------------------
+export interface WannadoSheet {
+  src: string;
+  alt: string;
+  label: string;
+  w: number;
+  h: number;
+}
+
+export const wannados: WannadoSheet[] = [
+  { src: '/wannados/wannados-1.jpeg', alt: 'Wannados Flash Sheet von Stecher Jaron', label: 'Sheet 01', w: 1638, h: 2048 },
+  { src: '/wannados/wannados-2.jpeg', alt: 'Wannados Flash Sheet von Stecher Jaron', label: 'Sheet 02', w: 1638, h: 2048 },
+  { src: '/wannados/wannados-3.jpeg', alt: 'Wannados Flash Sheet von Stecher Jaron', label: 'Sheet 03', w: 1626, h: 2033 },
+  { src: '/wannados/wannados-4.jpeg', alt: 'Wannados Flash Sheet von Stecher Jaron', label: 'Sheet 04', w: 1638, h: 2048 },
+  { src: '/wannados/wannados-5.jpeg', alt: 'Wannados Flash Sheet von Stecher Jaron', label: 'Sheet 05', w: 1638, h: 2048 },
+  { src: '/wannados/wannados-6.jpeg', alt: 'Wannados Flash Sheet von Stecher Jaron', label: 'Sheet 06', w: 1607, h: 2009 },
 ];
 
 // ---------------------------------------------------------------------------
