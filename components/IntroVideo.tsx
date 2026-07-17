@@ -91,11 +91,13 @@ export default function IntroVideo() {
   };
 
   return (
-    <section className="relative z-10 px-6 py-24 md:px-12 md:py-32">
+    <section className="relative z-10 py-24 md:px-12 md:py-32">
+      {/* Full-bleed on mobile (no side padding) so the landscape video is as
+          large as it can be without cropping; boxed + max-width from md up. */}
       <div ref={sectionRef} className="mx-auto w-full max-w-[940px]">
         <motion.div
           style={reduce ? { opacity: 1, borderRadius: 0 } : { scale, opacity, borderRadius: radius }}
-          className="relative mx-auto aspect-[4/5] w-full overflow-hidden bg-surface sm:aspect-video"
+          className="relative mx-auto aspect-video w-full overflow-hidden bg-surface"
         >
           {/* No poster image — the hero photo as poster looked like the wrong
               content. Instead preload="metadata" + #t=0.001 makes browsers
