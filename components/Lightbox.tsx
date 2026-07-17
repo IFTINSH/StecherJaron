@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { useTranslations } from 'next-intl';
 
 // Shared lightbox for all galleries: locks the page scroll while open, closes on
 // Escape / backdrop / ×, and navigates with arrow keys, edge buttons (desktop)
@@ -24,6 +25,7 @@ interface Props {
 }
 
 export default function Lightbox({ images, index, onClose, onIndexChange }: Props) {
+  const t = useTranslations('lightbox');
   const touch = useRef<{ x: number; y: number } | null>(null);
   const count = images.length;
   const canNavigate = count > 1;
@@ -61,7 +63,7 @@ export default function Lightbox({ images, index, onClose, onIndexChange }: Prop
       data-lenis-prevent
       role="dialog"
       aria-modal="true"
-      aria-label="Bildansicht"
+      aria-label={t('view')}
       onClick={onClose}
       onTouchStart={(e) => {
         touch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
@@ -101,7 +103,7 @@ export default function Lightbox({ images, index, onClose, onIndexChange }: Prop
         }}
         className="absolute left-6 top-7 font-display text-xs uppercase tracking-brand text-white/70"
       >
-        <span className="underline-trail">← Zurück</span>
+        <span className="underline-trail">{t('back')}</span>
       </button>
 
       {/* close */}
@@ -111,7 +113,7 @@ export default function Lightbox({ images, index, onClose, onIndexChange }: Prop
           onClose();
         }}
         className="absolute right-6 top-6 p-2 text-white/70 transition-colors hover:text-white"
-        aria-label="Schließen"
+        aria-label={t('close')}
       >
         <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
           <line x1="18" y1="6" x2="6" y2="18" />
@@ -128,7 +130,7 @@ export default function Lightbox({ images, index, onClose, onIndexChange }: Prop
               prev();
             }}
             className="absolute left-3 top-1/2 hidden -translate-y-1/2 p-2.5 text-white/50 transition-colors hover:text-white md:block"
-            aria-label="Vorheriges Bild"
+            aria-label={t('prevImage')}
           >
             <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="15 18 9 12 15 6" />
@@ -140,7 +142,7 @@ export default function Lightbox({ images, index, onClose, onIndexChange }: Prop
               next();
             }}
             className="absolute right-3 top-1/2 hidden -translate-y-1/2 p-2.5 text-white/50 transition-colors hover:text-white md:block"
-            aria-label="Nächstes Bild"
+            aria-label={t('nextImage')}
           >
             <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="9 18 15 12 9 6" />

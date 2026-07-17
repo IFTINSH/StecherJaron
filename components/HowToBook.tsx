@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
+import { useTranslations } from 'next-intl';
 import type { HowToBookData } from '@/lib/data';
 import BookingAccordion from './BookingAccordion';
 
@@ -9,6 +10,7 @@ import BookingAccordion from './BookingAccordion';
 // right) opens a panel with the booking guidance, grouped into clear sections.
 export default function HowToBook({ data }: { data: HowToBookData }) {
   const howToBook = data;
+  const t = useTranslations('howtobook');
   const [open, setOpen] = useState(false);
   // Which section is expanded; starts fully collapsed so the panel isn't a wall
   // of text — same collapsed pattern as the Contact section.
@@ -75,7 +77,7 @@ export default function HowToBook({ data }: { data: HowToBookData }) {
               <button
                 onClick={() => setOpen(false)}
                 className="absolute right-5 top-5 text-white/70 transition-colors hover:text-white"
-                aria-label="Schließen"
+                aria-label={t('close')}
               >
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
                   <line x1="18" y1="6" x2="6" y2="18" />

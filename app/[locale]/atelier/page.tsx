@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { setRequestLocale } from 'next-intl/server';
 import BackgroundShader from '@/components/BackgroundShader';
 import Header from '@/components/Header';
 import BackButton from '@/components/BackButton';
@@ -7,6 +8,7 @@ import HowToBook from '@/components/HowToBook';
 import Footer from '@/components/Footer';
 import { site } from '@/lib/content';
 import { getHowToBook, getStudioImages } from '@/lib/data';
+import type { Locale } from '@/lib/i18n/routing';
 
 export const revalidate = 60;
 
@@ -16,8 +18,14 @@ export const metadata: Metadata = {
   alternates: { canonical: '/atelier' },
 };
 
-export default async function AtelierPage() {
-  const [howToBook, images] = await Promise.all([getHowToBook(), getStudioImages()]);
+export default async function AtelierPage({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const [howToBook, images] = await Promise.all([getHowToBook(locale), getStudioImages(locale)]);
 
   return (
     <>

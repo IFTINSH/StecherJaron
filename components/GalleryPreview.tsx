@@ -1,8 +1,9 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { motion } from 'motion/react';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/lib/i18n/navigation';
 import ParallaxImage from './ParallaxImage';
 
 // Shared "editorial preview" (from the Figma design): a few feature images in dark
@@ -63,10 +64,11 @@ function FeatureImage({
   /** parallax strength (% travel); the mobile swipe row uses a gentler value */
   magnitude?: number;
 }) {
+  const t = useTranslations('gallery');
   return (
     <button
       onClick={() => onOpenLightbox(index)}
-      aria-label={item.alt || 'Bild vergrößern'}
+      aria-label={item.alt || t('enlargeImage')}
       className={`group relative block cursor-pointer overflow-hidden rounded-sm bg-surface ${className}`}
     >
       {/* Parallax: the image gently scrolls within its frame as the tile passes by,
@@ -105,6 +107,7 @@ export function SeeAllTile({
   vertical: boolean;
   className?: string;
 }) {
+  const t = useTranslations('gallery');
   return (
     <Link
       href={href}
@@ -142,7 +145,7 @@ export function SeeAllTile({
           +{remaining}
         </span>
         <span className="font-display text-[8px] uppercase tracking-brand text-white/40 transition-colors duration-300 group-hover:text-white/60">
-          Alle ansehen
+          {t('seeAll')}
         </span>
       </div>
 

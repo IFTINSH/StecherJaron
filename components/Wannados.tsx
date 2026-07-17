@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'motion/react';
+import { useTranslations } from 'next-intl';
 import Lightbox from './Lightbox';
 import type { WannadoItem } from '@/lib/data';
 
@@ -14,6 +15,7 @@ import type { WannadoItem } from '@/lib/data';
 // Only a couple of sheets show at once, so it scales to any number. Click a sheet
 // to open it full-size in the shared lightbox.
 export default function Wannados({ items }: { items: WannadoItem[] }) {
+  const t = useTranslations();
   const trackRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
   const [lightbox, setLightbox] = useState<number | null>(null);
@@ -98,7 +100,7 @@ export default function Wannados({ items }: { items: WannadoItem[] }) {
           className="text-center font-display text-4xl uppercase tracking-brand text-white/90 md:text-left md:text-7xl"
           style={{ fontWeight: 300 }}
         >
-          Wannado’s
+          {t('sections.wannados')}
         </motion.h2>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -107,7 +109,7 @@ export default function Wannados({ items }: { items: WannadoItem[] }) {
           transition={{ duration: 0.8, delay: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
           className="mx-auto mt-6 max-w-[42ch] text-center text-secondary md:mx-0 md:mt-8 md:text-left"
         >
-          Designs, die ich gerne stechen möchte — such dir eins aus.
+          {t('wannados.subtitle')}
         </motion.p>
 
         {/* The wall — left-aligned strip; first sheet flush with the gutter, peeks right */}
@@ -126,7 +128,7 @@ export default function Wannados({ items }: { items: WannadoItem[] }) {
               data-sheet
               type="button"
               onClick={() => openSheet(i)}
-              aria-label={`${sheet.label} vergrößern`}
+              aria-label={t('wannados.enlargeSheet', { label: sheet.label })}
               className="w-[78vw] flex-shrink-0 snap-start snap-always select-none md:w-[calc((100%-6rem)/5)]"
             >
               <div
@@ -160,7 +162,7 @@ export default function Wannados({ items }: { items: WannadoItem[] }) {
             type="button"
             onClick={() => nudge(-1)}
             disabled={active <= 0}
-            aria-label="Vorheriges Sheet"
+            aria-label={t('wannados.prevSheet')}
             className="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white/80 transition-colors hover:bg-white hover:text-black disabled:pointer-events-none disabled:opacity-30"
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -174,7 +176,7 @@ export default function Wannados({ items }: { items: WannadoItem[] }) {
             type="button"
             onClick={() => nudge(1)}
             disabled={active >= items.length - 1}
-            aria-label="Nächstes Sheet"
+            aria-label={t('wannados.nextSheet')}
             className="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white/80 transition-colors hover:bg-white hover:text-black disabled:pointer-events-none disabled:opacity-30"
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">

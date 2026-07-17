@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'motion/react';
+import { useTranslations } from 'next-intl';
 import GalleryPreview, { type PreviewItem } from './GalleryPreview';
 import Lightbox from './Lightbox';
 import { site } from '@/lib/content';
@@ -12,6 +13,7 @@ import type { StudioImageItem } from '@/lib/data';
 // tile — same pattern as Portfolio. Photos come from Sanity (lib/data).
 export default function Studio({ images }: { images: StudioImageItem[] }) {
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const t = useTranslations();
 
   const items: PreviewItem[] = images.map((img) => ({
     key: img.id,
@@ -30,7 +32,7 @@ export default function Studio({ images }: { images: StudioImageItem[] }) {
           className="text-center font-display text-4xl uppercase tracking-brand text-white/90 md:text-left md:text-7xl"
           style={{ fontWeight: 300 }}
         >
-          Studio
+          {t('sections.studio')}
         </motion.h2>
 
         <motion.div
@@ -41,7 +43,7 @@ export default function Studio({ images }: { images: StudioImageItem[] }) {
           className="mt-12 text-center md:mt-10 md:text-left"
         >
           <span className="block font-display text-xs uppercase tracking-brand text-secondary">
-            Adresse
+            {t('studioSection.address')}
           </span>
           <a
             href={site.studio.mapsUrl}

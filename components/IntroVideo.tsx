@@ -2,11 +2,13 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
+import { useTranslations } from 'next-intl';
 
 // "Scrolls in & expands" like dotstolines.com. Plays muted+looped; sound is
 // opt-in via the "Ton" button (no auto-unmute — unexpected audio while
 // scrolling is jarring, and browsers usually block it anyway). Mobile-first.
 export default function IntroVideo() {
+  const t = useTranslations('video');
   const sectionRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
@@ -118,15 +120,15 @@ export default function IntroVideo() {
             <button
               onClick={toggleSound}
               className="flex items-center gap-2 rounded-full bg-black/55 px-4 py-2 text-xs font-light uppercase tracking-brand text-white backdrop-blur-md transition-colors hover:bg-black/75"
-              aria-label={muted ? 'Ton aktivieren' : 'Ton ausschalten'}
+              aria-label={muted ? t('enableSound') : t('disableSound')}
             >
               {muted ? <SoundOff /> : <SoundOn />}
-              {muted && <span>Ton</span>}
+              {muted && <span>{t('sound')}</span>}
             </button>
             <button
               onClick={toggleFullscreen}
               className="flex items-center justify-center rounded-full bg-black/55 p-2.5 text-white backdrop-blur-md transition-colors hover:bg-black/75"
-              aria-label={fullscreen ? 'Vollbild verlassen' : 'Vollbild'}
+              aria-label={fullscreen ? t('exitFullscreen') : t('fullscreen')}
             >
               {fullscreen ? <FsExit /> : <FsEnter />}
             </button>

@@ -1,14 +1,18 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { motion } from 'motion/react';
+import { useLocale, useTranslations } from 'next-intl';
+import { Link } from '@/lib/i18n/navigation';
 import type { EventItem } from '@/lib/data';
 import { formatEventDate } from '@/lib/format';
+import type { Locale } from '@/lib/i18n/routing';
 
 // One event tile (cover + title/date row) linking to its detail page.
 // Used by the homepage Events section and the /events overview page.
 export default function EventCard({ event, delay = 0 }: { event: EventItem; delay?: number }) {
+  const t = useTranslations('events');
+  const locale = useLocale() as Locale;
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -19,7 +23,7 @@ export default function EventCard({ event, delay = 0 }: { event: EventItem; dela
       <Link
         href={`/events/${event.slug}`}
         className="group block"
-        aria-label={`Event ansehen: ${event.title}`}
+        aria-label={t('view', { title: event.title })}
       >
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-surface">
           <Image
@@ -35,9 +39,9 @@ export default function EventCard({ event, delay = 0 }: { event: EventItem; dela
           <h3 className="font-display text-sm uppercase tracking-wordmark text-white">
             {event.title}
           </h3>
-          {formatEventDate(event.date) && (
+          {formatEventDate(event.date, locale) && (
             <span className="font-display text-xs uppercase tracking-brand text-muted">
-              {formatEventDate(event.date)}
+              {formatEventDate(event.date, locale)}
             </span>
           )}
         </div>

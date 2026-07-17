@@ -6,7 +6,7 @@ export const howToBook = defineType({
   title: 'How to Book',
   type: 'document',
   fields: [
-    defineField({ name: 'title', title: 'Überschrift', type: 'string', initialValue: 'How to Book' }),
+    defineField({ name: 'title', title: 'Überschrift', type: 'localeString' }),
     defineField({
       name: 'sections',
       title: 'Abschnitte',
@@ -20,22 +20,21 @@ export const howToBook = defineType({
             defineField({
               name: 'heading',
               title: 'Abschnitts-Titel',
-              type: 'string',
-              validation: (r) => r.required(),
+              type: 'localeString',
             }),
             defineField({
               name: 'items',
               title: 'Punkte',
               type: 'array',
-              of: [{ type: 'text', rows: 2 }],
+              of: [{ type: 'localeText' }],
             }),
           ],
-          preview: { select: { title: 'heading' } },
+          preview: { select: { title: 'heading.de' } },
         }),
       ],
     }),
-    defineField({ name: 'ctaLabel', title: 'Button-Text', type: 'string' }),
+    defineField({ name: 'ctaLabel', title: 'Button-Text', type: 'localeString' }),
     defineField({ name: 'ctaUrl', title: 'Button-Link (Instagram)', type: 'url' }),
   ],
-  preview: { select: { title: 'title' } },
+  preview: { select: { title: 'title.de' } },
 });

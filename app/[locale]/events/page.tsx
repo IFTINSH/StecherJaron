@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
+import { setRequestLocale } from 'next-intl/server';
 import { getEvents, getHowToBook } from '@/lib/data';
+import type { Locale } from '@/lib/i18n/routing';
 import BackgroundShader from '@/components/BackgroundShader';
 import Header from '@/components/Header';
 import BackButton from '@/components/BackButton';
@@ -17,8 +19,14 @@ export const metadata: Metadata = {
 
 // The full events overview — the "Alle ansehen" target of the mobile Events
 // preview. Same page skeleton as /portfolio and /atelier.
-export default async function EventsPage() {
-  const [events, howToBook] = await Promise.all([getEvents(), getHowToBook()]);
+export default async function EventsPage({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const [events, howToBook] = await Promise.all([getEvents(locale), getHowToBook(locale)]);
 
   return (
     <>

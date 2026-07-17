@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
+import { setRequestLocale } from 'next-intl/server';
 import { getTattoos, getHowToBook } from '@/lib/data';
+import type { Locale } from '@/lib/i18n/routing';
 import BackgroundShader from '@/components/BackgroundShader';
 import Header from '@/components/Header';
 import BackButton from '@/components/BackButton';
@@ -15,8 +17,14 @@ export const metadata: Metadata = {
   alternates: { canonical: '/portfolio' },
 };
 
-export default async function PortfolioPage() {
-  const [tattoos, howToBook] = await Promise.all([getTattoos(), getHowToBook()]);
+export default async function PortfolioPage({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const [tattoos, howToBook] = await Promise.all([getTattoos(locale), getHowToBook(locale)]);
 
   return (
     <>

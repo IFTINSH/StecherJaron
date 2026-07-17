@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'motion/react';
+import { useTranslations } from 'next-intl';
 import { site } from '@/lib/content';
 import type { HowToBookData } from '@/lib/data';
 import BookingAccordion from './BookingAccordion';
@@ -16,6 +17,7 @@ export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
   // Both start fully collapsed on desktop and mobile.
   const [openDesktop, setOpenDesktop] = useState<number | null>(null);
   const [openMobile, setOpenMobile] = useState<number | null>(null);
+  const t = useTranslations();
 
   return (
     <section id="contact" className="relative z-10 px-6 pb-14 pt-24 md:px-12 md:pb-16 md:pt-32">
@@ -28,7 +30,7 @@ export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
           className="text-center font-display text-4xl uppercase tracking-brand text-white/90 md:text-7xl"
           style={{ fontWeight: 300 }}
         >
-          Kontakt
+          {t('sections.contact')}
         </motion.h2>
 
         {/* ── Desktop: address hugs the left, booking hugs the right, a subtle
@@ -43,7 +45,7 @@ export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
           >
             <div className="flex items-baseline gap-4">
               <span className="shrink-0 font-display text-xs uppercase tracking-brand text-secondary">
-                Adresse
+                {t('labels.address')}
               </span>
               <a
                 href={site.studio.mapsUrl}
@@ -68,7 +70,7 @@ export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
             className="w-full max-w-xl justify-self-center"
           >
             <span className="mb-4 block font-display text-xs uppercase tracking-brand text-secondary">
-              Booking
+              {t('labels.booking')}
             </span>
             <BookingAccordion sections={howToBook.sections} openIdx={openDesktop} setOpenIdx={setOpenDesktop} />
             <a
@@ -92,7 +94,7 @@ export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
             className="text-center"
           >
             <span className="mb-3 block font-display text-xs uppercase tracking-brand text-secondary">
-              Adresse
+              {t('labels.address')}
             </span>
             <a
               href={site.studio.mapsUrl}
@@ -113,7 +115,7 @@ export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
             className="mt-12"
           >
             <span className="mb-4 block text-center font-display text-xs uppercase tracking-brand text-secondary">
-              Booking
+              {t('labels.booking')}
             </span>
             <BookingAccordion sections={howToBook.sections} openIdx={openMobile} setOpenIdx={setOpenMobile} />
             <a

@@ -5,14 +5,13 @@ export const about = defineType({
   title: 'Über mich',
   type: 'document',
   fields: [
-    defineField({ name: 'title', title: 'Überschrift', type: 'string', initialValue: 'Über mich' }),
+    defineField({ name: 'title', title: 'Überschrift', type: 'localeString' }),
     defineField({
       name: 'body',
       title: 'Text',
-      type: 'text',
-      rows: 8,
+      type: 'localeText',
       description: 'Absätze bleiben erhalten (leere Zeile = neuer Absatz).',
     }),
   ],
-  preview: { select: { title: 'title' } },
+  preview: { select: { title: 'title.de' } },
 });

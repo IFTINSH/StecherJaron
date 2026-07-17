@@ -22,8 +22,7 @@ export const wannados = defineType({
     defineField({
       name: 'alt',
       title: 'Bildbeschreibung (Alt-Text)',
-      type: 'string',
-      initialValue: 'Wannado’s Flash Sheet von Stecher Jaron',
+      type: 'localeString',
     }),
     defineField({
       name: 'order',
@@ -35,5 +34,5 @@ export const wannados = defineType({
   orderings: [
     { title: 'Reihenfolge', name: 'orderAsc', by: [{ field: 'order', direction: 'asc' }] },
   ],
-  preview: { select: { title: 'label', subtitle: 'alt', media: 'image' } },
+  preview: { select: { title: 'label', subtitle: 'alt.de', media: 'image' } },
 });

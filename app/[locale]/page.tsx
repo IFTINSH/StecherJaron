@@ -1,4 +1,7 @@
-import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { hasLocale } from 'next-intl';
+import { setRequestLocale } from 'next-intl/server';
+import { routing } from '@/lib/i18n/routing';
 import BackgroundShader from '@/components/BackgroundShader';
 import SmoothScroll from '@/components/SmoothScroll';
 import LoadingProvider from '@/components/LoadingProvider';
@@ -14,21 +17,28 @@ import Contact from '@/components/Contact';
 import HowToBook from '@/components/HowToBook';
 import Footer from '@/components/Footer';
 import { getAbout, getTattoos, getEvents, getHowToBook, getStudioImages, getWannados } from '@/lib/data';
+import type { Locale } from '@/lib/i18n/routing';
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  alternates: { canonical: '/' },
-};
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
+  // Guard: a bare path like /favicon.ico would otherwise match [locale] and run
+  // a Sanity query with an invalid $locale. Reject anything that isn't a locale.
+  if (!hasLocale(routing.locales, locale)) notFound();
+  setRequestLocale(locale);
 
-export default async function Home() {
   const [about, tattoos, events, howToBook, studioImages, wannados] = await Promise.all([
-    getAbout(),
-    getTattoos(),
-    getEvents(),
-    getHowToBook(),
-    getStudioImages(),
-    getWannados(),
+    getAbout(locale),
+    getTattoos(locale),
+    getEvents(locale),
+    getHowToBook(locale),
+    getStudioImages(locale),
+    getWannados(locale),
   ]);
 
   return (

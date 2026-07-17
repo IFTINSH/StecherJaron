@@ -2,12 +2,29 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { nav, site } from '@/lib/content';
+import { useLocale, useTranslations } from 'next-intl';
+import { site } from '@/lib/content';
 import { useLoaded } from './LoadingProvider';
+import LocaleToggle from './LocaleToggle';
+
+// Homepage-section anchors. Labels come from the `nav` message namespace.
+const navItems = [
+  { href: '/#about', key: 'about' },
+  { href: '/#work', key: 'portfolio' },
+  { href: '/#wannados', key: 'wannados' },
+  { href: '/#studio', key: 'studio' },
+  { href: '/#events', key: 'events' },
+  { href: '/#contact', key: 'contact' },
+] as const;
 
 export default function Header() {
   const loaded = useLoaded();
   const [open, setOpen] = useState(false);
+  const t = useTranslations('nav');
+  const th = useTranslations('header');
+  const locale = useLocale();
+  // Prefix homepage anchors with the locale so cross-page nav stays in-language.
+  const prefix = locale === 'de' ? '' : `/${locale}`;
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
@@ -30,7 +47,7 @@ export default function Header() {
         transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1], delay: 0.8 }}
       >
         <a
-          href="/#top"
+          href={`${prefix}/#top`}
           className="font-display tracking-wordmark text-lg uppercase text-white no-underline md:text-xl"
           style={{ fontWeight: 400 }}
         >
@@ -38,26 +55,33 @@ export default function Header() {
         </a>
 
         <nav className="hidden items-center gap-10 md:flex">
-          {nav.map((link, i) => (
+          {navItems.map((link, i) => (
             <motion.a
               key={link.href}
-              href={link.href}
+              href={`${prefix}${link.href}`}
               className="underline-trail font-display text-sm font-light uppercase tracking-brand text-white"
               initial={{ opacity: 0, y: -8 }}
               animate={loaded ? { opacity: 1, y: 0 } : { opacity: 0, y: -8 }}
               transition={{ duration: 0.5, delay: 1.1 + i * 0.08 }}
             >
-              {link.label}
+              {t(link.key)}
             </motion.a>
           ))}
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={loaded ? { opacity: 1, y: 0 } : { opacity: 0, y: -8 }}
+            transition={{ duration: 0.5, delay: 1.1 + navItems.length * 0.08 }}
+          >
+            <LocaleToggle />
+          </motion.div>
         </nav>
 
         <button
           onClick={() => setOpen(true)}
           className="-m-2 p-2 font-display text-sm font-light uppercase tracking-brand text-white md:hidden"
-          aria-label="Menü öffnen"
+          aria-label={th('openMenu')}
         >
-          Menü
+          {th('menu')}
         </button>
       </motion.header>
 
@@ -73,36 +97,39 @@ export default function Header() {
         <button
           onClick={() => setOpen(false)}
           className="absolute right-3 top-2 p-3 font-display text-sm font-light uppercase tracking-brand text-white"
-          aria-label="Menü schließen"
+          aria-label={th('closeMenu')}
         >
-          Schließen
+          {th('close')}
         </button>
 
         <nav className="flex flex-col items-center gap-8">
-          {nav.map((link) => (
+          {navItems.map((link) => (
             <a
               key={link.href}
-              href={link.href}
+              href={`${prefix}${link.href}`}
               onClick={() => setOpen(false)}
               className="font-display text-2xl font-light uppercase tracking-brand text-white no-underline transition-colors duration-300 hover:text-secondary"
             >
-              {link.label}
+              {t(link.key)}
             </a>
           ))}
         </nav>
 
-        <div className="absolute bottom-10 flex flex-col items-center gap-3">
-          <span className="text-xs uppercase tracking-brand text-secondary">
-            Social Media
-          </span>
-          <a
-            href={site.instagram.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline-trail text-sm text-white no-underline"
-          >
-            Instagram
-          </a>
+        <div className="absolute bottom-10 flex flex-col items-center gap-5">
+          <LocaleToggle className="text-sm" />
+          <div className="flex flex-col items-center gap-3">
+            <span className="text-xs uppercase tracking-brand text-secondary">
+              {th('socialMedia')}
+            </span>
+            <a
+              href={site.instagram.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline-trail text-sm text-white no-underline"
+            >
+              Instagram
+            </a>
+          </div>
         </div>
       </div>
     </>

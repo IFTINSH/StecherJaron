@@ -5,12 +5,16 @@ export const event = defineType({
   title: 'Event',
   type: 'document',
   fields: [
-    defineField({ name: 'title', title: 'Titel', type: 'string', validation: (r) => r.required() }),
+    defineField({ name: 'title', title: 'Titel', type: 'localeString' }),
     defineField({
       name: 'slug',
       title: 'URL-Slug',
       type: 'slug',
-      options: { source: 'title', maxLength: 96 },
+      // Slug is shared across languages → derive it from the German title.
+      options: {
+        source: (doc) => (doc.title as { de?: string } | undefined)?.de || '',
+        maxLength: 96,
+      },
       validation: (r) => r.required(),
     }),
     defineField({
@@ -20,8 +24,8 @@ export const event = defineType({
       options: { dateFormat: 'DD.MM.YYYY' },
       description: 'Bestimmt die Reihenfolge auf der Website (neueste zuerst).',
     }),
-    defineField({ name: 'location', title: 'Ort', type: 'string' }),
-    defineField({ name: 'description', title: 'Beschreibung', type: 'text', rows: 4 }),
+    defineField({ name: 'location', title: 'Ort', type: 'localeString' }),
+    defineField({ name: 'description', title: 'Beschreibung', type: 'localeText' }),
     defineField({
       name: 'cover',
       title: 'Cover-Bild',
@@ -39,5 +43,5 @@ export const event = defineType({
   orderings: [
     { title: 'Datum (neueste zuerst)', name: 'dateDesc', by: [{ field: 'date', direction: 'desc' }] },
   ],
-  preview: { select: { title: 'title', subtitle: 'date', media: 'cover' } },
+  preview: { select: { title: 'title.de', subtitle: 'date', media: 'cover' } },
 });

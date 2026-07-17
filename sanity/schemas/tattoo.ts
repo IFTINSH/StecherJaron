@@ -12,7 +12,7 @@ export const tattoo = defineType({
       options: { hotspot: true },
       validation: (rule) => rule.required(),
     }),
-    defineField({ name: 'alt', title: 'Bildbeschreibung (Alt-Text)', type: 'string' }),
+    defineField({ name: 'alt', title: 'Bildbeschreibung (Alt-Text)', type: 'localeString' }),
     defineField({
       name: 'category',
       title: 'Kategorie',
@@ -29,5 +29,5 @@ export const tattoo = defineType({
   orderings: [
     { title: 'Reihenfolge', name: 'orderAsc', by: [{ field: 'order', direction: 'asc' }] },
   ],
-  preview: { select: { title: 'alt', subtitle: 'category.title', media: 'image' } },
+  preview: { select: { title: 'alt.de', subtitle: 'category.title', media: 'image' } },
 });

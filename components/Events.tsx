@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'motion/react';
+import { useTranslations } from 'next-intl';
 import EventCard from './EventCard';
 import type { EventItem } from '@/lib/data';
 
@@ -14,6 +15,7 @@ const MOBILE_PAGE = 3;
 export default function Events({ events }: { events: EventItem[] }) {
   // events arrive sorted newest-first (see lib/data)
   const [visible, setVisible] = useState(MOBILE_PAGE);
+  const t = useTranslations();
 
   return (
     <section id="events" className="relative z-10 px-6 py-24 md:px-12 md:py-32">
@@ -26,7 +28,7 @@ export default function Events({ events }: { events: EventItem[] }) {
           className="text-center font-display text-4xl uppercase tracking-brand text-white/90 md:text-left md:text-7xl"
           style={{ fontWeight: 300 }}
         >
-          Events
+          {t('sections.events')}
         </motion.h2>
 
         {/* ── Mobile: newest first, more revealed in place ── */}
@@ -43,7 +45,7 @@ export default function Events({ events }: { events: EventItem[] }) {
                 onClick={() => setVisible((v) => v + MOBILE_PAGE)}
                 className="underline-trail font-display text-sm uppercase tracking-brand text-white"
               >
-                Weitere laden
+                {t('events.loadMore')}
               </button>
             </div>
           )}

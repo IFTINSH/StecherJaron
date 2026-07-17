@@ -1,9 +1,17 @@
-import Link from 'next/link';
 import type { Metadata } from 'next';
+import { setRequestLocale } from 'next-intl/server';
+import { Link } from '@/lib/i18n/navigation';
+import type { Locale } from '@/lib/i18n/routing';
 
 export const metadata: Metadata = { title: 'Impressum', robots: { index: false } };
 
-export default function Impressum() {
+export default async function Impressum({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
   return (
     <main className="relative z-10 mx-auto min-h-dvh max-w-2xl px-6 pb-28 pt-28">
       <Link href="/" className="underline-trail font-display text-xs uppercase tracking-brand text-white/70">

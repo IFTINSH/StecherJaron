@@ -15,8 +15,7 @@ export const studioImage = defineType({
     defineField({
       name: 'alt',
       title: 'Bildbeschreibung (Alt-Text)',
-      type: 'string',
-      initialValue: 'Studio Impression',
+      type: 'localeString',
     }),
     defineField({
       name: 'order',
@@ -28,5 +27,5 @@ export const studioImage = defineType({
   orderings: [
     { title: 'Reihenfolge', name: 'orderAsc', by: [{ field: 'order', direction: 'asc' }] },
   ],
-  preview: { select: { title: 'alt', media: 'image' } },
+  preview: { select: { title: 'alt.de', media: 'image' } },
 });

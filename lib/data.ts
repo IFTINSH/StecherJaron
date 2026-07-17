@@ -1,5 +1,6 @@
 import { client } from '@/sanity/client';
 import { imageUrl } from '@/sanity/image';
+import type { Locale } from './i18n/routing';
 import {
   about as aboutFallback,
   howToBook as howToBookFallback,
@@ -39,11 +40,21 @@ export interface HowToBookData {
   ctaUrl: string;
 }
 
-export async function getHowToBook(): Promise<HowToBookData> {
+export async function getHowToBook(locale: Locale = 'de'): Promise<HowToBookData> {
   if (!client) return howToBookFallback;
   const doc = await client.fetch<Partial<HowToBookData> | null>(
-    `*[_type == "howToBook"][0]{ title, sections, ctaLabel, ctaUrl }`,
-    {},
+    // coalesce(field[$locale], field.de, field) reads the localized value and
+    // gracefully falls back — also works for not-yet-migrated plain-string data.
+    `*[_type == "howToBook"][0]{
+      "title": coalesce(title[$locale], title.de, title),
+      "sections": sections[]{
+        "heading": coalesce(heading[$locale], heading.de, heading),
+        "items": items[]{ "v": coalesce(@[$locale], @.de, @) }.v
+      },
+      "ctaLabel": coalesce(ctaLabel[$locale], ctaLabel.de, ctaLabel),
+      ctaUrl
+    }`,
+    { locale },
     fetchOpts,
   );
   // Nur Sanity nehmen, wenn echte Abschnitte vorhanden sind, sonst Fallback.
@@ -56,18 +67,21 @@ export async function getHowToBook(): Promise<HowToBookData> {
   };
 }
 
-export async function getAbout(): Promise<AboutData> {
+export async function getAbout(locale: Locale = 'de'): Promise<AboutData> {
   if (!client) return { title: aboutFallback.title, body: aboutFallback.body };
   const doc = await client.fetch<{ title?: string; body?: string } | null>(
-    `*[_type == "about"][0]{ title, body }`,
-    {},
+    `*[_type == "about"][0]{
+      "title": coalesce(title[$locale], title.de, title),
+      "body": coalesce(body[$locale], body.de, body)
+    }`,
+    { locale },
     fetchOpts,
   );
   if (!doc?.body) return { title: aboutFallback.title, body: aboutFallback.body };
   return { title: doc.title || aboutFallback.title, body: doc.body };
 }
 
-export async function getTattoos(): Promise<TattooItem[]> {
+export async function getTattoos(locale: Locale = 'de'): Promise<TattooItem[]> {
   if (!client) {
     return tattoosFallback.map((t) => ({ id: t.id, src: t.src, alt: t.alt, style: t.style }));
   }
@@ -75,9 +89,9 @@ export async function getTattoos(): Promise<TattooItem[]> {
     { id: string; alt?: string; style?: string; image: unknown }[]
   >(
     `*[_type == "tattoo" && defined(image)] | order(order asc, _createdAt desc){
-      "id": _id, alt, "style": category->title, image
+      "id": _id, "alt": coalesce(alt[$locale], alt.de, alt), "style": category->title, image
     }`,
-    {},
+    { locale },
     fetchOpts,
   );
   const items = docs
@@ -100,15 +114,15 @@ export interface StudioImageItem {
   alt: string;
 }
 
-export async function getStudioImages(): Promise<StudioImageItem[]> {
+export async function getStudioImages(locale: Locale = 'de'): Promise<StudioImageItem[]> {
   const fallback = () =>
     studioImagesFallback.map((s) => ({ id: s.src, src: s.src, alt: s.alt }));
   if (!client) return fallback();
   const docs = await client.fetch<{ id: string; alt?: string; image: unknown }[]>(
     `*[_type == "studioImage" && defined(image)] | order(order asc, _createdAt desc){
-      "id": _id, alt, image
+      "id": _id, "alt": coalesce(alt[$locale], alt.de, alt), image
     }`,
-    {},
+    { locale },
     fetchOpts,
   );
   const items = docs
@@ -131,7 +145,7 @@ export interface WannadoItem {
   h: number;
 }
 
-export async function getWannados(): Promise<WannadoItem[]> {
+export async function getWannados(locale: Locale = 'de'): Promise<WannadoItem[]> {
   const fallback = () =>
     wannadosFallback.map((w) => ({ id: w.src, src: w.src, alt: w.alt, label: w.label, w: w.w, h: w.h }));
   if (!client) return fallback();
@@ -139,11 +153,11 @@ export async function getWannados(): Promise<WannadoItem[]> {
     { id: string; alt?: string; label?: string; w?: number; h?: number; image: unknown }[]
   >(
     `*[_type == "wannados" && defined(image)] | order(order asc, _createdAt desc){
-      "id": _id, alt, label, image,
+      "id": _id, "alt": coalesce(alt[$locale], alt.de, alt), label, image,
       "w": image.asset->metadata.dimensions.width,
       "h": image.asset->metadata.dimensions.height
     }`,
-    {},
+    { locale },
     fetchOpts,
   );
   const items = docs
@@ -166,30 +180,40 @@ const sortedFallbackEvents = () =>
     .sort((a, b) => (b.date || '').localeCompare(a.date || ''))
     .map(toFallbackEvent);
 
-export async function getEvents(): Promise<EventItem[]> {
+export async function getEvents(locale: Locale = 'de'): Promise<EventItem[]> {
   if (!client) return sortedFallbackEvents();
   const docs = await client.fetch<RawEvent[]>(
     // coalesce -> Events ohne Datum ans Ende (sonst sortiert GROQ null bei desc nach oben).
     `*[_type == "event" && defined(cover)] | order(coalesce(date, "") desc, _createdAt desc){
-      "slug": slug.current, title, date, location, description, cover, images
+      "slug": slug.current,
+      "title": coalesce(title[$locale], title.de, title),
+      date,
+      "location": coalesce(location[$locale], location.de, location),
+      "description": coalesce(description[$locale], description.de, description),
+      cover, images
     }`,
-    {},
+    { locale },
     fetchOpts,
   );
   const items = docs.map(fromSanityEvent).filter((e) => e.slug && e.cover);
   return items.length ? items : sortedFallbackEvents();
 }
 
-export async function getEvent(slug: string): Promise<EventItem | null> {
+export async function getEvent(slug: string, locale: Locale = 'de'): Promise<EventItem | null> {
   if (!client) {
     const ev = eventsFallback.find((e) => e.slug === slug);
     return ev ? toFallbackEvent(ev) : null;
   }
   const doc = await client.fetch<RawEvent | null>(
     `*[_type == "event" && slug.current == $slug][0]{
-      "slug": slug.current, title, date, location, description, cover, images
+      "slug": slug.current,
+      "title": coalesce(title[$locale], title.de, title),
+      date,
+      "location": coalesce(location[$locale], location.de, location),
+      "description": coalesce(description[$locale], description.de, description),
+      cover, images
     }`,
-    { slug },
+    { slug, locale },
     fetchOpts,
   );
   if (doc) return fromSanityEvent(doc);

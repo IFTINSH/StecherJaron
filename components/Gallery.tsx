@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'motion/react';
+import { useTranslations } from 'next-intl';
 import GalleryPreview, { type PreviewItem } from './GalleryPreview';
 import Lightbox from './Lightbox';
 import type { TattooItem } from '@/lib/data';
@@ -10,6 +11,7 @@ import type { TattooItem } from '@/lib/data';
 // an "Alle ansehen" tile); the tile opens the full social-media feed on its own page.
 export default function Gallery({ tattoos }: { tattoos: TattooItem[] }) {
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const t = useTranslations('sections');
 
   const items: PreviewItem[] = tattoos.map((t) => ({
     key: t.id,
@@ -32,7 +34,7 @@ export default function Gallery({ tattoos }: { tattoos: TattooItem[] }) {
             className="text-center font-display text-4xl uppercase tracking-brand text-white/90 md:text-left md:text-7xl"
             style={{ fontWeight: 300 }}
           >
-            Portfolio
+            {t('portfolio')}
           </h2>
         </motion.div>
 

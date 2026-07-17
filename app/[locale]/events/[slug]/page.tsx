@@ -1,8 +1,10 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import type { Metadata } from 'next';
+import { setRequestLocale } from 'next-intl/server';
 import { getEvent, getEventSlugs, getHowToBook } from '@/lib/data';
 import { formatEventDate } from '@/lib/format';
+import type { Locale } from '@/lib/i18n/routing';
 import BackgroundShader from '@/components/BackgroundShader';
 import Header from '@/components/Header';
 import BackButton from '@/components/BackButton';
@@ -19,10 +21,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: Locale }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const ev = await getEvent(slug);
+  const { slug, locale } = await params;
+  const ev = await getEvent(slug, locale);
   if (!ev) return { title: 'Event' };
   return {
     title: ev.title,
@@ -35,10 +37,11 @@ export async function generateMetadata({
 export default async function EventPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: Locale }>;
 }) {
-  const { slug } = await params;
-  const [ev, howToBook] = await Promise.all([getEvent(slug), getHowToBook()]);
+  const { slug, locale } = await params;
+  setRequestLocale(locale);
+  const [ev, howToBook] = await Promise.all([getEvent(slug, locale), getHowToBook(locale)]);
   if (!ev) notFound();
 
   // Show the gallery images; fall back to the cover if no extra images exist.
@@ -60,7 +63,7 @@ export default async function EventPage({
               {ev.title}
             </h1>
             <div className="mt-4 flex flex-wrap gap-x-6 gap-y-1 font-display text-xs uppercase tracking-brand text-muted">
-              {formatEventDate(ev.date) && <span>{formatEventDate(ev.date)}</span>}
+              {formatEventDate(ev.date, locale) && <span>{formatEventDate(ev.date, locale)}</span>}
               {ev.location && <span>{ev.location}</span>}
             </div>
             {ev.description && (

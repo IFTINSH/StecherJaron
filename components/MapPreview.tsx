@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
+import { site } from '@/lib/content';
 
 // Two-click Google Maps embed (GDPR-friendly): the page ships with a LOCAL map
 // image (stitched from OpenStreetMap tiles, address centred — no third-party
@@ -16,6 +18,8 @@ const DARK_FILTER = 'grayscale(1) invert(0.92) contrast(0.9)';
 
 export default function MapPreview() {
   const [loaded, setLoaded] = useState(false);
+  const t = useTranslations('map');
+  const address = site.studio.address;
 
   return (
     <div className="mx-auto mt-8 w-full max-w-xl md:mx-0 md:max-w-none">
@@ -23,7 +27,7 @@ export default function MapPreview() {
         {loaded ? (
           <iframe
             src={EMBED_URL}
-            title="Karte: Firmianstraße 10, Passau"
+            title={t('iframeTitle', { address })}
             loading="lazy"
             allowFullScreen
             referrerPolicy="no-referrer-when-downgrade"
@@ -33,12 +37,12 @@ export default function MapPreview() {
           <button
             type="button"
             onClick={() => setLoaded(true)}
-            aria-label="Google-Maps-Karte laden"
+            aria-label={t('loadMapAria')}
             className="group absolute inset-0 block h-full w-full cursor-pointer"
           >
             <Image
               src="/map/map-preview.png"
-              alt="Kartenausschnitt: Firmianstraße 10, Passau"
+              alt={t('imageAlt', { address })}
               fill
               sizes="(max-width: 768px) 100vw, 576px"
               loading="lazy"
@@ -57,7 +61,7 @@ export default function MapPreview() {
             {/* load CTA — same pill language as the other buttons */}
             <span className="absolute inset-x-0 bottom-5 flex justify-center">
               <span className="flex items-center gap-2 rounded-full bg-white px-6 py-3 font-display text-xs uppercase tracking-brand text-black transition-opacity group-hover:opacity-85">
-                Karte laden
+                {t('loadMap')}
               </span>
             </span>
           </button>
@@ -66,19 +70,19 @@ export default function MapPreview() {
 
       <p className="mt-2 text-[11px] leading-relaxed text-muted">
         {loaded ? (
-          <>Karte: Google Maps</>
+          <>{t('mapLoaded')}</>
         ) : (
           <>
-            Vorschau: ©{' '}
+            {t('previewPrefix')}{' '}
             <a
               href="https://www.openstreetmap.org/copyright"
               target="_blank"
               rel="noopener noreferrer"
               className="underline-trail"
             >
-              OpenStreetMap
+              {t('osm')}
             </a>
-            -Mitwirkende · Beim Laden wird Google Maps eingebunden.
+            {t('previewSuffix')}
           </>
         )}
       </p>
