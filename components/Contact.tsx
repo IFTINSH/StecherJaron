@@ -73,7 +73,7 @@ export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
 
   return (
     <section id="contact" className="relative z-10 px-6 pb-14 pt-24 md:px-12 md:pb-16 md:pt-32">
-      <div className="mx-auto max-w-[1400px]">
+      <div className="mx-auto max-w-[1800px]">
         <motion.h2
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -85,13 +85,15 @@ export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
           Kontakt
         </motion.h2>
 
-        {/* ── Desktop: map left, booking accordion right ── */}
-        <div className="mt-16 hidden grid-cols-[1.05fr_0.95fr] items-start gap-16 md:grid lg:gap-28 lg:px-8">
+        {/* ── Desktop: address hugs the left, booking hugs the right, a subtle
+             full-height hairline splits the wide middle so it doesn't read empty. ── */}
+        <div className="mt-16 hidden items-stretch gap-x-16 md:grid md:grid-cols-[1fr_1px_1fr] lg:gap-x-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-10% 0px' }}
             transition={{ duration: 0.8, delay: 0.15 }}
+            className="w-full max-w-xl justify-self-center"
           >
             <span className="mb-3 block font-display text-xs uppercase tracking-brand text-secondary">
               Adresse
@@ -107,14 +109,18 @@ export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
             <MapPreview />
           </motion.div>
 
+          {/* Subtle vertical divider filling the centre */}
+          <div className="w-px self-stretch bg-line" aria-hidden="true" />
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-10% 0px' }}
             transition={{ duration: 0.8, delay: 0.25 }}
+            className="w-full max-w-xl justify-self-center"
           >
             <span className="mb-4 block font-display text-xs uppercase tracking-brand text-secondary">
-              So läuft&apos;s
+              Booking
             </span>
             <BookingAccordion sections={howToBook.sections} openIdx={openDesktop} setOpenIdx={setOpenDesktop} />
             <a
@@ -159,7 +165,7 @@ export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
             className="mt-12"
           >
             <span className="mb-4 block text-center font-display text-xs uppercase tracking-brand text-secondary">
-              So läuft&apos;s
+              Booking
             </span>
             <BookingAccordion sections={howToBook.sections} openIdx={openMobile} setOpenIdx={setOpenMobile} />
             <a
