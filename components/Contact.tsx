@@ -2,22 +2,74 @@
 
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { site, bookingSteps } from '@/lib/content';
+import { site } from '@/lib/content';
 import type { HowToBookData } from '@/lib/data';
 import MapPreview from './MapPreview';
 
-// Contact = the page's closing beat: booking + address under one heading.
-// Desktop: two columns — address + map left, the booking flow ("So läuft's",
-// three numbered steps + CTA pair) right. Mobile: address + map first, then the
-// FULL How-to-Book content as an accordion + CTA (nothing hidden behind the pill).
-export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
-  // All accordion items start collapsed.
-  const [openIdx, setOpenIdx] = useState<number | null>(null);
+// Shared "So läuft's" accordion — the full How-to-Book content, collapsed by
+// default. Used identically on desktop and mobile so the text is one source
+// (Sanity: howToBook) and never diverges. openIdx is lifted so both layouts
+// (only one visible per breakpoint) stay in sync.
+function BookingAccordion({
+  sections,
+  openIdx,
+  setOpenIdx,
+}: {
+  sections: HowToBookData['sections'];
+  openIdx: number | null;
+  setOpenIdx: (i: number | null) => void;
+}) {
+  return (
+    <div>
+      {sections.map((section, i) => {
+        const open = openIdx === i;
+        return (
+          <div key={section.heading} className="border-t border-line last:border-b">
+            <button
+              type="button"
+              onClick={() => setOpenIdx(open ? null : i)}
+              aria-expanded={open}
+              className="flex w-full items-center justify-between gap-4 py-4 text-left"
+            >
+              <h3 className="font-display text-sm font-normal uppercase tracking-brand text-white">
+                {section.heading}
+              </h3>
+              <span
+                className="text-secondary transition-transform duration-300"
+                style={{ transform: open ? 'rotate(45deg)' : 'none' }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+              </span>
+            </button>
+            {open && (
+              <ul className="space-y-2.5 pb-5 pl-4 text-left text-sm leading-relaxed text-body">
+                {section.items.map((item) => (
+                  <li key={item} className="list-disc">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
-  const openPanel = () => {
-    // HowToBook.tsx listens for this and opens its overlay panel.
-    window.dispatchEvent(new CustomEvent('howtobook:open'));
-  };
+// Contact = the page's closing beat: booking + address under one heading.
+// Desktop: two columns — address + map left, the "So läuft's" accordion right.
+// Mobile: address + map first, then the same accordion stacked below. Both use
+// the identical collapsed How-to-Book content + Instagram CTA.
+export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
+  // Separate state per breakpoint (both layouts live in the DOM at once):
+  // desktop opens the first item ("Buchungsanfrage") by default, mobile starts
+  // fully collapsed.
+  const [openDesktop, setOpenDesktop] = useState<number | null>(0);
+  const [openMobile, setOpenMobile] = useState<number | null>(null);
 
   return (
     <section id="contact" className="relative z-10 px-6 pb-14 pt-24 md:px-12 md:pb-16 md:pt-32">
@@ -33,7 +85,7 @@ export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
           Kontakt
         </motion.h2>
 
-        {/* ── Desktop: map left, booking right ── */}
+        {/* ── Desktop: map left, booking accordion right ── */}
         <div className="mt-16 hidden grid-cols-[1.05fr_0.95fr] items-start gap-16 md:grid lg:gap-28 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -61,47 +113,22 @@ export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
             viewport={{ once: true, margin: '-10% 0px' }}
             transition={{ duration: 0.8, delay: 0.25 }}
           >
-            <span className="mb-6 block font-display text-xs uppercase tracking-brand text-secondary">
+            <span className="mb-4 block font-display text-xs uppercase tracking-brand text-secondary">
               So läuft&apos;s
             </span>
-            <div className="space-y-6">
-              {bookingSteps.map((step) => (
-                <div key={step.no} className="border-t border-line pt-5">
-                  <span className="block font-display text-xs tracking-[0.3em] text-muted">
-                    {step.no}
-                  </span>
-                  <h3 className="mt-2 font-display text-sm font-normal uppercase tracking-brand text-white">
-                    {step.title}
-                  </h3>
-                  <p className="mt-1.5 max-w-[48ch] text-[0.92rem] leading-relaxed text-body">
-                    {step.text}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            {/* CTA pair — primary + quiet details ghost */}
-            <div className="mt-9 flex flex-wrap items-center gap-4">
-              <a
-                href={howToBook.ctaUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 rounded-full bg-white px-8 py-4 font-display text-xs uppercase tracking-brand text-black transition-opacity hover:opacity-85"
-              >
-                {howToBook.ctaLabel}
-              </a>
-              <button
-                type="button"
-                onClick={openPanel}
-                className="flex items-center justify-center rounded-full border border-white/25 px-7 py-4 font-display text-xs uppercase tracking-brand text-white/80 transition-colors hover:border-white hover:text-white"
-              >
-                Alle Details
-              </button>
-            </div>
+            <BookingAccordion sections={howToBook.sections} openIdx={openDesktop} setOpenIdx={setOpenDesktop} />
+            <a
+              href={howToBook.ctaUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-9 inline-flex items-center justify-center gap-2 rounded-full bg-white px-8 py-4 font-display text-xs uppercase tracking-brand text-black transition-opacity hover:opacity-85"
+            >
+              {howToBook.ctaLabel}
+            </a>
           </motion.div>
         </div>
 
-        {/* ── Mobile: address + map, then booking accordion + CTA ── */}
+        {/* ── Mobile: address + map, then the same accordion + CTA ── */}
         <div className="mt-8 md:hidden">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -134,43 +161,7 @@ export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
             <span className="mb-4 block text-center font-display text-xs uppercase tracking-brand text-secondary">
               So läuft&apos;s
             </span>
-            <div>
-              {howToBook.sections.map((section, i) => {
-                const open = openIdx === i;
-                return (
-                  <div key={section.heading} className="border-t border-line last:border-b">
-                    <button
-                      type="button"
-                      onClick={() => setOpenIdx(open ? null : i)}
-                      aria-expanded={open}
-                      className="flex w-full items-center justify-between gap-4 py-4 text-left"
-                    >
-                      <h3 className="font-display text-sm font-normal uppercase tracking-brand text-white">
-                        {section.heading}
-                      </h3>
-                      <span
-                        className="text-secondary transition-transform duration-300"
-                        style={{ transform: open ? 'rotate(45deg)' : 'none' }}
-                      >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-                          <line x1="12" y1="5" x2="12" y2="19" />
-                          <line x1="5" y1="12" x2="19" y2="12" />
-                        </svg>
-                      </span>
-                    </button>
-                    {open && (
-                      <ul className="space-y-2.5 pb-5 pl-4 text-left text-sm leading-relaxed text-body">
-                        {section.items.map((item) => (
-                          <li key={item} className="list-disc">
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+            <BookingAccordion sections={howToBook.sections} openIdx={openMobile} setOpenIdx={setOpenMobile} />
             <a
               href={howToBook.ctaUrl}
               target="_blank"

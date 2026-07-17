@@ -36,26 +36,6 @@ export const about = {
   body: `Hey, ich bin Jaron — Tattoo Artist aus Passau. Ich spezialisiere mich auf Dotwork, Blackwork und Fine-Line Tattoos. Jedes meiner Designs entsteht individuell für dich, mit einem Fokus auf feine Details, klare Linien und ausdrucksstarke Kontraste zwischen schwarzer Tinte und Haut. Lass uns gemeinsam deine Vision auf die Haut bringen.`,
 };
 
-// Booking section (desktop): the How-to-Book flow condensed into three steps.
-// The full detail text lives in `howToBook` below (panel + mobile accordion).
-export const bookingSteps = [
-  {
-    no: '01',
-    title: 'Schreib mir deine Idee',
-    text: 'Eine DM auf Instagram reicht — mit deiner Idee oder deinem Wannado, gern plus Referenzen, Größe in cm und 2–3 möglichen Terminen.',
-  },
-  {
-    no: '02',
-    title: 'Termin sichern',
-    text: 'Mit 50 € Anzahlung ist dein Termin verbindlich reserviert — darin steckt auch die Ausarbeitung deines individuellen Entwurfs.',
-  },
-  {
-    no: '03',
-    title: 'Stechen in Passau',
-    text: 'Dein Termin im Studio, Firmianstraße 10. Verfügbare Termine findest du in den Instagram-Highlights.',
-  },
-] as const;
-
 // "How to Book" — persistent overlay content. Booking happens via Instagram.
 export const howToBook = {
   title: 'How to Book',

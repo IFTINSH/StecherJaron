@@ -30,6 +30,7 @@ export default defineConfig({
             S.divider(),
             S.documentTypeListItem('category').title('Kategorien'),
             S.documentTypeListItem('tattoo').title('Portfolio'),
+            S.documentTypeListItem('wannados').title('Wannado’s'),
             S.documentTypeListItem('studioImage').title('Studio-Fotos'),
             S.documentTypeListItem('event').title('Events'),
           ]),

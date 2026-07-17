@@ -22,6 +22,18 @@ export default function HowToBook({ data }: { data: HowToBookData }) {
     };
   }, []);
 
+  // Lock background scroll while the panel is open (same pattern as Lightbox).
+  // Hiding body overflow also removes the scrollable range, so Lenis smooth-scroll
+  // has nothing to move — the page behind stays put on desktop and mobile.
+  useEffect(() => {
+    if (!open) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [open]);
+
   return (
     <>
       <button
