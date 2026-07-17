@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { setRequestLocale } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getTattoos, getHowToBook } from '@/lib/data';
 import type { Locale } from '@/lib/i18n/routing';
 import BackgroundShader from '@/components/BackgroundShader';
@@ -11,11 +11,23 @@ import Footer from '@/components/Footer';
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: 'Portfolio',
-  description: 'Alle Arbeiten von Stecher Jaron — Dotwork, Blackwork, Fine-Line Tattoos.',
-  alternates: { canonical: '/portfolio' },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'pageMeta' });
+  const isDe = locale === 'de';
+  return {
+    title: t('portfolioTitle'),
+    description: t('portfolioDescription'),
+    alternates: {
+      canonical: isDe ? '/portfolio' : '/en/portfolio',
+      languages: { 'de-DE': '/portfolio', 'en-US': '/en/portfolio', 'x-default': '/portfolio' },
+    },
+  };
+}
 
 export default async function PortfolioPage({
   params,
@@ -24,6 +36,7 @@ export default async function PortfolioPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const t = await getTranslations({ locale });
   const [tattoos, howToBook] = await Promise.all([getTattoos(locale), getHowToBook(locale)]);
 
   return (
@@ -32,14 +45,14 @@ export default async function PortfolioPage({
       <Header />
       <main className="relative z-10 min-h-dvh px-6 pb-28 pt-28 md:px-12">
         <div className="mx-auto max-w-[1800px]">
-          <BackButton label="← Zurück" fallbackHref="/#work" />
+          <BackButton label={t('common.back')} fallbackHref="/#work" />
 
           <header className="mt-8 border-b border-line pb-8">
             <h1
               className="font-display text-4xl uppercase tracking-brand text-white md:text-6xl"
               style={{ fontWeight: 300 }}
             >
-              Portfolio
+              {t('sections.portfolio')}
             </h1>
           </header>
 

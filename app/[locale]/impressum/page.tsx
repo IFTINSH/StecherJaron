@@ -1,9 +1,17 @@
 import type { Metadata } from 'next';
-import { setRequestLocale } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { Link } from '@/lib/i18n/navigation';
 import type { Locale } from '@/lib/i18n/routing';
 
-export const metadata: Metadata = { title: 'Impressum', robots: { index: false } };
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'legal' });
+  return { title: t('imprintTitle'), robots: { index: false } };
+}
 
 export default async function Impressum({
   params,
@@ -12,21 +20,22 @@ export default async function Impressum({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const t = await getTranslations({ locale, namespace: 'legal' });
+  const tc = await getTranslations({ locale, namespace: 'common' });
   return (
     <main className="relative z-10 mx-auto min-h-dvh max-w-2xl px-6 pb-28 pt-28">
       <Link href="/" className="underline-trail font-display text-xs uppercase tracking-brand text-white/70">
-        ← Zurück
+        {tc('back')}
       </Link>
       <h1 className="mt-8 font-display text-4xl uppercase tracking-brand text-white" style={{ fontWeight: 300 }}>
-        Impressum
+        {t('imprintTitle')}
       </h1>
       <div className="mt-8 space-y-4 font-light leading-relaxed text-body">
         <p className="rounded-lg border border-line bg-surface p-4 text-sm text-secondary">
-          Platzhalter — bitte vor Veröffentlichung mit den echten Angaben füllen
-          (Pflicht nach §5 DDG / §18 MStV).
+          {t('imprintPlaceholder')}
         </p>
         <p>
-          Angaben gemäß §5 DDG
+          {t('imprintAccording')}
           <br />
           Stecher Jaron
           <br />
@@ -35,14 +44,14 @@ export default async function Impressum({
           94032 Passau
         </p>
         <p>
-          <strong className="text-white">Kontakt</strong>
+          <strong className="text-white">{t('contact')}</strong>
           <br />
           Instagram: @stecherjaron
         </p>
         <p>
-          <strong className="text-white">Verantwortlich für den Inhalt</strong>
+          <strong className="text-white">{t('responsible')}</strong>
           <br />
-          Jaron [Nachname], Anschrift wie oben.
+          {t('responsibleName')}
         </p>
       </div>
     </main>

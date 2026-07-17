@@ -43,6 +43,32 @@ const messages = {
   events: {
     loadMore: 'Load more',
     view: 'View event: {title}',
+    backToAll: '← All events',
+  },
+  common: {
+    back: '← Back',
+  },
+  pageMeta: {
+    portfolioTitle: 'Portfolio',
+    portfolioDescription: 'All works by Stecher Jaron — dotwork, blackwork, fine-line tattoos.',
+    studioTitle: 'Studio',
+    studioDescription: "Impressions from Stecher Jaron's studio in Passau.",
+    eventsTitle: 'Events',
+    eventsDescription: 'All events by Stecher Jaron — flash days, conventions and more.',
+  },
+  legal: {
+    imprintTitle: 'Legal Notice',
+    privacyTitle: 'Privacy Policy',
+    imprintPlaceholder:
+      'Placeholder — please fill in the real details before publishing (required under §5 DDG / §18 MStV).',
+    imprintAccording: 'Information pursuant to §5 DDG',
+    contact: 'Contact',
+    responsible: 'Responsible for the content',
+    responsibleName: 'Jaron [surname], address as above.',
+    privacyPlaceholder:
+      'Placeholder — replace with a complete privacy policy before publishing (GDPR). Topics include: hosting (Vercel), embedded fonts (locally via next/font), external links (Instagram, Google Maps), and later possibly Sanity (CMS) & video embedding.',
+    privacyBody:
+      'This website is hosted on Vercel. Fonts are served locally (no external Google requests). When you click external links (Instagram, Google Maps), the privacy policies of the respective providers apply.',
   },
   gallery: {
     all: 'All',

@@ -3,25 +3,29 @@
 import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import { AnimatePresence, motion } from 'motion/react';
+import { useTranslations } from 'next-intl';
 import Lightbox from './Lightbox';
 import { cn } from '@/lib/utils';
 import type { TattooItem } from '@/lib/data';
 
 const PAGE = 12;
+// Internal sentinel for the "all" filter — kept separate from its (localized) label.
+const ALL = '__all__';
 
 // The "social media feed": a filterable, paginated grid of all works with a lightbox.
 // Lives on its own page (/portfolio), reached from the Portfolio preview's "Mehr anzeigen".
 export default function GalleryGrid({ tattoos }: { tattoos: TattooItem[] }) {
-  const [filter, setFilter] = useState<string>('Alle');
+  const t = useTranslations('gallery');
+  const [filter, setFilter] = useState<string>(ALL);
   const [visible, setVisible] = useState(PAGE);
   const [lightbox, setLightbox] = useState<number | null>(null);
 
   const categories = useMemo(
-    () => ['Alle', ...Array.from(new Set(tattoos.map((t) => t.style)))],
+    () => [ALL, ...Array.from(new Set(tattoos.map((t) => t.style)))],
     [tattoos]
   );
   const filtered = useMemo(
-    () => (filter === 'Alle' ? tattoos : tattoos.filter((t) => t.style === filter)),
+    () => (filter === ALL ? tattoos : tattoos.filter((t) => t.style === filter)),
     [filter, tattoos]
   );
   const shown = filtered.slice(0, visible);
@@ -46,7 +50,7 @@ export default function GalleryGrid({ tattoos }: { tattoos: TattooItem[] }) {
                 : 'border-line text-white/70 hover:border-white hover:text-white'
             )}
           >
-            {f}
+            {f === ALL ? t('all') : f}
           </button>
         ))}
       </div>
@@ -89,7 +93,7 @@ export default function GalleryGrid({ tattoos }: { tattoos: TattooItem[] }) {
             onClick={() => setVisible((v) => v + PAGE)}
             className="underline-trail font-display text-sm uppercase tracking-brand text-white"
           >
-            Mehr laden
+            {t('loadMore')}
           </button>
         </div>
       )}

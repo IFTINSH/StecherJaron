@@ -44,6 +44,32 @@ const messages = {
   events: {
     loadMore: 'Weitere laden',
     view: 'Event ansehen: {title}',
+    backToAll: '← Alle Events',
+  },
+  common: {
+    back: '← Zurück',
+  },
+  pageMeta: {
+    portfolioTitle: 'Portfolio',
+    portfolioDescription: 'Alle Arbeiten von Stecher Jaron — Dotwork, Blackwork, Fine-Line Tattoos.',
+    studioTitle: 'Studio',
+    studioDescription: 'Impressionen aus dem Studio von Stecher Jaron in Passau.',
+    eventsTitle: 'Events',
+    eventsDescription: 'Alle Events von Stecher Jaron — Flashdays, Conventions und mehr.',
+  },
+  legal: {
+    imprintTitle: 'Impressum',
+    privacyTitle: 'Datenschutz',
+    imprintPlaceholder:
+      'Platzhalter — bitte vor Veröffentlichung mit den echten Angaben füllen (Pflicht nach §5 DDG / §18 MStV).',
+    imprintAccording: 'Angaben gemäß §5 DDG',
+    contact: 'Kontakt',
+    responsible: 'Verantwortlich für den Inhalt',
+    responsibleName: 'Jaron [Nachname], Anschrift wie oben.',
+    privacyPlaceholder:
+      'Platzhalter — vor Veröffentlichung mit einer vollständigen Datenschutzerklärung ersetzen (DSGVO). Punkte u. a.: Hosting (Vercel), eingebettete Schriften (lokal via next/font), externe Links (Instagram, Google Maps), später ggf. Sanity (CMS) & Video-Einbettung.',
+    privacyBody:
+      'Diese Website wird bei Vercel gehostet. Schriften werden lokal ausgeliefert (keine externen Google-Anfragen). Beim Klick auf externe Links (Instagram, Google Maps) gelten die Datenschutzbestimmungen der jeweiligen Anbieter.',
   },
   gallery: {
     all: 'Alle',

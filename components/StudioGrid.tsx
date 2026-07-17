@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'motion/react';
+import { useTranslations } from 'next-intl';
 import Lightbox from './Lightbox';
 import type { StudioImageItem } from '@/lib/data';
 
@@ -10,6 +11,7 @@ import type { StudioImageItem } from '@/lib/data';
 // the Studio preview. Uniform 4:5 tiles, static images (no parallax), same look the
 // Studio section used to have inline. Photos come from Sanity (lib/data).
 export default function StudioGrid({ images }: { images: StudioImageItem[] }) {
+  const t = useTranslations('studioGrid');
   const [lightbox, setLightbox] = useState<number | null>(null);
 
   return (
@@ -24,7 +26,7 @@ export default function StudioGrid({ images }: { images: StudioImageItem[] }) {
             transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
             onClick={() => setLightbox(i)}
             className="group relative aspect-[4/5] overflow-hidden bg-surface"
-            aria-label="Foto vergrößern"
+            aria-label={t('enlargePhoto')}
           >
             <Image
               src={img.src}

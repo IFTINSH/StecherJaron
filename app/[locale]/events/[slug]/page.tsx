@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import type { Metadata } from 'next';
-import { setRequestLocale } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getEvent, getEventSlugs, getHowToBook } from '@/lib/data';
 import { formatEventDate } from '@/lib/format';
 import type { Locale } from '@/lib/i18n/routing';
@@ -26,10 +26,16 @@ export async function generateMetadata({
   const { slug, locale } = await params;
   const ev = await getEvent(slug, locale);
   if (!ev) return { title: 'Event' };
+  const isDe = locale === 'de';
+  const dePath = `/events/${slug}`;
+  const enPath = `/en/events/${slug}`;
   return {
     title: ev.title,
     description: ev.description ?? `${ev.title} — Stecher Jaron`,
-    alternates: { canonical: `/events/${slug}` },
+    alternates: {
+      canonical: isDe ? dePath : enPath,
+      languages: { 'de-DE': dePath, 'en-US': enPath, 'x-default': dePath },
+    },
     openGraph: { title: ev.title, images: ev.cover ? [ev.cover] : [] },
   };
 }
@@ -41,6 +47,7 @@ export default async function EventPage({
 }) {
   const { slug, locale } = await params;
   setRequestLocale(locale);
+  const t = await getTranslations({ locale });
   const [ev, howToBook] = await Promise.all([getEvent(slug, locale), getHowToBook(locale)]);
   if (!ev) notFound();
 
@@ -53,7 +60,7 @@ export default async function EventPage({
       <Header />
       <main className="relative z-10 min-h-dvh px-6 pb-28 pt-28 md:px-12">
         <div className="mx-auto max-w-[1500px]">
-          <BackButton />
+          <BackButton label={t('events.backToAll')} />
 
           <header className="mt-8 border-b border-line pb-8">
             <h1
