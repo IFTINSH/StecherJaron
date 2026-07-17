@@ -4,71 +4,17 @@ import { useState } from 'react';
 import { motion } from 'motion/react';
 import { site } from '@/lib/content';
 import type { HowToBookData } from '@/lib/data';
+import BookingAccordion from './BookingAccordion';
 import MapPreview from './MapPreview';
-
-// Shared "So läuft's" accordion — the full How-to-Book content, collapsed by
-// default. Used identically on desktop and mobile so the text is one source
-// (Sanity: howToBook) and never diverges. openIdx is lifted so both layouts
-// (only one visible per breakpoint) stay in sync.
-function BookingAccordion({
-  sections,
-  openIdx,
-  setOpenIdx,
-}: {
-  sections: HowToBookData['sections'];
-  openIdx: number | null;
-  setOpenIdx: (i: number | null) => void;
-}) {
-  return (
-    <div>
-      {sections.map((section, i) => {
-        const open = openIdx === i;
-        return (
-          <div key={section.heading} className="border-t border-line last:border-b">
-            <button
-              type="button"
-              onClick={() => setOpenIdx(open ? null : i)}
-              aria-expanded={open}
-              className="flex w-full items-center justify-between gap-4 py-4 text-left"
-            >
-              <h3 className="font-display text-sm font-normal uppercase tracking-brand text-white">
-                {section.heading}
-              </h3>
-              <span
-                className="text-secondary transition-transform duration-300"
-                style={{ transform: open ? 'rotate(45deg)' : 'none' }}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-                  <line x1="12" y1="5" x2="12" y2="19" />
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                </svg>
-              </span>
-            </button>
-            {open && (
-              <ul className="space-y-2.5 pb-5 pl-4 text-left text-sm leading-relaxed text-body">
-                {section.items.map((item) => (
-                  <li key={item} className="list-disc">
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
 
 // Contact = the page's closing beat: booking + address under one heading.
 // Desktop: two columns — address + map left, the "So läuft's" accordion right.
 // Mobile: address + map first, then the same accordion stacked below. Both use
 // the identical collapsed How-to-Book content + Instagram CTA.
 export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
-  // Separate state per breakpoint (both layouts live in the DOM at once):
-  // desktop opens the first item ("Buchungsanfrage") by default, mobile starts
-  // fully collapsed.
-  const [openDesktop, setOpenDesktop] = useState<number | null>(0);
+  // Separate state per breakpoint (both layouts live in the DOM at once).
+  // Both start fully collapsed on desktop and mobile.
+  const [openDesktop, setOpenDesktop] = useState<number | null>(null);
   const [openMobile, setOpenMobile] = useState<number | null>(null);
 
   return (

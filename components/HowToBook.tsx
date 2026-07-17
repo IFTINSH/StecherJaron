@@ -3,12 +3,16 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import type { HowToBookData } from '@/lib/data';
+import BookingAccordion from './BookingAccordion';
 
 // Persistent, site-wide "How to Book" affordance. A fixed floating pill (bottom-
 // right) opens a panel with the booking guidance, grouped into clear sections.
 export default function HowToBook({ data }: { data: HowToBookData }) {
   const howToBook = data;
   const [open, setOpen] = useState(false);
+  // Which section is expanded; starts fully collapsed so the panel isn't a wall
+  // of text — same collapsed pattern as the Contact section.
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
@@ -83,25 +87,8 @@ export default function HowToBook({ data }: { data: HowToBookData }) {
                 {howToBook.title}
               </h3>
 
-              <div className="mt-8 space-y-9">
-                {howToBook.sections.map((section) => (
-                  <section key={section.heading}>
-                    <h4 className="font-display text-xs uppercase tracking-brand text-secondary">
-                      {section.heading}
-                    </h4>
-                    <ul className="mt-4 space-y-3">
-                      {section.items.map((item, i) => (
-                        <li key={i} className="flex gap-4 font-light leading-relaxed text-body">
-                          <span
-                            className="mt-[0.6em] h-px w-3 shrink-0 bg-muted"
-                            aria-hidden="true"
-                          />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </section>
-                ))}
+              <div className="mt-8">
+                <BookingAccordion sections={howToBook.sections} openIdx={openIdx} setOpenIdx={setOpenIdx} />
               </div>
 
               <a

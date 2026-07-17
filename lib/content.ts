@@ -44,14 +44,10 @@ export const howToBook = {
       heading: 'Buchungsanfrage',
       items: [
         'Buchungsanfragen erfolgen ausschließlich über Instagram.',
-        'Bitte sende eine möglichst präzise Beschreibung deiner Tattoo-Idee oder Wunschvorstellung.',
-        'Falls vorhanden, ergänze deine Anfrage gerne mit Referenzbildern, Inspirationen oder Skizzen.',
-        'Bei Wannado’s füge bitte zusätzlich einen entsprechenden Screenshot bei.',
+        'Beschreibe deine Tattoo-Idee möglichst präzise und ergänze sie — falls vorhanden — mit Referenzbildern, Inspirationen oder Skizzen; bei Wannado’s bitte zusätzlich einen Screenshot.',
         'Wenn du die gewünschte Größe bereits einschätzen kannst, teile diese am besten in cm mit; das erleichtert eine erste preisliche Orientierung.',
-        'Ein Foto der gewünschten Körperstelle hilft dabei, Placement und Wirkung besser einzuschätzen.',
-        'Sollte es dir unangenehm sein, ein Foto der Stelle zu schicken, ist das selbstverständlich kein Problem — gib in dem Fall einfach kurz Bescheid.',
-        'Bitte nenne außerdem 2–3 Termine, die für dich grundsätzlich infrage kommen.',
-        'Aktuelle verfügbare Termine findest du in den Instagram-Highlights.',
+        'Ein Foto der gewünschten Körperstelle hilft, Placement und Wirkung besser einzuschätzen — ist dir das unangenehm, gib einfach kurz Bescheid, das ist selbstverständlich kein Problem.',
+        'Nenne außerdem 2–3 mögliche Termine; aktuell verfügbare Termine findest du in den Instagram-Highlights.',
       ],
     },
     {

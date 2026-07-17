@@ -121,7 +121,7 @@ export default function IntroVideo() {
               aria-label={muted ? 'Ton aktivieren' : 'Ton ausschalten'}
             >
               {muted ? <SoundOff /> : <SoundOn />}
-              <span>{muted ? 'Ton' : 'Ton an'}</span>
+              {muted && <span>Ton</span>}
             </button>
             <button
               onClick={toggleFullscreen}
