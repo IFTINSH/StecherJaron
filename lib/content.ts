@@ -12,7 +12,7 @@ export const site = {
     url: 'https://www.instagram.com/stecherjaron/',
   },
   studio: {
-    address: 'Firmianstraße 10, Passau',
+    address: 'Firmianstraße 10, 94032 Passau',
     mapsUrl:
       'https://www.google.com/maps/search/?api=1&query=Firmianstra%C3%9Fe+10+Passau',
   },

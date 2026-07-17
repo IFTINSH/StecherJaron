@@ -41,17 +41,19 @@ export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
             transition={{ duration: 0.8, delay: 0.15 }}
             className="w-full max-w-xl justify-self-center"
           >
-            <span className="mb-3 block font-display text-xs uppercase tracking-brand text-secondary">
-              Adresse
-            </span>
-            <a
-              href={site.studio.mapsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline-trail text-xl font-light text-white"
-            >
-              {site.studio.address}
-            </a>
+            <div className="flex items-baseline gap-4">
+              <span className="shrink-0 font-display text-xs uppercase tracking-brand text-secondary">
+                Adresse
+              </span>
+              <a
+                href={site.studio.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline-trail text-xl font-light text-white"
+              >
+                {site.studio.address}
+              </a>
+            </div>
             <MapPreview />
           </motion.div>
 
