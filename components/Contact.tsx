@@ -19,6 +19,11 @@ export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
   const [openMobile, setOpenMobile] = useState<number | null>(null);
   const t = useTranslations();
 
+  // Split "Street 10, 94032 City" into street / city so the desktop address can
+  // stand as a two-line statement (falls back to the raw string if no comma).
+  const [studioStreet, ...studioRest] = site.studio.address.split(', ');
+  const studioCity = studioRest.join(', ');
+
   return (
     <section id="contact" className="relative z-10 px-6 pb-14 pt-24 md:px-12 md:pb-16 md:pt-32">
       <div className="mx-auto max-w-[1800px]">
@@ -43,19 +48,25 @@ export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
             transition={{ duration: 0.8, delay: 0.15 }}
             className="w-full max-w-xl justify-self-center"
           >
-            <div className="flex items-baseline gap-4">
-              <span className="shrink-0 font-display text-xs uppercase tracking-brand text-secondary">
-                {t('labels.address')}
-              </span>
-              <a
-                href={site.studio.mapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline-trail text-xl font-light text-white"
-              >
-                {site.studio.address}
-              </a>
-            </div>
+            <span className="block font-display text-xs uppercase tracking-brand text-secondary">
+              {t('labels.address')}
+            </span>
+            <a
+              href={site.studio.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline-trail mt-3 inline-block font-display text-lg uppercase leading-[1.25] tracking-[0.12em] text-white lg:text-xl"
+              style={{ fontWeight: 300 }}
+            >
+              {studioCity ? (
+                <>
+                  <span className="block">{studioStreet}</span>
+                  <span className="block">{studioCity}</span>
+                </>
+              ) : (
+                site.studio.address
+              )}
+            </a>
             <MapPreview />
           </motion.div>
 
