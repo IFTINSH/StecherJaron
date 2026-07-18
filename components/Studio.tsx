@@ -21,6 +21,11 @@ export default function Studio({ images }: { images: StudioImageItem[] }) {
     alt: img.alt,
   }));
 
+  // Split "Street 10, 94032 City" so it can stack onto two lines on mobile
+  // (the uppercase, wide-tracked address is too wide for one line on a phone).
+  const [studioStreet, ...studioRest] = site.studio.address.split(', ');
+  const studioCity = studioRest.join(', ');
+
   return (
     <section id="studio" className="relative z-10 px-6 py-24 md:px-12 md:py-32">
       <div className="mx-auto max-w-[1800px]">
@@ -49,9 +54,16 @@ export default function Studio({ images }: { images: StudioImageItem[] }) {
             href={site.studio.mapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="underline-trail mt-2 inline-block font-display text-lg uppercase tracking-wordmark text-white"
+            className="underline-trail mt-2 inline-block font-display text-base uppercase tracking-[0.14em] text-white md:text-lg md:tracking-wordmark"
           >
-            {site.studio.address}
+            {studioCity ? (
+              <>
+                <span className="block md:inline">{studioStreet},</span>{' '}
+                <span className="block md:inline">{studioCity}</span>
+              </>
+            ) : (
+              site.studio.address
+            )}
           </a>
         </motion.div>
 

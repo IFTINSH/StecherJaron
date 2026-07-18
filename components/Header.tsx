@@ -67,22 +67,32 @@ export default function Header() {
               {t(link.key)}
             </motion.a>
           ))}
+          {/* Hairline sets the language switch apart from the nav links as a
+              utility control, not a seventh destination. */}
           <motion.div
+            className="flex items-center gap-6"
             initial={{ opacity: 0, y: -8 }}
             animate={loaded ? { opacity: 1, y: 0 } : { opacity: 0, y: -8 }}
             transition={{ duration: 0.5, delay: 1.1 + navItems.length * 0.08 }}
           >
+            <span className="h-4 w-px bg-line" aria-hidden="true" />
             <LocaleToggle />
           </motion.div>
         </nav>
 
-        <button
-          onClick={() => setOpen(true)}
-          className="-m-2 p-2 font-display text-sm font-light uppercase tracking-brand text-white md:hidden"
-          aria-label={th('openMenu')}
-        >
-          {th('menu')}
-        </button>
+        {/* Mobile: language switch always visible next to the menu button,
+            set apart by a hairline so it reads as utility, not a nav item. */}
+        <div className="flex items-center gap-3 md:hidden">
+          <LocaleToggle />
+          <span className="h-4 w-px bg-line" aria-hidden="true" />
+          <button
+            onClick={() => setOpen(true)}
+            className="-m-2 p-2 font-display text-sm font-light uppercase tracking-brand text-white"
+            aria-label={th('openMenu')}
+          >
+            {th('menu')}
+          </button>
+        </div>
       </motion.header>
 
       {/* Mobile menu — z above the How-to-Book pill (z-120) so the pill is

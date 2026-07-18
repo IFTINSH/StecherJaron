@@ -8,9 +8,10 @@ import Lightbox from './Lightbox';
 import type { WannadoItem } from '@/lib/data';
 
 // Wannados — the "flash wall": designs Jaron wants to tattoo, clients pick one.
-// A horizontal, left-aligned row of white "paper" sheets on the black ground that
-// you drag / swipe / arrow through — like flipping the flash binder on the studio
-// wall. Sits in the same gutter/container as Portfolio & Studio (mobile centred,
+// A horizontal, left-aligned row of the flash sheets on the black ground that
+// you drag / swipe / arrow through — the drawings sit straight and frameless
+// (no paper mat, just a soft shadow for depth) so they stand on their own.
+// Sits in the same gutter/container as Portfolio & Studio (mobile centred,
 // desktop left) so it reads as one of the site's sections, not a floating widget.
 // Only a couple of sheets show at once, so it scales to any number. Click a sheet
 // to open it full-size in the shared lightbox.
@@ -112,7 +113,8 @@ export default function Wannados({ items }: { items: WannadoItem[] }) {
           {t('wannados.subtitle')}
         </motion.p>
 
-        {/* The wall — left-aligned strip; first sheet flush with the gutter, peeks right */}
+        {/* The wall — left-aligned strip; first sheet flush with the gutter, peeks right.
+            Sheets are frameless and straight; a soft shadow lifts each off the black. */}
         <div
           ref={trackRef}
           onScroll={onScroll}
@@ -131,13 +133,7 @@ export default function Wannados({ items }: { items: WannadoItem[] }) {
               aria-label={t('wannados.enlargeSheet', { label: sheet.label })}
               className="w-[78vw] flex-shrink-0 snap-start snap-always select-none md:w-[calc((100%-6rem)/5)]"
             >
-              <div
-                className="bg-[#f6f4ef] p-3 md:p-4"
-                style={{
-                  transform: `rotate(${i % 2 === 0 ? -0.8 : 0.8}deg)`,
-                  boxShadow: '0 30px 60px -20px rgba(0,0,0,0.85), 0 8px 22px -8px rgba(0,0,0,0.6)',
-                }}
-              >
+              <div>
                 <Image
                   src={sheet.src}
                   alt={sheet.alt}
@@ -146,9 +142,9 @@ export default function Wannados({ items }: { items: WannadoItem[] }) {
                   sizes="(max-width: 768px) 78vw, 340px"
                   loading="lazy"
                   draggable={false}
-                  className="pointer-events-none block h-auto w-full select-none [-webkit-touch-callout:none] [-webkit-user-drag:none]"
+                  className="pointer-events-none block h-auto w-full select-none shadow-[0_24px_50px_-24px_rgba(0,0,0,0.9)] [-webkit-touch-callout:none] [-webkit-user-drag:none]"
                 />
-                <span className="block pt-3 pb-1 text-center font-display text-xs uppercase tracking-wordmark text-[#5a564c]">
+                <span className="block pt-3 text-center font-display text-xs uppercase tracking-wordmark text-muted">
                   {sheet.label}
                 </span>
               </div>
@@ -156,28 +152,42 @@ export default function Wannados({ items }: { items: WannadoItem[] }) {
           ))}
         </div>
 
-        {/* Index + arrows — left-aligned on desktop, centred on mobile */}
+        {/* Index + arrows — arrows only from md up (mobile navigates by swipe);
+            the index counter stays as the position indicator on all sizes. */}
         <div className="mt-8 flex items-center justify-center gap-5">
           <button
             type="button"
             onClick={() => nudge(-1)}
             disabled={active <= 0}
             aria-label={t('wannados.prevSheet')}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white/80 transition-colors hover:bg-white hover:text-black disabled:pointer-events-none disabled:opacity-30"
+            className="hidden h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white/80 transition-colors hover:bg-white hover:text-black disabled:pointer-events-none disabled:opacity-30 md:flex"
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="15 18 9 12 15 6" />
             </svg>
           </button>
-          <span className="min-w-[6em] text-center font-display text-xs uppercase tracking-brand tabular-nums text-secondary">
-            {String(active + 1).padStart(2, '0')} — {String(items.length).padStart(2, '0')}
-          </span>
+          {/* Segment line — one bar per sheet, the active one wider and white.
+              Matches the site's hairline language; replaces the numeric counter. */}
+          <div
+            className="flex items-center gap-2"
+            role="img"
+            aria-label={`${active + 1} / ${items.length}`}
+          >
+            {items.map((_, i) => (
+              <span
+                key={i}
+                className={`h-0.5 rounded-full transition-all duration-300 ${
+                  i === active ? 'w-7 bg-white' : 'w-3.5 bg-white/25'
+                }`}
+              />
+            ))}
+          </div>
           <button
             type="button"
             onClick={() => nudge(1)}
             disabled={active >= items.length - 1}
             aria-label={t('wannados.nextSheet')}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white/80 transition-colors hover:bg-white hover:text-black disabled:pointer-events-none disabled:opacity-30"
+            className="hidden h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white/80 transition-colors hover:bg-white hover:text-black disabled:pointer-events-none disabled:opacity-30 md:flex"
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="9 6 15 12 9 18" />

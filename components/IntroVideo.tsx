@@ -94,9 +94,9 @@ export default function IntroVideo() {
 
   return (
     <section className="relative z-10 py-24 md:px-12 md:py-32">
-      {/* Full-bleed on mobile (no side padding) so the landscape video is as
-          large as it can be without cropping; boxed + max-width from md up. */}
-      <div ref={sectionRef} className="mx-auto w-full max-w-[940px]">
+      {/* Mobile: subtle side margin (95% width) so it reads as embedded but stays large;
+          boxed + max-width from md up. */}
+      <div ref={sectionRef} className="mx-auto w-[95%] max-w-[940px] md:w-full">
         <motion.div
           style={reduce ? { opacity: 1, borderRadius: 0 } : { scale, opacity, borderRadius: radius }}
           className="relative mx-auto aspect-video w-full overflow-hidden bg-surface"

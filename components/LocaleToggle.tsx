@@ -23,11 +23,11 @@ export default function LocaleToggle({ className = '' }: { className?: string })
             href={pathname}
             locale={loc}
             aria-current={active === loc ? 'true' : undefined}
-            className={
+            className={`-my-2 inline-block py-2 ${
               active === loc
                 ? 'text-white'
                 : 'text-secondary transition-colors hover:text-white'
-            }
+            }`}
           >
             {loc.toUpperCase()}
           </Link>
