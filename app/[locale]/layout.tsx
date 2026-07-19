@@ -87,6 +87,7 @@ export default async function LocaleLayout({
     description: t('description'),
     image: 'https://stecherjaron.de/hero/hero-16x9.jpeg',
     url: 'https://stecherjaron.de',
+    email: 'Tattoostudio.jaronbock@gmail.com',
     address: {
       '@type': 'PostalAddress',
       streetAddress,
@@ -100,7 +101,8 @@ export default async function LocaleLayout({
       longitude: 13.4528076,
     },
     areaServed: t('areaServed'),
-    sameAs: [settings.instagram.url],
+    founder: { '@type': 'Person', name: 'Jaron Bock' },
+    sameAs: [settings.instagram.url, 'https://www.tiktok.com/@stecherjaron0'],
   };
 
   return (
