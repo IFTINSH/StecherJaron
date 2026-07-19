@@ -33,7 +33,7 @@ export const about = {
   title: 'Über mich',
   // Short teaser shown under the wordmark in the hero.
   teaser: `Tattoo Artist aus Passau — spezialisiert auf Dotwork, Blackwork & Fine-Line. Jedes Design entsteht individuell für dich.`,
-  body: `Bei mir dreht sich alles um dich und dein Tattoo, entspannt, persönlich und ohne Zeitdruck. Ich arbeite ausschließlich nach Termin, damit jedes Tattoo die Aufmerksamkeit bekommt, die es verdient. Mir ist wichtig, dass du dich wohlfühlst, deshalb gehören guter Kaffee, HiFi-Sound und eine entspannte Atmosphäre bei mir dazu.`,
+  body: `Bei mir dreht sich alles um dich und dein Tattoo, persönlich und ohne Zeitdruck. Ich arbeite ausschließlich nach Termin, damit jedes Tattoo die Aufmerksamkeit bekommt, die es verdient. Mir ist wichtig, dass du dich wohlfühlst, deshalb gehören guter Kaffee, HiFi-Sound und eine entspannte Atmosphäre bei mir dazu.`,
 };
 
 // "How to Book" — persistent overlay content. Booking happens via Instagram.
