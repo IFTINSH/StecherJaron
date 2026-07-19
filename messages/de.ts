@@ -67,9 +67,9 @@ const messages = {
     responsible: 'Verantwortlich für den Inhalt',
     responsibleName: 'Jaron [Nachname], Anschrift wie oben.',
     privacyPlaceholder:
-      'Platzhalter — vor Veröffentlichung mit einer vollständigen Datenschutzerklärung ersetzen (DSGVO). Punkte u. a.: Hosting (Vercel), eingebettete Schriften (lokal via next/font), externe Links (Instagram, Google Maps), später ggf. Sanity (CMS) & Video-Einbettung.',
+      'Platzhalter — vor Veröffentlichung mit einer vollständigen Datenschutzerklärung ersetzen (DSGVO). Punkte u. a.: Hosting (Netlify), eingebettete Schriften (lokal via next/font), externe Links (Instagram, Google Maps), später ggf. Sanity (CMS) & Video-Einbettung.',
     privacyBody:
-      'Diese Website wird bei Vercel gehostet. Schriften werden lokal ausgeliefert (keine externen Google-Anfragen). Beim Klick auf externe Links (Instagram, Google Maps) gelten die Datenschutzbestimmungen der jeweiligen Anbieter.',
+      'Diese Website wird bei Netlify gehostet (Netlify, Inc., San Francisco, Kalifornien, USA). Beim Aufruf der Seite verarbeitet Netlify technisch notwendige Daten (z. B. IP-Adresse) in Server-Logfiles; die Übermittlung in die USA erfolgt auf Grundlage der EU-Standardvertragsklauseln. Schriften werden lokal ausgeliefert (keine externen Google-Anfragen). Beim Klick auf externe Links (Instagram, Google Maps) gelten die Datenschutzbestimmungen der jeweiligen Anbieter.',
   },
   gallery: {
     all: 'Alle',
