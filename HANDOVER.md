@@ -61,7 +61,7 @@ npm run build    # vor Deploy: muss grün sein
 - [ ] **Netlify-Deploy** fertigstellen (Env-Vars in Netlify, Sanity-CORS, ggf. Domain).
 - [ ] **Sanity-Projekt** anlegen, echte Inhalte einpflegen (Portfolio, Events, Über-mich), Jaron einladen.
 - [ ] **Hi-Res `public/hero/hero-mobile.jpg`** (aktuell nur 578 px, leicht weich) — gleicher Ausschnitt, dann bleibt die Linie gültig.
-- [ ] **Impressum/Datenschutz** mit echten Angaben füllen (DE-Pflicht, aktuell Platzhalter).
+- [x] **Impressum/Datenschutz** vollständig (Jaron Bock, Kleinunternehmer § 19 UStG, Netlify/Sanity/Maps-Zwei-Klick abgedeckt; DE maßgeblich, EN Convenience-Übersetzung).
 - [ ] Optional später: **Videos in Events** (Schema-Feld ergänzen).
 - [ ] Aufräumen: ungenutzte Experimente `HeroPattern.tsx` / `PatternBackground.tsx` prüfen/entfernen.
 
