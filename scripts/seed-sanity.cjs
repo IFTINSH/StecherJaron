@@ -177,10 +177,8 @@ async function run() {
     console.log(`✓ Tattoo ${t.id} (${t.style})`);
   }
 
-  // 4) Events
-  let eo = 0;
+  // 4) Events (Sortierung auf der Website läuft über 'date', nicht über order)
   for (const ev of events) {
-    eo++;
     const coverAndImages = [];
     for (const f of ev.files) coverAndImages.push(await uploadImage(f));
     const [cover, ...rest] = coverAndImages;
@@ -193,7 +191,6 @@ async function run() {
       location: ev.location || undefined,
       description: ev.description || undefined,
       cover,
-      order: eo,
     };
     // Alle hochgeladenen Bilder (inkl. Cover) in die Galerie; Array-Keys ergänzen
     doc.images = coverAndImages.map((img, idx) => ({ ...img, _key: `img-${idx}` }));
