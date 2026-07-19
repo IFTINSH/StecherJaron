@@ -39,13 +39,22 @@ export async function generateMetadata({
       locale: isDe ? 'de_DE' : 'en_US',
       alternateLocale: isDe ? 'en_US' : 'de_DE',
       siteName: site.name,
-      images: ['/hero/hero.jpeg'],
+      images: [
+        {
+          url: '/hero/hero-16x9.jpeg',
+          width: 2752,
+          height: 1536,
+          alt: isDe
+            ? 'Stecher Jaron — Tattoo Artist im Studio in Passau'
+            : 'Stecher Jaron — tattoo artist at the studio in Passau',
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: ['/hero/hero.jpeg'],
+      images: ['/hero/hero-16x9.jpeg'],
     },
   };
 }
@@ -76,7 +85,7 @@ export default async function LocaleLayout({
     '@type': 'TattooParlor',
     name: site.name,
     description: t('description'),
-    image: 'https://stecherjaron.de/hero/hero.jpeg',
+    image: 'https://stecherjaron.de/hero/hero-16x9.jpeg',
     url: 'https://stecherjaron.de',
     address: {
       '@type': 'PostalAddress',
