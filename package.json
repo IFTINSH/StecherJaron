@@ -9,7 +9,9 @@
     "start": "next start",
     "lint": "next lint",
     "seed": "node --env-file=.env.local scripts/seed-sanity.cjs",
-    "seed:studio": "node --env-file=.env.local scripts/seed-studio.cjs"
+    "seed:studio": "node --env-file=.env.local scripts/seed-studio.cjs",
+    "seed:wannados": "node --env-file=.env.local scripts/seed-wannados.cjs",
+    "seed:site": "node --env-file=.env.local scripts/seed-site.cjs"
   },
   "dependencies": {
     "@paper-design/shaders-react": "^0.0.72",
