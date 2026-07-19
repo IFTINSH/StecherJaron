@@ -46,7 +46,7 @@ export default function Studio({ images }: { images: StudioImageItem[] }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-10% 0px' }}
           transition={{ duration: 0.8, delay: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
-          className="mt-12 text-center md:mt-10 md:text-left"
+          className="mt-12 text-center md:mt-14 md:text-left"
         >
           <span className="block font-display text-xs uppercase tracking-brand text-secondary">
             {t('studioSection.address')}

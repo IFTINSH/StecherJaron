@@ -35,7 +35,7 @@ export default function Events({ events }: { events: EventItem[] }) {
 
         {/* ── Mobile: newest first, more revealed in place ── */}
         <div className="md:hidden">
-          <div className="mt-12 grid grid-cols-1 gap-8">
+          <div className="mt-12 md:mt-14 grid grid-cols-1 gap-8">
             {events.slice(0, visible).map((ev) => (
               <EventCard key={ev.slug} event={ev} />
             ))}

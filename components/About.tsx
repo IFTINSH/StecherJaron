@@ -31,7 +31,7 @@ export default function About({ title, body }: { title: string; body: string }) 
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1], delay: 0.2 }}
-          className="mx-auto mt-12 max-w-3xl whitespace-pre-line font-light text-body"
+          className="mx-auto mt-12 md:mt-14 max-w-3xl whitespace-pre-line font-light text-body"
           style={{ fontSize: 'clamp(1.05rem, 3.2vw, 1.7rem)', lineHeight: 1.75 }}
         >
           {body}

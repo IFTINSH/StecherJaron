@@ -28,7 +28,7 @@ export default function Gallery({ tattoos }: { tattoos: TattooItem[] }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-10% 0px' }}
           transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-          className="mb-12 md:mb-8"
+          className="mb-12 md:mb-14"
         >
           <h2
             className="text-center font-display text-4xl uppercase tracking-brand text-white/90 md:text-left md:text-7xl"

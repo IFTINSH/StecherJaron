@@ -41,7 +41,7 @@ export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
 
         {/* ── Desktop: address hugs the left, booking hugs the right, a subtle
              full-height hairline splits the wide middle so it doesn't read empty. ── */}
-        <div className="mt-16 hidden items-stretch gap-x-16 md:grid md:grid-cols-[1fr_1px_1fr] lg:gap-x-24">
+        <div className="mt-12 md:mt-14 hidden items-stretch gap-x-16 md:grid md:grid-cols-[1fr_1px_1fr] lg:gap-x-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -97,7 +97,7 @@ export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
         </div>
 
         {/* ── Mobile: address + map, then the same accordion + CTA ── */}
-        <div className="mt-8 md:hidden">
+        <div className="mt-12 md:hidden">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
