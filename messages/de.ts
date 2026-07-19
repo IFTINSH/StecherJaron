@@ -36,7 +36,7 @@ const messages = {
     booking: 'Booking',
   },
   wannados: {
-    subtitle: 'Designs, die ich gerne stechen möchte — such dir eins aus.',
+    subtitle: 'Inspiration für dein Design.',
     prevSheet: 'Vorheriges Sheet',
     nextSheet: 'Nächstes Sheet',
     enlargeSheet: '{label} vergrößern',

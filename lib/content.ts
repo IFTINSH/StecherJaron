@@ -33,7 +33,7 @@ export const about = {
   title: 'Über mich',
   // Short teaser shown under the wordmark in the hero.
   teaser: `Tattoo Artist aus Passau — spezialisiert auf Dotwork, Blackwork & Fine-Line. Jedes Design entsteht individuell für dich.`,
-  body: `Hey, ich bin Jaron — Tattoo Artist aus Passau. Ich spezialisiere mich auf Dotwork, Blackwork und Fine-Line Tattoos. Jedes meiner Designs entsteht individuell für dich, mit einem Fokus auf feine Details, klare Linien und ausdrucksstarke Kontraste zwischen schwarzer Tinte und Haut. Lass uns gemeinsam deine Vision auf die Haut bringen.`,
+  body: `Bei mir dreht sich alles um dich und dein Tattoo, entspannt, persönlich und ohne Zeitdruck. Ich arbeite ausschließlich nach Termin, damit jedes Tattoo die Aufmerksamkeit bekommt, die es verdient. Mir ist wichtig, dass du dich wohlfühlst, deshalb gehören guter Kaffee, HiFi-Sound und eine entspannte Atmosphäre bei mir dazu.`,
 };
 
 // "How to Book" — persistent overlay content. Booking happens via Instagram.

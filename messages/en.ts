@@ -35,7 +35,7 @@ const messages = {
     booking: 'Booking',
   },
   wannados: {
-    subtitle: 'Designs I’d love to tattoo — pick one.',
+    subtitle: 'Inspiration for your design.',
     prevSheet: 'Previous sheet',
     nextSheet: 'Next sheet',
     enlargeSheet: 'Enlarge {label}',
