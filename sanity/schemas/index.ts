@@ -1,5 +1,6 @@
 import { localeString } from './localeString';
 import { localeText } from './localeText';
+import { siteSettings } from './siteSettings';
 import { about } from './about';
 import { howToBook } from './howToBook';
 import { category } from './category';
@@ -12,6 +13,7 @@ export const schemaTypes = [
   // i18n field types (must be registered before the docs that use them)
   localeString,
   localeText,
+  siteSettings,
   about,
   howToBook,
   category,

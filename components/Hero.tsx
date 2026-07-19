@@ -2,7 +2,7 @@
 
 import { motion } from 'motion/react';
 import { useLoaded } from './LoadingProvider';
-import { site } from '@/lib/content';
+import { useSite } from './SiteProvider';
 import HeroPhotoBackground from './HeroPhotoBackground';
 import HeroLine from './HeroLine';
 
@@ -11,6 +11,7 @@ import HeroLine from './HeroLine';
 // stage scrolls away.
 export default function Hero() {
   const loaded = useLoaded();
+  const s = useSite();
 
   return (
     <section id="top" className="relative h-[100vw] w-full overflow-hidden md:h-[100svh]">
@@ -38,7 +39,7 @@ export default function Hero() {
           Jaron
         </h1>
         <p className="mt-3 font-display text-[10px] uppercase tracking-brand text-white/60 md:text-xs">
-          {site.tagline}
+          {s.tagline}
         </p>
       </motion.div>
 

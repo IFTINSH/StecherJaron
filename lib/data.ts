@@ -2,6 +2,7 @@ import { client } from '@/sanity/client';
 import { imageUrl } from '@/sanity/image';
 import type { Locale } from './i18n/routing';
 import {
+  site as siteFallback,
   about as aboutFallback,
   howToBook as howToBookFallback,
   tattoos as tattoosFallback,
@@ -12,6 +13,52 @@ import {
 
 // Revalidate Sanity-backed pages at most once a minute so edits show up quickly.
 const fetchOpts = { next: { revalidate: 60 } } as const;
+
+// Global site data (address, maps, Instagram, tagline). Same shape as the static
+// `site` object so consumers can swap 1:1; Sanity values override the fallback.
+export interface SiteSettings {
+  name: string;
+  wordmark: string;
+  tagline: string;
+  instagram: { handle: string; url: string };
+  studio: { address: string; mapsUrl: string };
+}
+
+export async function getSiteSettings(): Promise<SiteSettings> {
+  const base: SiteSettings = {
+    name: siteFallback.name,
+    wordmark: siteFallback.wordmark,
+    tagline: siteFallback.tagline,
+    instagram: { ...siteFallback.instagram },
+    studio: { ...siteFallback.studio },
+  };
+  if (!client) return base;
+  const doc = await client.fetch<{
+    address?: string;
+    mapsUrl?: string;
+    instagramHandle?: string;
+    instagramUrl?: string;
+    tagline?: string;
+  } | null>(
+    `*[_type == "siteSettings"][0]{ address, mapsUrl, instagramHandle, instagramUrl, tagline }`,
+    {},
+    fetchOpts,
+  );
+  if (!doc) return base;
+  return {
+    name: base.name,
+    wordmark: base.wordmark,
+    tagline: doc.tagline || base.tagline,
+    instagram: {
+      handle: doc.instagramHandle || base.instagram.handle,
+      url: doc.instagramUrl || base.instagram.url,
+    },
+    studio: {
+      address: doc.address || base.studio.address,
+      mapsUrl: doc.mapsUrl || base.studio.mapsUrl,
+    },
+  };
+}
 
 export interface AboutData {
   title: string;

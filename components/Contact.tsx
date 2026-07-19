@@ -3,10 +3,10 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
-import { site } from '@/lib/content';
 import type { HowToBookData } from '@/lib/data';
 import BookingAccordion from './BookingAccordion';
 import MapPreview from './MapPreview';
+import { useSite } from './SiteProvider';
 
 // Contact = the page's closing beat: booking + address under one heading.
 // Desktop: two columns — address + map left, the "So läuft's" accordion right.
@@ -18,10 +18,11 @@ export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
   const [openDesktop, setOpenDesktop] = useState<number | null>(null);
   const [openMobile, setOpenMobile] = useState<number | null>(null);
   const t = useTranslations();
+  const s = useSite();
 
   // Split "Street 10, 94032 City" into street / city so the desktop address can
   // stand as a two-line statement (falls back to the raw string if no comma).
-  const [studioStreet, ...studioRest] = site.studio.address.split(', ');
+  const [studioStreet, ...studioRest] = s.studio.address.split(', ');
   const studioCity = studioRest.join(', ');
 
   return (
@@ -52,7 +53,7 @@ export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
               {t('labels.address')}
             </span>
             <a
-              href={site.studio.mapsUrl}
+              href={s.studio.mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="underline-trail mt-3 inline-block font-display text-lg uppercase leading-[1.25] tracking-[0.12em] text-white lg:text-xl"
@@ -64,7 +65,7 @@ export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
                   <span className="block">{studioCity}</span>
                 </>
               ) : (
-                site.studio.address
+                s.studio.address
               )}
             </a>
             <MapPreview />
@@ -108,12 +109,12 @@ export default function Contact({ howToBook }: { howToBook: HowToBookData }) {
               {t('labels.address')}
             </span>
             <a
-              href={site.studio.mapsUrl}
+              href={s.studio.mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="underline-trail text-lg font-light text-white"
             >
-              {site.studio.address}
+              {s.studio.address}
             </a>
             <MapPreview />
           </motion.div>

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { Link } from '@/lib/i18n/navigation';
+import { getSiteSettings } from '@/lib/data';
 import type { Locale } from '@/lib/i18n/routing';
 
 export async function generateMetadata({
@@ -22,6 +23,8 @@ export default async function Impressum({
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: 'legal' });
   const tc = await getTranslations({ locale, namespace: 'common' });
+  const settings = await getSiteSettings();
+  const [imprintStreet = '', imprintCity = ''] = settings.studio.address.split(', ');
   return (
     <main className="relative z-10 mx-auto min-h-dvh max-w-2xl px-6 pb-28 pt-28">
       <Link href="/" className="underline-trail font-display text-xs uppercase tracking-brand text-white/70">
@@ -39,9 +42,9 @@ export default async function Impressum({
           <br />
           Stecher Jaron
           <br />
-          Firmianstraße 10
+          {imprintStreet}
           <br />
-          94032 Passau
+          {imprintCity}
         </p>
         <p>
           <strong className="text-white">{t('contact')}</strong>

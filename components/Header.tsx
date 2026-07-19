@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { useLocale, useTranslations } from 'next-intl';
-import { site } from '@/lib/content';
 import { useLoaded } from './LoadingProvider';
+import { useSite } from './SiteProvider';
 import LocaleToggle from './LocaleToggle';
 
 // Homepage-section anchors. Labels come from the `nav` message namespace.
@@ -23,6 +23,7 @@ export default function Header() {
   const t = useTranslations('nav');
   const th = useTranslations('header');
   const locale = useLocale();
+  const s = useSite();
   // Prefix homepage anchors with the locale so cross-page nav stays in-language.
   const prefix = locale === 'de' ? '' : `/${locale}`;
 
@@ -51,7 +52,7 @@ export default function Header() {
           className="font-display tracking-wordmark text-lg uppercase text-white no-underline md:text-xl"
           style={{ fontWeight: 400 }}
         >
-          {site.wordmark}
+          {s.wordmark}
         </a>
 
         <nav className="hidden items-center gap-10 md:flex">
@@ -132,7 +133,7 @@ export default function Header() {
               {th('socialMedia')}
             </span>
             <a
-              href={site.instagram.url}
+              href={s.instagram.url}
               target="_blank"
               rel="noopener noreferrer"
               className="underline-trail text-sm text-white no-underline"

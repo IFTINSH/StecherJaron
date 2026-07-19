@@ -4,6 +4,8 @@ import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { setRequestLocale, getMessages, getTranslations } from 'next-intl/server';
 import { jost, inter } from '@/lib/fonts';
 import { site } from '@/lib/content';
+import { getSiteSettings } from '@/lib/data';
+import { SiteProvider } from '@/components/SiteProvider';
 import { routing } from '@/lib/i18n/routing';
 import '../globals.css';
 
@@ -63,6 +65,11 @@ export default async function LocaleLayout({
 
   const messages = await getMessages();
   const t = await getTranslations({ locale, namespace: 'meta' });
+  const settings = await getSiteSettings();
+
+  // Derive the structured address from the editable "Street 10, 94032 City".
+  const [streetAddress = '', cityPart = ''] = settings.studio.address.split(', ');
+  const [postalCode = '', ...localityRest] = cityPart.split(' ');
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -73,9 +80,9 @@ export default async function LocaleLayout({
     url: 'https://stecherjaron.de',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: 'Firmianstraße 10',
-      postalCode: '94032',
-      addressLocality: 'Passau',
+      streetAddress,
+      postalCode,
+      addressLocality: localityRest.join(' '),
       addressCountry: 'DE',
     },
     geo: {
@@ -84,7 +91,7 @@ export default async function LocaleLayout({
       longitude: 13.4528076,
     },
     areaServed: t('areaServed'),
-    sameAs: [site.instagram.url],
+    sameAs: [settings.instagram.url],
   };
 
   return (
@@ -95,7 +102,7 @@ export default async function LocaleLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <NextIntlClientProvider messages={messages}>
-          {children}
+          <SiteProvider value={settings}>{children}</SiteProvider>
         </NextIntlClientProvider>
       </body>
     </html>

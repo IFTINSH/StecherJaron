@@ -18,6 +18,9 @@ export const tattoo = defineType({
       title: 'Kategorie',
       type: 'reference',
       to: [{ type: 'category' }],
+      // Required: the category is the join key for the style filter — a tattoo
+      // without one silently drops out of the portfolio.
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'order',

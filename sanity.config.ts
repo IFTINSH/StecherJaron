@@ -6,6 +6,10 @@ import { visionTool } from '@sanity/vision';
 import { schemaTypes } from './sanity/schemas';
 import { projectId, dataset, apiVersion } from './sanity/env';
 
+// Singletons: exactly one document, edited in place (fixed documentId). They must
+// not be created anew, duplicated, or deleted from the UI.
+const SINGLETONS = ['siteSettings', 'about', 'howToBook'];
+
 export default defineConfig({
   name: 'stecher-jaron',
   title: 'Stecher Jaron',
@@ -19,6 +23,11 @@ export default defineConfig({
         S.list()
           .title('Inhalt')
           .items([
+            S.listItem()
+              .title('Einstellungen')
+              .id('siteSettings')
+              .child(S.document().schemaType('siteSettings').documentId('siteSettings')),
+            S.divider(),
             S.listItem()
               .title('Über mich')
               .id('about')
@@ -37,5 +46,17 @@ export default defineConfig({
     }),
     visionTool({ defaultApiVersion: apiVersion }),
   ],
+  // Hide singletons from the global "New document" menu…
+  document: {
+    newDocumentOptions: (prev) =>
+      prev.filter((tpl) => !SINGLETONS.includes(tpl.templateId)),
+    // …and remove create/duplicate/delete actions on the singleton documents.
+    actions: (prev, { schemaType }) =>
+      SINGLETONS.includes(schemaType)
+        ? prev.filter(
+            (action) => !['duplicate', 'delete', 'unpublish'].includes(action.action as string),
+          )
+        : prev,
+  },
   schema: { types: schemaTypes },
 });

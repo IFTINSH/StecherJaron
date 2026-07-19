@@ -5,7 +5,7 @@ import { motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
 import GalleryPreview, { type PreviewItem } from './GalleryPreview';
 import Lightbox from './Lightbox';
-import { site } from '@/lib/content';
+import { useSite } from './SiteProvider';
 import type { StudioImageItem } from '@/lib/data';
 
 // Heading + address, then the editorial preview (a few photos + an "Alle ansehen"
@@ -14,6 +14,7 @@ import type { StudioImageItem } from '@/lib/data';
 export default function Studio({ images }: { images: StudioImageItem[] }) {
   const [lightbox, setLightbox] = useState<number | null>(null);
   const t = useTranslations();
+  const s = useSite();
 
   const items: PreviewItem[] = images.map((img) => ({
     key: img.id,
@@ -23,7 +24,7 @@ export default function Studio({ images }: { images: StudioImageItem[] }) {
 
   // Split "Street 10, 94032 City" so it can stack onto two lines on mobile
   // (the uppercase, wide-tracked address is too wide for one line on a phone).
-  const [studioStreet, ...studioRest] = site.studio.address.split(', ');
+  const [studioStreet, ...studioRest] = s.studio.address.split(', ');
   const studioCity = studioRest.join(', ');
 
   return (
@@ -51,7 +52,7 @@ export default function Studio({ images }: { images: StudioImageItem[] }) {
             {t('studioSection.address')}
           </span>
           <a
-            href={site.studio.mapsUrl}
+            href={s.studio.mapsUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="underline-trail mt-2 inline-block font-display text-base uppercase tracking-[0.14em] text-white md:text-lg md:tracking-wordmark"
@@ -62,7 +63,7 @@ export default function Studio({ images }: { images: StudioImageItem[] }) {
                 <span className="block md:inline">{studioCity}</span>
               </>
             ) : (
-              site.studio.address
+              s.studio.address
             )}
           </a>
         </motion.div>

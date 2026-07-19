@@ -3,15 +3,15 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
-import { site } from '@/lib/content';
+import { useSite } from './SiteProvider';
 
 // Two-click Google Maps embed (GDPR-friendly): the page ships with a LOCAL map
 // image (stitched from OpenStreetMap tiles, address centred — no third-party
 // requests). Only after the visitor clicks "Karte laden" does the actual Google
 // Maps iframe load. The PREVIEW is darkened to sit in the black-and-white design;
 // the loaded map keeps Google's real colours (that's what you navigate with).
-const EMBED_URL =
-  'https://maps.google.com/maps?q=Firmianstra%C3%9Fe+10,+94032+Passau&z=16&output=embed';
+// NOTE: the local preview PNG is fixed to the current address — if the address
+// changes in the Studio, regenerate public/map/map-preview.png to match.
 
 // grayscale first, then invert → clean dark monochrome preview
 const DARK_FILTER = 'grayscale(1) invert(0.92) contrast(0.9)';
@@ -19,14 +19,15 @@ const DARK_FILTER = 'grayscale(1) invert(0.92) contrast(0.9)';
 export default function MapPreview() {
   const [loaded, setLoaded] = useState(false);
   const t = useTranslations('map');
-  const address = site.studio.address;
+  const address = useSite().studio.address;
+  const embedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(address)}&z=16&output=embed`;
 
   return (
     <div className="mx-auto mt-8 w-full max-w-xl md:mx-0 md:max-w-none">
       <div className="relative aspect-[16/10] overflow-hidden rounded-sm border border-line bg-surface">
         {loaded ? (
           <iframe
-            src={EMBED_URL}
+            src={embedUrl}
             title={t('iframeTitle', { address })}
             loading="lazy"
             allowFullScreen

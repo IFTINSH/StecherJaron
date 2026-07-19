@@ -6,8 +6,7 @@ import BackButton from '@/components/BackButton';
 import StudioGrid from '@/components/StudioGrid';
 import HowToBook from '@/components/HowToBook';
 import Footer from '@/components/Footer';
-import { site } from '@/lib/content';
-import { getHowToBook, getStudioImages } from '@/lib/data';
+import { getHowToBook, getStudioImages, getSiteSettings } from '@/lib/data';
 import type { Locale } from '@/lib/i18n/routing';
 
 export const revalidate = 60;
@@ -38,7 +37,11 @@ export default async function AtelierPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations({ locale });
-  const [howToBook, images] = await Promise.all([getHowToBook(locale), getStudioImages(locale)]);
+  const [howToBook, images, settings] = await Promise.all([
+    getHowToBook(locale),
+    getStudioImages(locale),
+    getSiteSettings(),
+  ]);
 
   return (
     <>
@@ -61,12 +64,12 @@ export default async function AtelierPage({
                 {t('labels.address')}
               </span>
               <a
-                href={site.studio.mapsUrl}
+                href={settings.studio.mapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="underline-trail mt-2 block font-display text-lg uppercase tracking-wordmark text-white"
               >
-                {site.studio.address}
+                {settings.studio.address}
               </a>
             </div>
           </header>
