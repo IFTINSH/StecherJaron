@@ -9,23 +9,7 @@
  *
  * Idempotent: nach dem ersten Lauf gibt es nichts mehr zu tun.
  */
-const { createClient } = require('@sanity/client');
-
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production';
-const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-10-01';
-const token = process.env.SANITY_API_WRITE_TOKEN;
-
-if (!projectId) {
-  console.error('FEHLER: NEXT_PUBLIC_SANITY_PROJECT_ID fehlt. Mit --env-file=.env.local starten.');
-  process.exit(1);
-}
-if (!token) {
-  console.error('FEHLER: SANITY_API_WRITE_TOKEN fehlt in .env.local.');
-  process.exit(1);
-}
-
-const client = createClient({ projectId, dataset, apiVersion, token, useCdn: false });
+const { client } = require('./_sanity.cjs')('node --env-file=.env.local scripts/cleanup-event-order.cjs');
 
 async function run() {
   const ids = await client.fetch(`*[_type == "event" && defined(order)]._id`);

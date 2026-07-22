@@ -40,19 +40,13 @@ export default function IntroVideo() {
     return () => io.disconnect();
   }, []);
 
-  const toggleSound = async () => {
-    const el = videoRef.current;
-    if (!el) return;
+  // `muted` steuert das <video> über den Prop (muted={muted}), nicht imperativ —
+  // play() läuft noch im stummen Zustand und ist damit immer erlaubt; das
+  // Entstummen greift beim Re-Render, direkt nach der Nutzer-Geste.
+  const toggleSound = () => {
     const next = !muted;
-    el.muted = next;
-    if (!next) {
-      try {
-        await el.play();
-      } catch {
-        /* ignore */
-      }
-    }
     setMuted(next);
+    if (!next) videoRef.current?.play().catch(() => {});
   };
 
   // Fullscreen (desktop): show native controls while in fullscreen for sound/seek.
@@ -109,7 +103,7 @@ export default function IntroVideo() {
             ref={videoRef}
             src="/video/intro.mp4#t=0.001"
             className="absolute inset-0 h-full w-full object-cover"
-            muted
+            muted={muted}
             loop
             playsInline
             preload="metadata"

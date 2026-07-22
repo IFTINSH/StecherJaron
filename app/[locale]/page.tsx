@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { hasLocale } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
-import { routing } from '@/lib/i18n/routing';
+import { routing, type Locale } from '@/lib/i18n/routing';
 import BackgroundShader from '@/components/BackgroundShader';
 import SmoothScroll from '@/components/SmoothScroll';
 import LoadingProvider from '@/components/LoadingProvider';
@@ -17,7 +17,6 @@ import Contact from '@/components/Contact';
 import HowToBook from '@/components/HowToBook';
 import Footer from '@/components/Footer';
 import { getAbout, getTattoos, getEvents, getHowToBook, getStudioImages, getWannados } from '@/lib/data';
-import type { Locale } from '@/lib/i18n/routing';
 
 export const revalidate = 60;
 

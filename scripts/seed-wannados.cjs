@@ -10,27 +10,7 @@
  * Idempotent für DOKUMENTE (feste _id -> createOrReplace). Bild-Assets werden
  * bei jedem Lauf neu hochgeladen -> nur einmal laufen lassen.
  */
-const path = require('path');
-const fs = require('fs');
-const { createClient } = require('@sanity/client');
-
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production';
-const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-10-01';
-const token = process.env.SANITY_API_WRITE_TOKEN;
-
-if (!projectId) {
-  console.error('FEHLER: NEXT_PUBLIC_SANITY_PROJECT_ID fehlt. Mit --env-file=.env.local starten (npm run seed:wannados).');
-  process.exit(1);
-}
-if (!token) {
-  console.error('FEHLER: SANITY_API_WRITE_TOKEN fehlt in .env.local. Token in sanity.io/manage -> API -> Tokens (Editor) anlegen.');
-  process.exit(1);
-}
-
-const client = createClient({ projectId, dataset, apiVersion, token, useCdn: false });
-
-const PUBLIC = path.join(__dirname, '..', 'public');
+const { client, uploadImage, projectId, dataset } = require('./_sanity.cjs')('npm run seed:wannados');
 
 // Spiegel von lib/content.ts (wannados) — Reihenfolge = order
 const sheets = [
@@ -42,12 +22,6 @@ const sheets = [
   'wannados/wannados-6.jpeg',
 ];
 
-async function uploadImage(relPath) {
-  const abs = path.join(PUBLIC, relPath);
-  const stream = fs.createReadStream(abs);
-  const asset = await client.assets.upload('image', stream, { filename: path.basename(abs) });
-  return { _type: 'image', asset: { _type: 'reference', _ref: asset._id } };
-}
 
 async function run() {
   console.log(`Seeding Wannado's -> Projekt ${projectId} / Dataset ${dataset}\n`);
