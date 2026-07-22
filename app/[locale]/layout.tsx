@@ -86,6 +86,9 @@ export default async function LocaleLayout({
     name: site.name,
     description: t('description'),
     image: 'https://stecherjaron.de/hero/hero-16x9.jpeg',
+    // Google nimmt für das Logo im Knowledge Panel `logo`, NICHT `image` —
+    // ohne dieses Feld bleibt dort die Logo-Fläche leer.
+    logo: 'https://stecherjaron.de/brand/monogramm.png',
     url: 'https://stecherjaron.de',
     email: 'Tattoostudio.jaronbock@gmail.com',
     address: {
