@@ -15,48 +15,13 @@
  */
 const { client, uploadImage, projectId, dataset } = require('./_sanity.cjs')('npm run seed');
 
-// --- Daten (Spiegel von lib/content.ts) ---------------------------------------
-const about = {
-  title: 'Über mich',
-  body: `Hey, ich bin Jaron — Tattoo Artist aus Passau. Ich spezialisiere mich auf Dotwork, Blackwork und Fine-Line Tattoos. Jedes meiner Designs entsteht individuell für dich, mit einem Fokus auf feine Details, klare Linien und ausdrucksstarke Kontraste zwischen schwarzer Tinte und Haut. Lass uns gemeinsam deine Vision auf die Haut bringen.`,
-};
-
-const howToBook = {
-  title: 'How to Book',
-  sections: [
-    {
-      heading: 'Buchungsanfrage',
-      items: [
-        'Buchungsanfragen erfolgen ausschließlich über Instagram.',
-        'Bitte sende eine möglichst präzise Beschreibung deiner Tattoo-Idee oder Wunschvorstellung.',
-        'Falls vorhanden, ergänze deine Anfrage gerne mit Referenzbildern, Inspirationen oder Skizzen.',
-        'Bei Wannados füge bitte zusätzlich einen entsprechenden Screenshot bei.',
-        'Wenn du die gewünschte Größe bereits einschätzen kannst, teile diese am besten in cm mit; das erleichtert eine erste preisliche Orientierung.',
-        'Ein Foto der gewünschten Körperstelle hilft dabei, Placement und Wirkung besser einzuschätzen.',
-        'Sollte es dir unangenehm sein, ein Foto der Stelle zu schicken, ist das selbstverständlich kein Problem — gib in dem Fall einfach kurz Bescheid.',
-        'Bitte nenne außerdem 2–3 Termine, die für dich grundsätzlich infrage kommen.',
-        'Aktuelle verfügbare Termine findest du in den Instagram-Highlights.',
-      ],
-    },
-    {
-      heading: 'Terminreservierung',
-      items: [
-        'Für die verbindliche Buchung eines Termins wird eine nicht erstattbare Anzahlung in Höhe von 50 € erhoben.',
-        'Diese Anzahlung deckt die Ausarbeitung deines individuellen Entwurfs ab und dient zugleich der verbindlichen Reservierung deines Termins.',
-      ],
-    },
-    {
-      heading: 'Stil und Zusammenarbeit',
-      items: [
-        'Auch neue, besondere oder stilistisch unkonventionelle Ideen sind jederzeit willkommen.',
-        'Entscheidend ist, dass Motiv, Stil und Umsetzung für beide Seiten stimmig sind.',
-        'Die beste Arbeit entsteht immer dann, wenn eine gemeinsame kreative Basis vorhanden ist und das Projekt von Anfang an auf gegenseitigem Vertrauen beruht.',
-      ],
-    },
-  ],
-  ctaLabel: 'Auf Instagram schreiben',
-  ctaUrl: 'https://www.instagram.com/stecherjaron/',
-};
+// --- Daten -------------------------------------------------------------------
+// about und howToBook kommen DIREKT aus lib/content.ts, nicht als Kopie. Vorher
+// standen die Texte hier nochmal: content.ts wurde aktualisiert, dieser Spiegel
+// nicht — ein Seed haette den alten Stand nach Sanity geschrieben und die Live-
+// Seite auf den alten Text zurueckgeworfen (Sanity hat Vorrang vor content.ts).
+// Node >=22.18 kann die .ts direkt lesen (Type-Stripping), kein Build noetig.
+const { about, howToBook } = require('../lib/content.ts');
 
 // Reihenfolge = order; Key = wird zur deterministischen _id (category-<key>)
 const categories = [
