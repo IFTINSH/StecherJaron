@@ -14,6 +14,18 @@ import {
 // Revalidate Sanity-backed pages at most once a minute so edits show up quickly.
 const fetchOpts = { next: { revalidate: 60 } } as const;
 
+// Sanity-Fetch, der nie wirft. Ohne das legt ein CORS-Fehler, eine falsche
+// Project-ID oder eine Sanity-Störung die ganze Seite lahm (uncaught throw in
+// der Server Component) — statt auf lib/content.ts zurückzufallen.
+async function safeFetch<T>(query: string, params: Record<string, unknown> = {}): Promise<T | null> {
+  try {
+    return await client!.fetch<T>(query, params, fetchOpts);
+  } catch (err) {
+    console.error('[sanity] Fetch fehlgeschlagen, nutze Fallback-Inhalte:', err);
+    return null;
+  }
+}
+
 // Global site data (address, maps, Instagram, tagline). Same shape as the static
 // `site` object so consumers can swap 1:1; Sanity values override the fallback.
 export interface SiteSettings {
@@ -33,7 +45,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     studio: { ...siteFallback.studio },
   };
   if (!client) return base;
-  const doc = await client.fetch<{
+  const doc = await safeFetch<{
     address?: string;
     mapsUrl?: string;
     instagramHandle?: string;
@@ -41,8 +53,6 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     tagline?: string;
   } | null>(
     `*[_type == "siteSettings"][0]{ address, mapsUrl, instagramHandle, instagramUrl, tagline }`,
-    {},
-    fetchOpts,
   );
   if (!doc) return base;
   return {
@@ -89,7 +99,7 @@ export interface HowToBookData {
 
 export async function getHowToBook(locale: Locale = 'de'): Promise<HowToBookData> {
   if (!client) return howToBookFallback;
-  const doc = await client.fetch<Partial<HowToBookData> | null>(
+  const doc = await safeFetch<Partial<HowToBookData> | null>(
     // coalesce(field[$locale], field.de, field) reads the localized value and
     // gracefully falls back — also works for not-yet-migrated plain-string data.
     `*[_type == "howToBook"][0]{
@@ -102,7 +112,6 @@ export async function getHowToBook(locale: Locale = 'de'): Promise<HowToBookData
       ctaUrl
     }`,
     { locale },
-    fetchOpts,
   );
   // Nur Sanity nehmen, wenn echte Abschnitte vorhanden sind, sonst Fallback.
   if (!doc?.sections?.length) return howToBookFallback;
@@ -116,13 +125,12 @@ export async function getHowToBook(locale: Locale = 'de'): Promise<HowToBookData
 
 export async function getAbout(locale: Locale = 'de'): Promise<AboutData> {
   if (!client) return { title: aboutFallback.title, body: aboutFallback.body };
-  const doc = await client.fetch<{ title?: string; body?: string } | null>(
+  const doc = await safeFetch<{ title?: string; body?: string } | null>(
     `*[_type == "about"][0]{
       "title": coalesce(title[$locale], title.de, title),
       "body": coalesce(body[$locale], body.de, body)
     }`,
     { locale },
-    fetchOpts,
   );
   if (!doc?.body) return { title: aboutFallback.title, body: aboutFallback.body };
   return { title: doc.title || aboutFallback.title, body: doc.body };
@@ -132,16 +140,15 @@ export async function getTattoos(locale: Locale = 'de'): Promise<TattooItem[]> {
   if (!client) {
     return tattoosFallback.map((t) => ({ id: t.id, src: t.src, alt: t.alt, style: t.style }));
   }
-  const docs = await client.fetch<
+  const docs = await safeFetch<
     { id: string; alt?: string; style?: string; image: unknown }[]
   >(
     `*[_type == "tattoo" && defined(image)] | order(order asc, _createdAt desc){
       "id": _id, "alt": coalesce(alt[$locale], alt.de, alt), "style": category->title, image
     }`,
     { locale },
-    fetchOpts,
   );
-  const items = docs
+  const items = (docs ?? [])
     .map((d) => ({
       id: d.id,
       src: imageUrl(d.image as never, 1000) || '',
@@ -165,14 +172,13 @@ export async function getStudioImages(locale: Locale = 'de'): Promise<StudioImag
   const fallback = () =>
     studioImagesFallback.map((s) => ({ id: s.src, src: s.src, alt: s.alt }));
   if (!client) return fallback();
-  const docs = await client.fetch<{ id: string; alt?: string; image: unknown }[]>(
+  const docs = await safeFetch<{ id: string; alt?: string; image: unknown }[]>(
     `*[_type == "studioImage" && defined(image)] | order(order asc, _createdAt desc){
       "id": _id, "alt": coalesce(alt[$locale], alt.de, alt), image
     }`,
     { locale },
-    fetchOpts,
   );
-  const items = docs
+  const items = (docs ?? [])
     .map((d) => ({
       id: d.id,
       src: imageUrl(d.image as never, 1000) || '',
@@ -196,7 +202,7 @@ export async function getWannados(locale: Locale = 'de'): Promise<WannadoItem[]>
   const fallback = () =>
     wannadosFallback.map((w) => ({ id: w.src, src: w.src, alt: w.alt, label: w.label, w: w.w, h: w.h }));
   if (!client) return fallback();
-  const docs = await client.fetch<
+  const docs = await safeFetch<
     { id: string; alt?: string; label?: string; w?: number; h?: number; image: unknown }[]
   >(
     `*[_type == "wannados" && defined(image)] | order(order asc, _createdAt desc){
@@ -205,9 +211,8 @@ export async function getWannados(locale: Locale = 'de'): Promise<WannadoItem[]>
       "h": image.asset->metadata.dimensions.height
     }`,
     { locale },
-    fetchOpts,
   );
-  const items = docs
+  const items = (docs ?? [])
     .map((d) => ({
       id: d.id,
       src: imageUrl(d.image as never, 1400) || '',
@@ -229,7 +234,7 @@ const sortedFallbackEvents = () =>
 
 export async function getEvents(locale: Locale = 'de'): Promise<EventItem[]> {
   if (!client) return sortedFallbackEvents();
-  const docs = await client.fetch<RawEvent[]>(
+  const docs = await safeFetch<RawEvent[]>(
     // coalesce -> Events ohne Datum ans Ende (sonst sortiert GROQ null bei desc nach oben).
     `*[_type == "event" && defined(cover)] | order(coalesce(date, "") desc, _createdAt desc){
       "slug": slug.current,
@@ -240,9 +245,8 @@ export async function getEvents(locale: Locale = 'de'): Promise<EventItem[]> {
       cover, images
     }`,
     { locale },
-    fetchOpts,
   );
-  const items = docs.map(fromSanityEvent).filter((e) => e.slug && e.cover);
+  const items = (docs ?? []).map(fromSanityEvent).filter((e) => e.slug && e.cover);
   return items.length ? items : sortedFallbackEvents();
 }
 
@@ -251,7 +255,7 @@ export async function getEvent(slug: string, locale: Locale = 'de'): Promise<Eve
     const ev = eventsFallback.find((e) => e.slug === slug);
     return ev ? toFallbackEvent(ev) : null;
   }
-  const doc = await client.fetch<RawEvent | null>(
+  const doc = await safeFetch<RawEvent | null>(
     `*[_type == "event" && slug.current == $slug][0]{
       "slug": slug.current,
       "title": coalesce(title[$locale], title.de, title),
@@ -261,7 +265,6 @@ export async function getEvent(slug: string, locale: Locale = 'de'): Promise<Eve
       cover, images
     }`,
     { slug, locale },
-    fetchOpts,
   );
   if (doc) return fromSanityEvent(doc);
   const fb = eventsFallback.find((e) => e.slug === slug);
@@ -270,12 +273,10 @@ export async function getEvent(slug: string, locale: Locale = 'de'): Promise<Eve
 
 export async function getEventSlugs(): Promise<string[]> {
   if (!client) return eventsFallback.map((e) => e.slug);
-  const slugs = await client.fetch<string[]>(
+  const slugs = await safeFetch<string[]>(
     `*[_type == "event" && defined(slug.current)].slug.current`,
-    {},
-    fetchOpts,
   );
-  return slugs.length ? slugs : eventsFallback.map((e) => e.slug);
+  return slugs?.length ? slugs : eventsFallback.map((e) => e.slug);
 }
 
 // ---- helpers ----

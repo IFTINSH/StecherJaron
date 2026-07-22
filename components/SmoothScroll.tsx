@@ -6,10 +6,16 @@ import { emitLenisScroll } from './lenisStore';
 
 export default function SmoothScroll() {
   useEffect(() => {
-    // Always (re)load at the top — stop the browser from restoring the previous
-    // scroll position (which often left mobile reloads parked at the Events section).
-    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-    window.scrollTo(0, 0);
+    // Reload at the top — stop the browser from restoring the previous scroll
+    // position (which often left mobile reloads parked at the Events section).
+    // ABER nicht bei /#anchor: die Nav verlinkt absolut (/#contact), von einer
+    // Unterseite aus ist das ein voller Seitenload — hier würde der Sprung zum
+    // Abschnitt sonst sofort wieder nach oben überschrieben.
+    const hasHash = !!window.location.hash;
+    if (!hasHash) {
+      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+      window.scrollTo(0, 0);
+    }
 
     if (
       typeof window !== 'undefined' &&
@@ -22,7 +28,7 @@ export default function SmoothScroll() {
       duration: 1.2,
       smoothWheel: true,
     });
-    lenis.scrollTo(0, { immediate: true });
+    if (!hasHash) lenis.scrollTo(0, { immediate: true });
     lenis.on('scroll', emitLenisScroll);
 
     let raf = 0;
