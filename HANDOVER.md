@@ -32,11 +32,12 @@ npm run build    # vor Deploy: muss grün sein
 - **Hero:** Foto + Chrome-„Intro-Linie" um Jaron (`components/FlowLine.tsx`): poppt einmal auf, flackert weich (Bloom), zieht sich symmetrisch zurück. Eigene Mobil-Silhouette; Foto+Linie gekoppelt (`HeroPhotoBackground.tsx`, `heroSilhouette.ts`). Pfade getract mit `scripts/trace-extract.cjs` (Desktop) / `scripts/trace-mobile.cjs` (Mobil).
 - **Design-System** (`app/globals.css` `@theme`): Tokens `text-body / text-secondary / text-muted / bg-surface / border-line`, keine rohen Hex in Komponenten. Gutter `px-6 md:px-12`, breite Sektionen `max-w-[1800px]`.
 - **Einheitlicher Rhythmus:** alle Content-Sektionen „Überschrift oben → Inhalt volle Breite". Heading-Ausrichtung PC: Raster-Sektionen (Portfolio/Studio/Events) links, Text-Sektionen (Über mich/Kontakt) mittig; Mobile immer zentriert.
-- **Portfolio & Studio:** gleiches Raster (`aspect-[4/5]`, `grid-cols-2 md:grid-cols-3 lg:grid-cols-4`) + **Scroll-Parallax in den Bildern** (`ParallaxImage.tsx` via `lenisStore.ts`).
+- **Portfolio & Studio:** gleiches Raster (`aspect-[4/5]`, `grid-cols-2 md:grid-cols-3 lg:grid-cols-4`), Bilder als plain `next/image` (`GalleryGrid.tsx` / `StudioGrid.tsx`). **Scroll-Parallax** läuft aktuell nur auf dem Feature-Bild der Portfolio-Vorschau (`ParallaxImage.tsx` in `GalleryPreview.tsx`, via `lenisStore.ts`).
 - **How to Book:** Floating-Button unten rechts → Panel mit Buchungstext (`HowToBook.tsx`), scrollbar.
 - **Feine Übergangslinie** auf der Naht Hero↔Über-mich (`About.tsx`, pulsiert dezent).
 - **Quality:** Reduced-Motion respektiert, `:focus-visible`-Ringe, Scroll-Restoration „manual" (lädt immer oben).
-- **Sanity-Integration** (Code fertig — Projekt noch nicht angelegt, s. u.).
+- **Sanity-Integration** (Code fertig — Projekt noch nicht angelegt, s. u.). Alle Sanity-Fetches laufen über `safeFetch` in `lib/data.ts`: bei CORS-/Netzwerk-/Config-Fehler fällt die Seite auf `content.ts` zurück statt zu 500en (Fehler landet im Server-Log).
+- **Anker-Nav:** `SmoothScroll.tsx` erzwingt „lädt oben" nur ohne Hash — `/#kontakt` von einer Unterseite springt korrekt zum Abschnitt.
 
 ## 5. Inhalte / Daten
 - Zentral in `lib/content.ts` (Fallback) → über `lib/data.ts` aus Sanity gelesen, sonst Fallback.
@@ -63,7 +64,8 @@ npm run build    # vor Deploy: muss grün sein
 - [ ] **Hi-Res `public/hero/hero-mobile.jpg`** (aktuell nur 578 px, leicht weich) — gleicher Ausschnitt, dann bleibt die Linie gültig.
 - [x] **Impressum/Datenschutz** vollständig (Jaron Bock, Kleinunternehmer § 19 UStG, Netlify/Sanity/Maps-Zwei-Klick abgedeckt; DE maßgeblich, EN Convenience-Übersetzung).
 - [ ] Optional später: **Videos in Events** (Schema-Feld ergänzen).
-- [ ] Aufräumen: ungenutzte Experimente `HeroPattern.tsx` / `PatternBackground.tsx` prüfen/entfernen.
+- [x] Aufräumen: ungenutzte Experimente `HeroPattern.tsx` / `PatternBackground.tsx` entfernt.
+- [x] Rohmaterial (`Studiobilder/`, `Tattoobilder/`, `Eventbilder/`, `Introvideo jaron.mp4`, ~11 MB) aus Git genommen — liegt weiter lokal, ist in `.gitignore`. Aufbereitet in `public/`.
 
 ## 9. Schnelle Stellschrauben (Datei → was)
 - Hero-Linie Timing/Stärke: `components/FlowLine.tsx` (`APPEAR/HOLD/RETRACT`, `MAG`, Bloom).
